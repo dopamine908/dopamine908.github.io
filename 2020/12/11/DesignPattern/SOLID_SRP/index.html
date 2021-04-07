@@ -1,0 +1,140 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SOLID - SRP - 單一職責原則 （Single Responsibility Principle） | Mobius</title><meta name="description" content="SOLID - SRP - 單一職責原則 （Single Responsibility Principle）"><meta name="keywords" content="SOLID"><meta name="author" content="Mobius,dopamine908@gmail.com"><meta name="copyright" content="Mobius"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="SOLID - SRP - 單一職責原則 （Single Responsibility Principle）"><meta name="twitter:description" content="SOLID - SRP - 單一職責原則 （Single Responsibility Principle）"><meta name="twitter:image" content="https://picsum.photos/id/594/800/600"><meta property="og:type" content="article"><meta property="og:title" content="SOLID - SRP - 單一職責原則 （Single Responsibility Principle）"><meta property="og:url" content="https://dopamine908.github.io/2020/12/11/DesignPattern/SOLID_SRP/"><meta property="og:site_name" content="Mobius"><meta property="og:description" content="SOLID - SRP - 單一職責原則 （Single Responsibility Principle）"><meta property="og:image" content="https://picsum.photos/id/594/800/600"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="canonical" href="https://dopamine908.github.io/2020/12/11/DesignPattern/SOLID_SRP/"><link rel="prev" title="Laravel Notifications - 以 Slack 為例子" href="https://dopamine908.github.io/2021/01/07/Laravel/Notification/"><link rel="next" title="晚點再說啦三部曲之四 - 精美的合作" href="https://dopamine908.github.io/2020/12/07/Laravel/ScheduleToJob_pt4_teamwork/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '鍵將本頁加入書籤'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"按","message_next":"鍵將本頁加入書籤"},"chs_to_cht":"你已切換為繁體","cht_to_chs":"你已切換為簡體","day_to_night":"你已切換為深色模式","night_to_day":"你已切換為淺色模式","bgLight":"#49b1f5","bgDark":"#2d3035","position":"bottom-right"},
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">38</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">標籤</div><div class="length_num">30</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分類</div><div class="length_num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目錄</div><div class="sidebar-toc__progress"><span class="progress-notice">你已經讀了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#solid-srp-單一職責原則-single-responsibility-principle"><span class="toc-text"> SOLID - SRP - 單一職責原則 （Single Responsibility Principle）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#定義"><span class="toc-text"> 定義</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#職責"><span class="toc-text"> 職責？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-text"> Reference</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://picsum.photos/id/594/800/600)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">Mobius</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">SOLID - SRP - 單一職責原則 （Single Responsibility Principle）</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="發表於 2020-12-11 15:46:52"><i class="fa fa-calendar" aria-hidden="true"></i> 發表於 2020-12-11</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新於 2020-12-23 10:32:23"><i class="fa fa-history" aria-hidden="true"></i> 更新於 2020-12-23</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8%E9%96%8B%E7%99%BC%E7%AD%86%E8%A8%98/">日常開發筆記</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>閱讀量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div id="article-container"><h1 id="solid-srp-單一職責原則-single-responsibility-principle"><a class="markdownIt-Anchor" href="#solid-srp-單一職責原則-single-responsibility-principle"></a> SOLID - SRP - 單一職責原則 （Single Responsibility Principle）</h1>
+<p>這篇的主角是 SOLID 原則中的 S : 單一職責原則 （Single Responsibility Principle），由 Robert C. Martin 在 1990 年代提出</p>
+<h2 id="定義"><a class="markdownIt-Anchor" href="#定義"></a> 定義</h2>
+<p>這邊我找到兩種定義，一種是在他出的書裡面提到的（<a href="https://www.amazon.com/Software-Development-Principles-Patterns-Practices/dp/0135974445" target="_blank" rel="noopener">書的連結</a>）</p>
+<blockquote>
+<p>A class should have one, and only one, reason to change.</p>
+</blockquote>
+<p>另一個是我在 Martin 的個人部落格中提到的</p>
+<blockquote>
+<p>The Single Responsibility Principle (SRP) states that each software module should have one and only one reason to change.</p>
+</blockquote>
+<p>兩種定義翻譯起來的意思其實大同小異</p>
+<blockquote>
+<p>一個類別（軟體模組）應當只有唯一一個可以改變他的理由</p>
+</blockquote>
+<p>這邊要特別提到，網路上有不少的文獻會將單一職責原則的定義解釋為「一個模組、類別或函式只做一件事情」，但我想這樣的解讀跟 Martin 原始敘述的語意是有些出入的。</p>
+<h2 id="職責"><a class="markdownIt-Anchor" href="#職責"></a> 職責？</h2>
+<p>定義中的敘述在解釋「職責」這個字眼用了 「 have one and only one reason to change 」去敘述</p>
+<p>既然談到了改變的理由，那麼自然是各種狀況都可能導致修改發生，舉凡 bug 的修改、功能的修正、功能的新增都有可能造成各種改變的發生，而 Martin 也在他的文章內提到，這其實都取決於程式最終的服務對象（ who must the design of the program respond to? ），這聽起來也很抽象，簡單的說就是程式對於功能的實作，底下我們舉個例子來看看</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">Class</span> <span class="title">Pay</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">creditPay</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>這是一個專門用來刷卡的 class ，如果今天情況相當單純，只有一個種類的銀行刷卡，那麼論改變來說，可能改變的原因只有該卡片刷卡行為的本身改變</p>
+<p>但如果今天我們的 class 需要兼顧 A 卡跟 B 卡呢？</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pay</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">creditPay</span><span class="params">($card)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ($card == <span class="string">'A'</span>) &#123;</span><br><span class="line">            <span class="comment">// 刷卡流程A</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> ($card == <span class="string">'B'</span>) &#123;</span><br><span class="line">            <span class="comment">//刷卡流程 B</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那麼可以改變他的原因就不止一種了</p>
+<ol>
+<li>A 卡片刷卡流程的改變</li>
+<li>B 卡片刷卡流程的改變</li>
+</ol>
+<p>所以說，職責單不單一這件事情，我們還得考量他的實作以及他的合作對象，所以對於實踐單一職責原則的狀況可以說是每種人都有不同的解讀，並沒有一定的標準</p>
+<p>像是我們上面講的兩個例子，我一開始的時候可能就真的只需要支援一張卡片的刷卡，那麼這樣的設計可以算是符合單一職責原則，但當後來需求增加了，我加入了第二張卡片，就變得不符合單一職責原則，所以說隨著功能的改變，對於有沒有符合單一職責原則的界定也需要重新的審視，加上適當的重構，才能夠盡量的保持符合單一職責原則的狀態。</p>
+<!-- ---
+原始定義（Robert C. Martin）
+
+什麼是職責（取決於實作
+
+關注點
+
+改變的理由只有一個，那麼跟他合作的人就是關鍵了，有可能因為跟他合作的方式不同導致改變的理由由一個變為多個
+
+要做到改變的理由只有一個，要看實作的內容，可以對實作的內容去思考有什麼因素可以構成改變
+
+這樣不就變成我一個class只能有一個function嗎？> 關注點
+
+寫一個class，剛開始職責ＯＫ但是後來改變造成值則不分離，所以舊分離了
+ -->
+<h2 id="reference"><a class="markdownIt-Anchor" href="#reference"></a> Reference</h2>
+<ul>
+<li><a href="http://www.butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod" target="_blank" rel="noopener">http://www.butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod</a></li>
+<li><a href="http://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html" target="_blank" rel="noopener">http://blog.cleancoder.com/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html</a></li>
+<li><a href="https://www.jyt0532.com/2020/03/18/srp/" target="_blank" rel="noopener">https://www.jyt0532.com/2020/03/18/srp/</a></li>
+<li><a href="https://medium.com/%E7%A8%8B%E5%BC%8F%E6%84%9B%E5%A5%BD%E8%80%85/%E4%BD%BF%E4%BA%BA%E7%98%8B%E7%8B%82%E7%9A%84-solid-%E5%8E%9F%E5%89%87-%E5%96%AE%E4%B8%80%E8%81%B7%E8%B2%AC%E5%8E%9F%E5%89%87-single-responsibility-principle-c2c4bd9b4e79" target="_blank" rel="noopener">https://medium.com/程式愛好者/使人瘋狂的-solid-原則-單一職責原則-single-responsibility-principle-c2c4bd9b4e79</a></li>
+<li><a href="https://drive.google.com/file/d/0ByOwmqah_nuGNHEtcU5OekdDMkk/view" target="_blank" rel="noopener">https://drive.google.com/file/d/0ByOwmqah_nuGNHEtcU5OekdDMkk/view</a></li>
+<li><a href="http://teddy-chen-tw.blogspot.com/2011/12/3.html" target="_blank" rel="noopener">http://teddy-chen-tw.blogspot.com/2011/12/3.html</a></li>
+</ul>
+</div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SOLID/">SOLID</a></div><div class="post_share"></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2021/01/07/Laravel/Notification/"><img class="prev_cover lazyload" data-src="https://picsum.photos/id/58/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Laravel Notifications - 以 Slack 為例子</div></div></a></div><div class="next-post pull_right"><a href="/2020/12/07/Laravel/ScheduleToJob_pt4_teamwork/"><img class="next_cover lazyload" data-src="https://picsum.photos/id/444/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">晚點再說啦三部曲之四 - 精美的合作</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相關推薦</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/08/28/DesignPattern/SOLID_DIP-1/" title="SOLID - Dependency Inversion Principle - 依賴反轉轉原則"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/325/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-08-28</div><div class="relatedPosts_title">SOLID - Dependency Inversion Principle - 依賴反轉轉原則</div></div></a></div></div><div class="clear_both"></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Mobius</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="閱讀模式"></i><i class="fa fa-plus" id="font_plus" title="放大字體"></i><i class="fa fa-minus" id="font_minus" title="縮小字體"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="夜間模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="設置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目錄" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到頂部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>$(function () {
+  $('span.katex-display').wrap('<div class="katex-wrap"></div>')
+})</script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script id="ribbon_piao" mobile="false" src="/js/third-party/piao.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>

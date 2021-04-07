@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>晚點再說啦三部曲之一 - Laravel Queue Job with Redis - 基礎篇 | Mobius</title><meta name="description" content="晚點再說啦三部曲之一 - Laravel Queue Job with Redis - 基礎篇"><meta name="keywords" content="PHP,Laravel,Job,Queue,Redis"><meta name="author" content="Mobius,dopamine908@gmail.com"><meta name="copyright" content="Mobius"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="晚點再說啦三部曲之一 - Laravel Queue Job with Redis - 基礎篇"><meta name="twitter:description" content="晚點再說啦三部曲之一 - Laravel Queue Job with Redis - 基礎篇"><meta name="twitter:image" content="https://picsum.photos/id/319/800/600"><meta property="og:type" content="article"><meta property="og:title" content="晚點再說啦三部曲之一 - Laravel Queue Job with Redis - 基礎篇"><meta property="og:url" content="https://dopamine908.github.io/2020/12/02/Laravel/ScheduleToJob_pt1_Job/"><meta property="og:site_name" content="Mobius"><meta property="og:description" content="晚點再說啦三部曲之一 - Laravel Queue Job with Redis - 基礎篇"><meta property="og:image" content="https://picsum.photos/id/319/800/600"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="canonical" href="https://dopamine908.github.io/2020/12/02/Laravel/ScheduleToJob_pt1_Job/"><link rel="prev" title="晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇" href="https://dopamine908.github.io/2020/12/03/Laravel/ScheduleToJob_pt2_command/"><link rel="next" title="PHP8 - Release Note - 字串與數字的比對行為修正" href="https://dopamine908.github.io/2020/11/30/Other/PHP8ReleaseNoteStringToNumberComparison/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '鍵將本頁加入書籤'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"按","message_next":"鍵將本頁加入書籤"},"chs_to_cht":"你已切換為繁體","cht_to_chs":"你已切換為簡體","day_to_night":"你已切換為深色模式","night_to_day":"你已切換為淺色模式","bgLight":"#49b1f5","bgDark":"#2d3035","position":"bottom-right"},
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">38</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">標籤</div><div class="length_num">30</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分類</div><div class="length_num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目錄</div><div class="sidebar-toc__progress"><span class="progress-notice">你已經讀了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#晚點再說啦三部曲之一-laravel-queue-job-with-redis-基礎篇"><span class="toc-text"> 晚點再說啦三部曲之一 - Laravel Queue Job with Redis - 基礎篇</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text"> 前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#流程"><span class="toc-text"> 流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#job-storage-driver-儲存-job-的地方"><span class="toc-text"> Job Storage Driver 儲存 Job 的地方</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#介紹-laravel-queue-job"><span class="toc-text"> 介紹 Laravel Queue Job</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何新增"><span class="toc-text"> 如何新增</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何派發"><span class="toc-text"> 如何派發</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何執行"><span class="toc-text"> 如何執行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#失敗了怎麼辦"><span class="toc-text"> 失敗了怎麼辦？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#將整個流程串起來吧"><span class="toc-text"> 將整個流程串起來吧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#新增-job"><span class="toc-text"> 新增 Job</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#派發"><span class="toc-text"> 派發</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#執行"><span class="toc-text"> 執行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#錯誤處理"><span class="toc-text"> 錯誤處理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reference"><span class="toc-text"> Reference</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://picsum.photos/id/319/800/600)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">Mobius</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">晚點再說啦三部曲之一 - Laravel Queue Job with Redis - 基礎篇</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="發表於 2020-12-02 16:00:24"><i class="fa fa-calendar" aria-hidden="true"></i> 發表於 2020-12-02</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新於 2020-12-07 20:45:50"><i class="fa fa-history" aria-hidden="true"></i> 更新於 2020-12-07</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Laravel/">Laravel</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>閱讀量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div id="article-container"><h1 id="晚點再說啦三部曲之一-laravel-queue-job-with-redis-基礎篇"><a class="markdownIt-Anchor" href="#晚點再說啦三部曲之一-laravel-queue-job-with-redis-基礎篇"></a> 晚點再說啦三部曲之一 - Laravel Queue Job with Redis - 基礎篇</h1>
+<p>本文章使用的開發環境為</p>
+<p>PHP : 7.3.11<br />
+Laravel : 8.16.1<br />
+Redis : 6.0<br />
+MySQL : 8.0</p>
+<hr />
+<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>對於網站來說，一個 Request 就代表一個從頭開始生成到最後銷毀的生命週期，時常我們會遇到一種狀況 :「如果我有一件事情想要在 request 結束之後的才做呢?」<br />
+舉個例子來說，試想我們有一個需求，需要在客戶下單後去寫入一個特殊的 Log ，以供之後做分析使用，而這個 Log 寫入普遍上來說又比較耗時(假設通常每一筆的寫入需耗費約一秒的時間成本)，那這樣不是會拖慢我們網站給使用者回饋的速度嗎?那麼在這種情境之下我們開如何去處理，從而節省那寶貴的一秒鐘呢?</p>
+<p>想法其實很簡單，就像我們的日常工作一樣，有些東西不急，我們就先加入代辦事項，晚點再來做。而對於上面的需求來說，寫入特殊的 Log 並不是一定要立即更新那麼急迫的，所以我們要做的是</p>
+<ol>
+<li>找一個地方，把不急的工作給放進去記錄下來</li>
+<li>有空的時候我們就可以去這個地方把工作撿回來做完</li>
+</ol>
+<p>這樣的情境與想法可以當作學習 Laravel Queue Job 的起點，有些狀況會變得不那麼抽象。</p>
+<h3 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h3>
+<p>當我們把情境拉回上面的例子，首先我們要做的是，把「寫入 Log 的工作」先放置到「某處」儲存起來。<br />
+在此處， Laravel 將「寫入 Log 的工作」的工作本體定義為一個稱作做 Job 的物件<br />
+而所謂的「某處」， Laravel 則提供了很多選擇可以使用，在這邊我們先用 <a href="https://redis.io/" target="_blank" rel="noopener">Redis</a> 作為例子。<br />
+而這時我們還得要指派一個角色，讓他可以有空的時候就去執行代辦的工作，在這個例子中， Sever 因為可以多工，我們讓他同時需要處理進來的 request ，同時也要去關心 Redis 內還沒有有其他工作要處理</p>
+<p>如下圖，簡單示意了一下從放入工作到 Redis ，再到拿工作去處理的流程</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/BgXxhtD.png"  alt="" /></p>
+<p>底下我們一個一個階段的去詳細解說</p>
+<h2 id="job-storage-driver-儲存-job-的地方"><a class="markdownIt-Anchor" href="#job-storage-driver-儲存-job-的地方"></a> Job Storage Driver 儲存 Job 的地方</h2>
+<p>既然我們想把工作儲存在某個地方，如上面舉例的想存在 Redis ，那麼很自然的就會產生一個疑問，那我想存在別的地方可以嗎?<br />
+結果是可以的， Laravel 提供了不少配合的 Driver 可以配合儲存待辦的工作，大致上有以下幾種</p>
+<p><strong>Queue Drive:</strong></p>
+<ul>
+<li>Database
+<ul>
+<li>普通的資料庫，如 MySQL 之類的</li>
+<li>如果使用這個選項要額外下<a href="https://laravel.com/docs/8.x/queues#database" target="_blank" rel="noopener">指令</a>去聲成對應的特殊表</li>
+</ul>
+</li>
+<li>Amazon SQS
+<ul>
+<li>Amazon 的服務</li>
+<li>要另外安裝套件 : <a href="https://github.com/aws/aws-sdk-php" target="_blank" rel="noopener">aws/aws-sdk-php</a> ~3.0</li>
+</ul>
+</li>
+<li><a href="https://beanstalkd.github.io/" target="_blank" rel="noopener">Beanstalkd</a>
+<ul>
+<li>需另外安裝套件 : <a href="https://github.com/pheanstalk/pheanstalk" target="_blank" rel="noopener">pda/pheanstalk</a> ~4.0</li>
+</ul>
+</li>
+<li>Redis
+<ul>
+<li>需另外安裝套件 : <a href="https://github.com/predis/predis" target="_blank" rel="noopener">predis/predis</a> ~1.0</li>
+</ul>
+</li>
+</ul>
+<p>在此處，因為筆者比較熟悉 Redis 的關係，所以我們選用 Redis 去作為儲存的載體</p>
+<p>首先，我們假設 redis 已經安裝完畢，而 Laravel 與 Redis 溝通需要依賴套件，所以我們先裝 <a href="https://github.com/predis/predis" target="_blank" rel="noopener">predis/predis</a> 套件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require predis&#x2F;predis</span><br></pre></td></tr></table></figure>
+<p>再來我們要去將與 redis 連線的設定做更改，底下會將其他設定先做簡化，只專注在必要調整的部分</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//config/database.php</span></span><br><span class="line"></span><br><span class="line"><span class="string">'redis'</span> =&gt; [</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 將預設的 client 調整為 predis </span></span><br><span class="line">    <span class="comment">// 或是在 env 新增 REDIS_CLIENT 參數並設定為 predis</span></span><br><span class="line">    <span class="string">'client'</span> =&gt; env(<span class="string">'REDIS_CLIENT'</span>, <span class="string">'predis'</span>), </span><br><span class="line"></span><br><span class="line">    <span class="string">'default'</span> =&gt; [</span><br><span class="line">        <span class="string">'url'</span> =&gt; env(<span class="string">'REDIS_URL'</span>),</span><br><span class="line">        <span class="string">'host'</span> =&gt; env(<span class="string">'REDIS_HOST'</span>, <span class="string">'127.0.0.1'</span>),</span><br><span class="line">        <span class="string">'password'</span> =&gt; env(<span class="string">'REDIS_PASSWORD'</span>, <span class="keyword">null</span>),</span><br><span class="line">        <span class="string">'port'</span> =&gt; env(<span class="string">'REDIS_PORT'</span>, <span class="string">'6379'</span>),</span><br><span class="line">        <span class="comment">// database 參數可以指定 redis 內的資料庫</span></span><br><span class="line">        <span class="comment">// 一般來說會看到16個（0~15)</span></span><br><span class="line">        <span class="comment">// 這邊預設指向0</span></span><br><span class="line">        <span class="string">'database'</span> =&gt; env(<span class="string">'REDIS_DB'</span>, <span class="string">'0'</span>),</span><br><span class="line">    ],</span><br><span class="line"></span><br><span class="line">],</span><br></pre></td></tr></table></figure>
+<p>如此一來 Laravel 與 Redis 的溝通手段就準備好了</p>
+<h2 id="介紹-laravel-queue-job"><a class="markdownIt-Anchor" href="#介紹-laravel-queue-job"></a> 介紹 Laravel Queue Job</h2>
+<p>儲存的地方準備好了，接下來我們要做的是將 Job 這個物件創造出來並且在需要的時候放進 redis 內</p>
+<h3 id="如何新增"><a class="markdownIt-Anchor" href="#如何新增"></a> 如何新增</h3>
+<p>首先我們要新增一個 Job ，這部分 Laravel 的 artisan 幫我們事先準備好了指令，讓我們可以透過下指令的方式輕鬆的產生 Job 類別</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:job WriteLogJob</span><br></pre></td></tr></table></figure>
+<p>而新產生的 Job 大致上會長這樣</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Jobs</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Bus</span>\<span class="title">Queueable</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Contracts</span>\<span class="title">Queue</span>\<span class="title">ShouldBeUnique</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Contracts</span>\<span class="title">Queue</span>\<span class="title">ShouldQueue</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Bus</span>\<span class="title">Dispatchable</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">InteractsWithQueue</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">SerializesModels</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WriteLogJob</span> <span class="keyword">implements</span> <span class="title">ShouldQueue</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">Dispatchable</span>, <span class="title">InteractsWithQueue</span>, <span class="title">Queueable</span>, <span class="title">SerializesModels</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Create a new job instance.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Execute the job.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><figcaption><span>的部分就是讓我們去定義自己想要做的工作的地方，遵循上面的例子來說，我今天想要讓他去寫一個特殊的 Log 所以我可以將 ```handle()``` 內改寫為以下示範內容</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&#96;&#96;&#96;php&#x3D;</span><br><span class="line">public function handle()</span><br><span class="line">&#123;</span><br><span class="line">    echo &quot;write special log \n&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="如何派發"><a class="markdownIt-Anchor" href="#如何派發"></a> 如何派發</h3>
+<p>我們已經準備好了 Job 本體，接下來我們來看看要怎麼樣將它給派發進去 redis 內， Laravel 很貼心的為 Job 物件事先包裝好了派發的方法，為求方便，我直接在 <code>web.php</code> 寫派發的過程</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Jobs</span>\<span class="title">WriteLogJob</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Route</span>;</span><br><span class="line"></span><br><span class="line">Route::get(</span><br><span class="line">    <span class="string">'/'</span>,</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">        WriteLogJob::dispatch();</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>只要用上面的語法，就可以輕易的將 Job 給派發到 redis 內，派發完之後 redis 裡面的內容會像是這樣</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/BvuMc4e.png"  alt="" /></p>
+<p>到這邊其實就算是派發完成了，接下來就等待這些工作被執行。</p>
+<p>而在派發的這個工作上， Laravel 還提供了你可以指定 queue 名稱讓我們可以去做 Job 的管理與分流，使用起來也相當簡單，語法如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Jobs</span>\<span class="title">WriteLogJob</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Route</span>;</span><br><span class="line"></span><br><span class="line">Route::get(</span><br><span class="line">    <span class="string">'/'</span>,</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">        WriteLogJob::dispatch();</span><br><span class="line">        WriteLogJob::dispatch()-&gt;onQueue(<span class="string">'A'</span>);</span><br><span class="line">        WriteLogJob::dispatch()-&gt;onQueue(<span class="string">'B'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>只要我們加上了 <code>onQueue('QueueName')</code> 就可以將 Job 派發到指定的地方，派發完的結果如下</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/zN4tcJ2.png"  alt="" /></p>
+<p>另外，如果除了 redis 以外我們還有不同的儲存載體的話，我們也可以在派發的時候指定要連接的地方，語法如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Jobs</span>\<span class="title">WriteLogJob</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Route</span>;</span><br><span class="line"></span><br><span class="line">Route::get(</span><br><span class="line">    <span class="string">'/'</span>,</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">        WriteLogJob::dispatch()-&gt;onConnection(<span class="string">'sqs'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>這個部分主要做的事情就是將我們寫好的 Job 給放到 redis 內，像是下圖這樣</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/aZjo3K0.png"  alt="" /></p>
+<h3 id="如何執行"><a class="markdownIt-Anchor" href="#如何執行"></a> 如何執行</h3>
+<p>我們已經將 redis 準備好， Job 也成功的派發了進去等待被處理，那麼我們該怎麼處理呢？ Laravel 也幫你把處理的動作也寫好了，同樣的我們僅僅需要下簡單的指令便可以讓他有空的時候就去撿 Job 回來做</p>
+<p>Laravel 的官方網站上提供了兩種可以執行的指令，分別是</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php artisan queue:work</span><br><span class="line">php artisan queue:listen</span><br></pre></td></tr></table></figure>
+<p>以上兩種指令都可以達到執行 Job 的結果，只是為什麼需要兩種不一樣的指令去做同一件事情呢？官網有寫出這兩種指令的差異性</p>
+<ul>
+<li><code>php artisan queue:work</code>
+<ul>
+<li>比起 <code>php artisan queue:listen</code> 在效率上更好一些</li>
+<li>但如果有更新 Job 的話必須要重新下指令</li>
+</ul>
+</li>
+<li><code>php artisan queue:listen</code>
+<ul>
+<li>比起 <code>php artisan queue:work</code> 在效率上會比較差</li>
+<li>如果有更新 Job 的話不用重新下指令</li>
+</ul>
+</li>
+</ul>
+<p>大致上可以這樣思考，如果在開發階段為了方便不想每次更新 Job 都去重新下指令的話，可以使用 <code>php artisan queue:listen</code> 就好，而在正式的產品上則使用 <code>php artisan queue:work</code> ，只是官網有特別指出，如果在正式的環境上讓指令做背景執行，要搭配監控的手段比較妥當，否則除非產品出了問題有人來回報，不然你不會知道執行程序跳掉了。</p>
+<p>接下來我們來介紹一些常用的可以接在指令後面的參數，可以讓你的指令更靈活</p>
+<p><strong>queue</strong></p>
+<p>在上面有提到我們可以透過 <code>onQueue()</code> 去指定要放到那個分流去，這個參數讓你可以單獨執行該分流的任務</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php artisan queue:work --queue&#x3D;A</span><br><span class="line">php artisan queue:work --queue&#x3D;B</span><br></pre></td></tr></table></figure>
+<p><strong>once</strong></p>
+<p>只執行一次（會執行順位最前面的那個）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan queue:work --once</span><br></pre></td></tr></table></figure>
+<p><strong>tries</strong></p>
+<p>當任務失敗，可以指定重新嘗試的次數</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;錯誤重新嘗試三次</span><br><span class="line">php artisan queue:work --tries&#x3D;3</span><br></pre></td></tr></table></figure>
+<p><strong>timeout</strong></p>
+<p>我們都害怕某項任務卡住而癱瘓了後面該做的事情，所以我們可以為每個執行設定一但超過多少時間就跳過他</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan queue:work --timeout&#x3D;30</span><br></pre></td></tr></table></figure>
+<p>指令執行起來大致上會像下圖般運作</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/7otJg6g.png"  alt="" /></p>
+<h3 id="失敗了怎麼辦"><a class="markdownIt-Anchor" href="#失敗了怎麼辦"></a> 失敗了怎麼辦？</h3>
+<p>再來我們談論到一個肯定會面臨的狀況，「如果我的 Job 執行的內容失敗了怎麼辦？」<br />
+這方面 Laravel 自然也是幫你準備好配套方案了， Laravel 幫你準備了一張資料表，讓整個流程中失敗的 Job 的相關訊息可以被記錄在裡面<br />
+該怎麼做呢？首先我們先新增一個 Laravel 幫我們準備好的 migration，並且將資料表新增（此處筆者使用的 Laravel 8.16.1 似乎在創立專案的時候就幫我們把 migration 給新增好了，所以下指令的時候他會告訴你已經存在，這時候就不用下第一個指令，直接做第二個的 migrate 就好）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php artisan queue:failed-table</span><br><span class="line">php artisan migrate</span><br></pre></td></tr></table></figure>
+<p>這時候如果執行結果失敗， Laravel 則會將失敗的相關訊息幫你存在 failed_jobs 中</p>
+<h2 id="將整個流程串起來吧"><a class="markdownIt-Anchor" href="#將整個流程串起來吧"></a> 將整個流程串起來吧</h2>
+<p>經過上面的介紹，運行的流程大概如下，假設我已經將 redis 的連線設定全部都搞定了，接下來我會先新增 Job</p>
+<h3 id="新增-job"><a class="markdownIt-Anchor" href="#新增-job"></a> 新增 Job</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:job WriteLogJob</span><br></pre></td></tr></table></figure>
+<p>然後撰寫 Job 的內容</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Jobs</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Bus</span>\<span class="title">Queueable</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Contracts</span>\<span class="title">Queue</span>\<span class="title">ShouldBeUnique</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Contracts</span>\<span class="title">Queue</span>\<span class="title">ShouldQueue</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Bus</span>\<span class="title">Dispatchable</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">InteractsWithQueue</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">SerializesModels</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WriteLogJob</span> <span class="keyword">implements</span> <span class="title">ShouldQueue</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">use</span> <span class="title">Dispatchable</span>, <span class="title">InteractsWithQueue</span>, <span class="title">Queueable</span>, <span class="title">SerializesModels</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Create a new job instance.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Execute the job.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"write special log \n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="派發"><a class="markdownIt-Anchor" href="#派發"></a> 派發</h3>
+<p>我們將執行的過程中加入 dispatch 的動作</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">App</span>\<span class="title">Jobs</span>\<span class="title">WriteLogJob</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Route</span>;</span><br><span class="line"></span><br><span class="line">Route::get(</span><br><span class="line">    <span class="string">'/'</span>,</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">        WriteLogJob::dispatch();</span><br><span class="line">        WriteLogJob::dispatch();</span><br><span class="line">        WriteLogJob::dispatch();</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>執行完之後我們會看到 redis 裡面多了新的 Job 等待被執行，如圖</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/o25etM2.png"  alt="" /></p>
+<p>到這邊就表示了我們已經將待辦的事情放到 redis 了</p>
+<h3 id="執行"><a class="markdownIt-Anchor" href="#執行"></a> 執行</h3>
+<p>接下來我們需要一個人時時刻刻去關心 redis ，去處理這些任務，所以我們在專案內下了下面的指令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan queue:work</span><br></pre></td></tr></table></figure>
+<p>然後我們可以看到下面的畫面，的確我們寫在 handle() 內的工作有被正常執行</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/1KQ2MMK.png"  alt="" /></p>
+<h3 id="錯誤處理"><a class="markdownIt-Anchor" href="#錯誤處理"></a> 錯誤處理</h3>
+<p>而如果執行的過程中有錯誤，錯誤訊息就會被丟入 failed_jobs 資料表並且被記錄下來</p>
+<p>以下我們將 Job 的 handle() 改成會出錯的內容</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> 字串沒有括起來;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再執行一次指令之後，會看到錯誤的告知</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/hmCkAh1.png"  alt="" /></p>
+<p>而且在資料庫的 failed_jobs 表中可以看到詳細的錯誤訊息</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/a2zxOQa.png"  alt="" /></p>
+<p>總結來說整理的流程串接起來大概上會像下面這張圖一樣</p>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/2W8LeXW.png"  alt="" /></p>
+<h2 id="reference"><a class="markdownIt-Anchor" href="#reference"></a> Reference</h2>
+<ul>
+<li><a href="https://laravel.com/docs/8.x/queues" target="_blank" rel="noopener">Laravel Queue Job</a></li>
+<li><a href="https://redis.io/" target="_blank" rel="noopener">Redis</a></li>
+<li><a href="https://beanstalkd.github.io/" target="_blank" rel="noopener">Beanstalkd</a></li>
+<li><a href="https://github.com/aws/aws-sdk-php" target="_blank" rel="noopener">aws/aws-sdk-php</a></li>
+<li><a href="https://github.com/pheanstalk/pheanstalk" target="_blank" rel="noopener">pda/pheanstalk</a></li>
+<li><a href="https://github.com/predis/predis" target="_blank" rel="noopener">predis/predis</a></li>
+</ul>
+</div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PHP/">PHP</a><a class="post-meta__tags" href="/tags/Laravel/">Laravel</a><a class="post-meta__tags" href="/tags/Job/">Job</a><a class="post-meta__tags" href="/tags/Queue/">Queue</a><a class="post-meta__tags" href="/tags/Redis/">Redis</a></div><div class="post_share"></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2020/12/03/Laravel/ScheduleToJob_pt2_command/"><img class="prev_cover lazyload" data-src="https://picsum.photos/id/284/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇</div></div></a></div><div class="next-post pull_right"><a href="/2020/11/30/Other/PHP8ReleaseNoteStringToNumberComparison/"><img class="next_cover lazyload" data-src="https://picsum.photos/id/1042/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">PHP8 - Release Note - 字串與數字的比對行為修正</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相關推薦</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/12/07/Laravel/ScheduleToJob_pt4_teamwork/" title="晚點再說啦三部曲之四 - 精美的合作"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/444/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-12-07</div><div class="relatedPosts_title">晚點再說啦三部曲之四 - 精美的合作</div></div></a></div><div class="relatedPosts_item"><a href="/2021/01/07/Laravel/Notification/" title="Laravel Notifications - 以 Slack 為例子"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/58/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2021-01-07</div><div class="relatedPosts_title">Laravel Notifications - 以 Slack 為例子</div></div></a></div><div class="relatedPosts_item"><a href="/2020/12/03/Laravel/ScheduleToJob_pt2_command/" title="晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/284/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-12-03</div><div class="relatedPosts_title">晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇</div></div></a></div><div class="relatedPosts_item"><a href="/2021/01/21/Laravel/Pipeline/" title="Laravel 中的職責鏈模式 - Middleware 背後的魔法 及 在 Query 上的應用"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/660/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2021-01-21</div><div class="relatedPosts_title">Laravel 中的職責鏈模式 - Middleware 背後的魔法 及 在 Query 上的應用</div></div></a></div><div class="relatedPosts_item"><a href="/2020/12/04/Laravel/ScheduleToJob_pt3_schedule/" title="晚點再說啦三部曲之三 - Laravel Task Scheduling - 基礎篇"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/357/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-12-04</div><div class="relatedPosts_title">晚點再說啦三部曲之三 - Laravel Task Scheduling - 基礎篇</div></div></a></div><div class="relatedPosts_item"><a href="/2020/03/04/Other/ReformatCodeStyleOnWin/" title="在 win10 上使用 php-cs-fixer 自動排版 php 程式碼為 psr-12 格式"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/618/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-03-04</div><div class="relatedPosts_title">在 win10 上使用 php-cs-fixer 自動排版 php 程式碼為 psr-12 格式</div></div></a></div></div><div class="clear_both"></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Mobius</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="閱讀模式"></i><i class="fa fa-plus" id="font_plus" title="放大字體"></i><i class="fa fa-minus" id="font_minus" title="縮小字體"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="夜間模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="設置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目錄" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到頂部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>$(function () {
+  $('span.katex-display').wrap('<div class="katex-wrap"></div>')
+})</script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script id="ribbon_piao" mobile="false" src="/js/third-party/piao.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>

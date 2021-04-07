@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8 | Mobius</title><meta name="description" content="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8"><meta name="keywords" content="讀書會報告,Unit Test,Test"><meta name="author" content="Mobius,dopamine908@gmail.com"><meta name="copyright" content="Mobius"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8"><meta name="twitter:description" content="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8"><meta name="twitter:image" content="https://picsum.photos/id/153/800/600"><meta property="og:type" content="article"><meta property="og:title" content="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8"><meta property="og:url" content="https://dopamine908.github.io/2021/02/24/UnitTestArt/ch1_sec1-5_sec1-8/"><meta property="og:site_name" content="Mobius"><meta property="og:description" content="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8"><meta property="og:image" content="https://picsum.photos/id/153/800/600"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="canonical" href="https://dopamine908.github.io/2021/02/24/UnitTestArt/ch1_sec1-5_sec1-8/"><link rel="prev" title="Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)" href="https://dopamine908.github.io/2021/03/03/WorkingEffectivelyWithLegacyCode/ch25_pt4/"><link rel="next" title="SQL達人的現場工作筆記 - Ch17 - 有關順序的冒險" href="https://dopamine908.github.io/2021/02/14/SQLTips/ch17/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '鍵將本頁加入書籤'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"按","message_next":"鍵將本頁加入書籤"},"chs_to_cht":"你已切換為繁體","cht_to_chs":"你已切換為簡體","day_to_night":"你已切換為深色模式","night_to_day":"你已切換為淺色模式","bgLight":"#49b1f5","bgDark":"#2d3035","position":"bottom-right"},
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">38</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">標籤</div><div class="length_num">30</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分類</div><div class="length_num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目錄</div><div class="sidebar-toc__progress"><span class="progress-notice">你已經讀了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#單元測試的藝術-ch1-單元測試基礎-sec-15-~-18"><span class="toc-text"> 單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#15-一個簡單的單元測試範例"><span class="toc-text"> 1.5 一個簡單的單元測試範例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#parseandsum"><span class="toc-text"> ParseAndSum()</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#input"><span class="toc-text"> Input</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#output"><span class="toc-text"> Output</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-測試驅動開發"><span class="toc-text"> 1.6 測試驅動開發</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#17-成功進行-tdd-的三種核心技能"><span class="toc-text"> 1.7 成功進行 TDD 的三種核心技能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#18-小結"><span class="toc-text"> 1.8 小結</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://picsum.photos/id/153/800/600)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">Mobius</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="發表於 2021-02-24 13:42:52"><i class="fa fa-calendar" aria-hidden="true"></i> 發表於 2021-02-24</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新於 2021-04-07 11:22:39"><i class="fa fa-history" aria-hidden="true"></i> 更新於 2021-04-07</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>閱讀量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div id="article-container"><h1 id="單元測試的藝術-ch1-單元測試基礎-sec-15-~-18"><a class="markdownIt-Anchor" href="#單元測試的藝術-ch1-單元測試基礎-sec-15-~-18"></a> 單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8</h1>
+<h2 id="15-一個簡單的單元測試範例"><a class="markdownIt-Anchor" href="#15-一個簡單的單元測試範例"></a> 1.5 一個簡單的單元測試範例</h2>
+<p>其實就算沒有測試框架的輔助，我們也可以自己寫一個自動化的單元測試</p>
+<p>舉例來說，有一個類別 <code>SimpleParser</code> ，裡面有一個 <code>ParseAndSum</code> 方法</p>
+<h3 id="parseandsum"><a class="markdownIt-Anchor" href="#parseandsum"></a> ParseAndSum()</h3>
+<h4 id="input"><a class="markdownIt-Anchor" href="#input"></a> Input</h4>
+<p>輸入零個或多個逗號分開的數字所組成的字串</p>
+<p>exaple: 1,2,3</p>
+<h4 id="output"><a class="markdownIt-Anchor" href="#output"></a> Output</h4>
+<ul>
+<li>輸入不包含數字
+<ul>
+<li>則回傳 0</li>
+</ul>
+</li>
+<li>包含一個數字
+<ul>
+<li>則回傳該數字</li>
+</ul>
+</li>
+<li>包含多個數字
+<ul>
+<li>則回傳這些數字的相加</li>
+</ul>
+</li>
+</ul>
+<p>為了示範方便，該 fucntion 現在只能處理0個或是1個數字的情況</p>
+<hr />
+<p>首先，我們有了一個已經實作了上述需求的 <code>SimpleParser</code> 類別</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;php&#x3D;</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">namespace Src;</span><br><span class="line"></span><br><span class="line">use Exception;</span><br><span class="line"></span><br><span class="line">class SimpleParser</span><br><span class="line">&#123;</span><br><span class="line">    public function ParseAndSum(string $number): int</span><br><span class="line">    &#123;</span><br><span class="line">        if (strlen($number) &#x3D;&#x3D; 0) &#123;</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line">        if (strpos($number, &#39;,&#39;) !&#x3D;&#x3D; false) &#123;</span><br><span class="line">            return (int)$number;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            throw new Exception(&#39;I can only handle 0 and 1 numbers for now!&#39;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接著我們新增一個要用來測試 <code>SimpleParser</code> 的 <code>SimpleParserTest</code> 類別，然後撰寫某一個 case 的測試內容</p>
+<p>我們想要測試在空字串的情況下， <code>ParseAndSum()</code> 會不會如期返回 0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;php&#x3D;</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">namespace Test;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">use Src\SimpleParser;</span><br><span class="line"></span><br><span class="line">class SimpleParserTest</span><br><span class="line">&#123;</span><br><span class="line">    public function TestReturnsZeroWhenEmptyString()</span><br><span class="line">    &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            $SimpleParser &#x3D; new SimpleParser();</span><br><span class="line">            $result &#x3D; $SimpleParser-&gt;ParseAndSum(&#39;&#39;);</span><br><span class="line">            if ($result !&#x3D; 0) &#123;</span><br><span class="line">                echo &quot; Error on SimpleParserTest::TestReturnsZeroWhenEmptyString\n</span><br><span class="line">                       ParseAndSum should have returned 0 on an empty string&quot;;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                echo &quot;SimpleParserTest::TestReturnsZeroWhenEmptyString verify success&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (\Exception $exception) &#123;</span><br><span class="line">            var_dump($exception-&gt;getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最後我們將測試的過程註冊到 <code>TestMain.php</code> 中，這樣我只要去執行這隻檔案就可以執行所有在這之中被註冊過的測試</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#96;&#96;&#96;php&#x3D;</span><br><span class="line">&lt;?php</span><br><span class="line"></span><br><span class="line">require __DIR__ . &#39;&#x2F;test&#x2F;SimpleParserTest.php&#39;;</span><br><span class="line">require __DIR__ . &#39;&#x2F;src&#x2F;SimpleParser.php&#39;;</span><br><span class="line"></span><br><span class="line">use Test\SimpleParserTest;</span><br><span class="line"></span><br><span class="line">try &#123;</span><br><span class="line">    $SimpleParserTest &#x3D; new SimpleParserTest();</span><br><span class="line">    $SimpleParserTest-&gt;TestReturnsZeroWhenEmptyString();</span><br><span class="line">&#125; catch (Exception $exception) &#123;</span><br><span class="line">    var_dump($exception-&gt;getMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最後用指令去執行這隻可以運行測試的腳本 php 檔</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php TestMain.php</span><br></pre></td></tr></table></figure>
+<h2 id="16-測試驅動開發"><a class="markdownIt-Anchor" href="#16-測試驅動開發"></a> 1.6 測試驅動開發</h2>
+<p>大致上理解了該怎麼去寫測試之後，下一個問題就是我們該在何時轉寫測試呢？</p>
+<p>有不少人會在軟體完成之後去撰寫測試，但越來越多人選擇在撰寫產品程式碼之前就先寫測試，這種方式稱為 <strong>測試驅動開發(Test-Driven Development, TDD)</strong></p>
+<p>書上的圖 1-3, 1-4 呈現了傳統撰寫方式與 TDD 的不同之處</p>
+<!-- <p style="color:red">插入圖片</p>-->
+<p>但 TDD 並不能保證你的專案一定會成功，測試的命名、測試的可維護性和可讀性，以及是否測試了正確的內容，或是測試本身有無缺陷或者設計不良都可能左右專案的成敗。本書的重點會把主軸放在將測試寫的到位上。</p>
+<p>以下簡述一下 TDD 的開發過程</p>
+<ol>
+<li>寫一個失敗的測試，已證明產品功能上的缺失</li>
+<li>撰寫產品程式碼，已通過測試</li>
+<li>重構程式碼</li>
+</ol>
+<blockquote>
+<p>【重構】</p>
+<blockquote>
+<p>重構意味著在不改變功能的前提下，修改其程式碼，改善其可讀性、可維護性</p>
+</blockquote>
+</blockquote>
+<h2 id="17-成功進行-tdd-的三種核心技能"><a class="markdownIt-Anchor" href="#17-成功進行-tdd-的三種核心技能"></a> 1.7 成功進行 TDD 的三種核心技能</h2>
+<p>想要成功的使用 TDD ，你需要三種核心技能</p>
+<ul>
+<li>僅僅做到先撰寫測試，並不能保證測試是可維護的、可讀且可靠的。</li>
+<li>僅僅做到撰寫出可維護、可讀、可靠的測試，並不能保證你能獲得測試先行的各種好處。</li>
+<li>僅僅做到測試先行，且測試可讀、可維護、可靠，並不能保證你能產出一個設計完善的系統。</li>
+</ul>
+<p>學習 TDD 的一個實際方式就是分別學習以上三個技能。</p>
+<h2 id="18-小結"><a class="markdownIt-Anchor" href="#18-小結"></a> 1.8 小結</h2>
+<p>本章節中，作者定義了一個優秀的單元測試應該具有的特質，如下</p>
+<ul>
+<li>一段自動化程式，他會呼叫另一個方法，然後驗證這個方法或是該類別的邏輯行為或某些預期結果</li>
+<li>用一個自動化測試框架進行撰寫</li>
+<li>容易撰寫</li>
+<li>執行快速</li>
+<li>能由開發團隊裡的任何人重複執行且得到一樣的結果</li>
+</ul>
+<p>並且告訴我們，區分整合測試與單元測試之間的差異非常重要，每當想要寫一個測試的時候，我們就必須去判斷該寫的是單元測試或是整合測試才適當</p>
+</div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a><a class="post-meta__tags" href="/tags/Unit-Test/">Unit Test</a><a class="post-meta__tags" href="/tags/Test/">Test</a></div><div class="post_share"></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2021/03/03/WorkingEffectivelyWithLegacyCode/ch25_pt4/"><img class="prev_cover lazyload" data-src="https://picsum.photos/id/178/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)</div></div></a></div><div class="next-post pull_right"><a href="/2021/02/14/SQLTips/ch17/"><img class="next_cover lazyload" data-src="https://picsum.photos/id/116/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SQL達人的現場工作筆記 - Ch17 - 有關順序的冒險</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相關推薦</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/11/19/WorkingEffectivelyWithLegacyCode/ch2/" title="Working Effectively with Legacy Code - Ch2 - 帶著回饋工作"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/169/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-11-19</div><div class="relatedPosts_title">Working Effectively with Legacy Code - Ch2 - 帶著回饋工作</div></div></a></div><div class="relatedPosts_item"><a href="/2020/11/10/WorkingEffectivelyWithLegacyCode/ch1/" title="Working Effectively with Legacy Code - Ch1 - 修改軟體"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/1059/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-11-10</div><div class="relatedPosts_title">Working Effectively with Legacy Code - Ch1 - 修改軟體</div></div></a></div><div class="relatedPosts_item"><a href="/2021/03/03/WorkingEffectivelyWithLegacyCode/ch25_pt4/" title="Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/178/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2021-03-03</div><div class="relatedPosts_title">Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)</div></div></a></div><div class="relatedPosts_item"><a href="/2021/03/12/WorkingEffectivelyWithLegacyCode/ch25_pt5/" title="Working Effectively with Legacy Code - Ch25 - 解依賴技術 (5)"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/190/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2021-03-12</div><div class="relatedPosts_title">Working Effectively with Legacy Code - Ch25 - 解依賴技術 (5)</div></div></a></div><div class="relatedPosts_item"><a href="/2020/11/25/WorkingEffectivelyWithLegacyCode/ch3/" title="Working Effectively with Legacy Code - Ch3 - 感測和分離"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/168/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-11-25</div><div class="relatedPosts_title">Working Effectively with Legacy Code - Ch3 - 感測和分離</div></div></a></div><div class="relatedPosts_item"><a href="/2020/03/21/CleanArchitecture/ch12/" title="簡潔架構 - Chapter 12 - 元件"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/0/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-03-21</div><div class="relatedPosts_title">簡潔架構 - Chapter 12 - 元件</div></div></a></div></div><div class="clear_both"></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Mobius</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="閱讀模式"></i><i class="fa fa-plus" id="font_plus" title="放大字體"></i><i class="fa fa-minus" id="font_minus" title="縮小字體"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="夜間模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="設置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目錄" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到頂部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>$(function () {
+  $('span.katex-display').wrap('<div class="katex-wrap"></div>')
+})</script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script id="ribbon_piao" mobile="false" src="/js/third-party/piao.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>

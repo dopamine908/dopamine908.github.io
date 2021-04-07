@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SOLID - Dependency Inversion Principle - 依賴反轉轉原則 | Mobius</title><meta name="description" content="SOLID - Dependency Inversion Principle - 依賴反轉轉原則"><meta name="keywords" content="SOLID"><meta name="author" content="Mobius,dopamine908@gmail.com"><meta name="copyright" content="Mobius"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="SOLID - Dependency Inversion Principle - 依賴反轉轉原則"><meta name="twitter:description" content="SOLID - Dependency Inversion Principle - 依賴反轉轉原則"><meta name="twitter:image" content="https://picsum.photos/id/325/800/600"><meta property="og:type" content="article"><meta property="og:title" content="SOLID - Dependency Inversion Principle - 依賴反轉轉原則"><meta property="og:url" content="https://dopamine908.github.io/2020/08/28/DesignPattern/SOLID_DIP-1/"><meta property="og:site_name" content="Mobius"><meta property="og:description" content="SOLID - Dependency Inversion Principle - 依賴反轉轉原則"><meta property="og:image" content="https://picsum.photos/id/325/800/600"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="canonical" href="https://dopamine908.github.io/2020/08/28/DesignPattern/SOLID_DIP-1/"><link rel="prev" title="Design Patterns - Structural - Composite Pattern 組合模式" href="https://dopamine908.github.io/2020/09/11/DesignPattern/Composite/"><link rel="next" title="Design Patterns - Creational - Abstract Factory Pattern 抽象工廠模式" href="https://dopamine908.github.io/2020/08/16/DesignPattern/AbstractFactory/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '鍵將本頁加入書籤'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"按","message_next":"鍵將本頁加入書籤"},"chs_to_cht":"你已切換為繁體","cht_to_chs":"你已切換為簡體","day_to_night":"你已切換為深色模式","night_to_day":"你已切換為淺色模式","bgLight":"#49b1f5","bgDark":"#2d3035","position":"bottom-right"},
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">38</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">標籤</div><div class="length_num">30</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分類</div><div class="length_num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目錄</div><div class="sidebar-toc__progress"><span class="progress-notice">你已經讀了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#solid-dip-1-dip-與-ioc"><span class="toc-text"> SOLID - DIP (1) - DIP 與 IoC</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dependency-inversion-principle-依賴反轉轉原則"><span class="toc-text"> Dependency Inversion Principle - 依賴反轉轉原則</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定義"><span class="toc-text"> 定義</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#依賴反轉-先了解下什麼是依賴吧"><span class="toc-text"> 依賴反轉? 先了解下什麼是&quot;依賴&quot;吧!</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子"><span class="toc-text"> 例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方式"><span class="toc-text"> 使用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#類別圖"><span class="toc-text"> 類別圖</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#plant-uml"><span class="toc-text"> plant uml</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#依賴反轉-反轉什麼"><span class="toc-text"> 依賴&quot;反轉&quot;? 反轉什麼?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#例子-2"><span class="toc-text"> 例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方式-2"><span class="toc-text"> 使用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#類別圖-2"><span class="toc-text"> 類別圖</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#plant-uml-2"><span class="toc-text"> plant uml</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例子-3"><span class="toc-text"> 例子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方式-3"><span class="toc-text"> 使用方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#類別圖-3"><span class="toc-text"> 類別圖</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#plant-uml-3"><span class="toc-text"> plant uml</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#類別圖-4"><span class="toc-text"> 類別圖</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#plant-uml-4"><span class="toc-text"> plant uml</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#inversion-of-control-控制反轉"><span class="toc-text"> Inversion of Control - 控制反轉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#控制反轉-反轉什麼"><span class="toc-text"> 控制&quot;反轉&quot;? 反轉什麼?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#幾種實踐ioc的方式"><span class="toc-text"> 幾種實踐IOC的方式</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://picsum.photos/id/325/800/600)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">Mobius</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">SOLID - Dependency Inversion Principle - 依賴反轉轉原則</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="發表於 2020-08-28 20:14:52"><i class="fa fa-calendar" aria-hidden="true"></i> 發表於 2020-08-28</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新於 2020-12-23 10:28:41"><i class="fa fa-history" aria-hidden="true"></i> 更新於 2020-12-23</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%97%A5%E5%B8%B8%E9%96%8B%E7%99%BC%E7%AD%86%E8%A8%98/">日常開發筆記</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>閱讀量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div id="article-container"><h1 id="solid-dip-1-dip-與-ioc"><a class="markdownIt-Anchor" href="#solid-dip-1-dip-與-ioc"></a> SOLID - DIP (1) - DIP 與 IoC</h1>
+<h2 id="dependency-inversion-principle-依賴反轉轉原則"><a class="markdownIt-Anchor" href="#dependency-inversion-principle-依賴反轉轉原則"></a> Dependency Inversion Principle - 依賴反轉轉原則</h2>
+<p>首先，我們先來看一段關於依賴反轉原則的敘述</p>
+<h3 id="定義"><a class="markdownIt-Anchor" href="#定義"></a> 定義</h3>
+<p><a href="https://en.wikipedia.org/wiki/Dependency_inversion_principle" target="_blank" rel="noopener">wiki</a></p>
+<blockquote>
+<p>A.High-level modules should not depend on low-level modules. Both should depend on abstractions (e.g. interfaces).<br />
+B.Abstractions should not depend on details. Details (concrete implementations) should depend on abstractions.</p>
+<blockquote>
+<p>A. 高階模組不應該依賴低階模組，兩者都應該依賴於抽象(例如interface)<br />
+B. 抽象不應該依賴於具體，而具體實現應該依賴於抽象介面</p>
+</blockquote>
+</blockquote>
+<p>如果你像我一樣看完之後一頭霧水的話，這邊應該大致上會產生幾個疑問</p>
+<ol>
+<li>什麼是高階模組?什麼又是低階模組?</li>
+<li>什麼是具體?什麼是抽象?</li>
+<li>什麼是依賴?</li>
+<li>什麼是抽象依賴於具體?</li>
+<li>什麼是具體依賴於抽象?</li>
+</ol>
+<h2 id="依賴反轉-先了解下什麼是依賴吧"><a class="markdownIt-Anchor" href="#依賴反轉-先了解下什麼是依賴吧"></a> 依賴反轉? 先了解下什麼是&quot;依賴&quot;吧!</h2>
+<h3 id="例子"><a class="markdownIt-Anchor" href="#例子"></a> 例子</h3>
+<p>首先，我們先來看個例子吧!<br />
+我們需要一個收銀台，我們先新增一個CheckoutCounter類別，再來我們的收銀檯是收現金的，所以我再新增一個Cash類別</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cash</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">payByCash</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'pay by cash'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CheckoutCounter</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> $Cash;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;Cash = <span class="keyword">new</span> Cash();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">pay</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;Cash-&gt;payByCash();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用方式"><a class="markdownIt-Anchor" href="#使用方式"></a> 使用方式</h3>
+<p>使用的時候如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$CheckoutCounter = <span class="keyword">new</span> CheckoutCounter();</span><br><span class="line">$CheckoutCounter-&gt;pay();</span><br></pre></td></tr></table></figure>
+<h3 id="類別圖"><a class="markdownIt-Anchor" href="#類別圖"></a> 類別圖</h3>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/JCIKm8R.png"  alt="" /></p>
+<h4 id="plant-uml"><a class="markdownIt-Anchor" href="#plant-uml"></a> plant uml</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line"></span><br><span class="line">skinparam classAttributeIconSize 0</span><br><span class="line"></span><br><span class="line">class Cash &#123;</span><br><span class="line">&#123;method&#125; + payByCash():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class CheckoutCounter &#123;</span><br><span class="line">&#123;field&#125; - Cash $Cash</span><br><span class="line">&#123;method&#125; + pay():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CheckoutCounter .right.&gt; Cash</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>以上面的例子來說，CheckoutCounter使用了Cash，CheckoutCounter掌握了Cash的使用權力，所以這種狀況下我們會將CheckoutCounter稱為&quot;高階模組&quot;，而被使用的Cash稱為&quot;低階模組&quot;。</p>
+<p>由上面的例子我們也可以發現，CheckoutCounter的運作必須要使用到Cash，一旦沒有了Cash就沒辦法運作，像是這樣誰沒有了誰就活不下去的關係我們就稱之為&quot;依賴&quot;。</p>
+<p>再來我們是用new Cash()這種方式去產生依賴，也就是說我們將Cash創造出來從而建構出了依賴關係，這邊的new Cash()因為實際被創造出來，我們稱new Cash()為&quot;具體&quot;，而此種依賴方式我們稱之為&quot;依賴具體&quot;。</p>
+<h2 id="依賴反轉-反轉什麼"><a class="markdownIt-Anchor" href="#依賴反轉-反轉什麼"></a> 依賴&quot;反轉&quot;? 反轉什麼?</h2>
+<p>到目前為止看起來並沒有甚麼問題，但如果我想新增收銀的方法呢?如果我想新增刷卡的付款方式，之後又想新增行動支付的付款方式呢?</p>
+<p>這個時候我們的CheckoutCounter類別很可能會變成下面這樣的寫法</p>
+<h3 id="例子-2"><a class="markdownIt-Anchor" href="#例子-2"></a> 例子</h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cash</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">payByCash</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'pay by cash'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Card</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">payByCard</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'pay by card'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mobile</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">payByMobile</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'pay by mobile'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CheckoutCounter</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> $Cash;</span><br><span class="line">    <span class="keyword">private</span> $Card;</span><br><span class="line">    <span class="keyword">private</span> $Mobile;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;Cash = <span class="keyword">new</span> Cash();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;Card = <span class="keyword">new</span> Card();</span><br><span class="line">        <span class="keyword">$this</span>-&gt;Mobile = <span class="keyword">new</span> Mobile();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">payByCash</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;Cash-&gt;payByCash();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">payByCard</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;Card-&gt;payByCard();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">payByMobile</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;Mobile-&gt;payByMobile();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用方式-2"><a class="markdownIt-Anchor" href="#使用方式-2"></a> 使用方式</h3>
+<p>使用起來會像下方這樣</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$CheckoutCounter = <span class="keyword">new</span> CheckoutCounter();</span><br><span class="line">$CheckoutCounter-&gt;payByCash(); <span class="comment">//付現</span></span><br><span class="line">$CheckoutCounter-&gt;payByCard(); <span class="comment">//刷卡</span></span><br><span class="line">$CheckoutCounter-&gt;payByMobile(); <span class="comment">//行動支付</span></span><br></pre></td></tr></table></figure>
+<h3 id="類別圖-2"><a class="markdownIt-Anchor" href="#類別圖-2"></a> 類別圖</h3>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/pUV6zjg.png"  alt="" /></p>
+<h4 id="plant-uml-2"><a class="markdownIt-Anchor" href="#plant-uml-2"></a> plant uml</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line"></span><br><span class="line">skinparam classAttributeIconSize 0</span><br><span class="line"></span><br><span class="line">class Cash &#123;</span><br><span class="line">&#123;method&#125; + payByCash():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Card &#123;</span><br><span class="line">&#123;method&#125; + payByCard():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Mobile &#123;</span><br><span class="line">&#123;method&#125; + payByMobile():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class CheckoutCounter &#123;</span><br><span class="line">&#123;field&#125; - Cash $Cash</span><br><span class="line">&#123;field&#125; - Card $Card</span><br><span class="line">&#123;field&#125; - Mobile $Mobile</span><br><span class="line">&#123;method&#125; + payByCash():string</span><br><span class="line">&#123;method&#125; + payByCard():string</span><br><span class="line">&#123;method&#125; + payByMobile():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CheckoutCounter .down.&gt; Cash : Concrete Dependent</span><br><span class="line">CheckoutCounter .down.&gt; Card : Concrete Dependent</span><br><span class="line">CheckoutCounter .down.&gt; Mobile : Concrete Dependent</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>因應擴充的需求，我們多新增了兩個付款相關的類別，並且修改了CheckoutCounter。<br />
+這樣的方式違反了開放封閉原則，更何況我們可以設想當今天的付款步驟相當複雜，而我們要一邊擴充還要一邊去管理步驟的邏輯，可預見大概會相當不好去做擴充。</p>
+<p>在解決這樣的問題之前，我先來介紹一個評估依賴的方式，這個方式是我之前在某個前輩的文章中看到的，我相當喜歡，可惜前輩的文章現在已經找不到了。</p>
+<p>首先，我們想要去評估依賴關係強還是弱，那麼如果我可以將依賴關係給量化，將整個系統的依賴關係變為一個數字，那麼我便可以很輕易地去比較出他的依賴關係強弱了。</p>
+<p>現在我們來訂定一個規則，當我今天的依賴為具體的時候，這個依賴關係就可以獲得2分，而當我今天我的依賴為抽象的時候(interface or abstract)，則這段依賴關係取得1分的依賴分數，最後我將總分對於類別數取平均，當作整個系統的依賴測量分數。</p>
+<p>那麼以上面的類別圖來說，我們可以列出向下面這樣的表格</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CheckoutCounter</th>
+<th>Cash</th>
+<th>Card</th>
+<th>Mobile</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CheckoutCounter</td>
+<td>-</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Cash</td>
+<td>2</td>
+<td>-</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Card</td>
+<td>2</td>
+<td>0</td>
+<td>-</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Mobile</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>則現在這樣的設計，我們可以取得我們整個系統內的依賴分數為(12/4)=3</p>
+<p>底下我們換一個設計方式，我們對於所有的付款類別提出一個interface，而在CheckoutCounter中我們改變運作方式，原本在CheckoutCounter中我們會需要事先將三種付款方式都準備齊全才能收銀，現在我想要變成依據客人指定的付款方式我們才去準備收銀的媒介。</p>
+<h3 id="例子-3"><a class="markdownIt-Anchor" href="#例子-3"></a> 例子</h3>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IPayment</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">pay</span><span class="params">()</span>: <span class="title">string</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cash</span> <span class="keyword">implements</span> <span class="title">IPayment</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">pay</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'pay by cash'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Card</span> <span class="keyword">implements</span> <span class="title">IPayment</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">pay</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'pay by card'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mobile</span> <span class="keyword">implements</span> <span class="title">IPayment</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">pay</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'pay by mobile'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CheckoutCounter</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> $Payment;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(IPayment $Payment)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;Payment = $Payment;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">pay</span><span class="params">()</span>: <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;Payment-&gt;pay();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用方式-3"><a class="markdownIt-Anchor" href="#使用方式-3"></a> 使用方式</h3>
+<p>顧客自己去決定要使用哪種方式付款，使用方式變為下面這樣</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//刷卡</span></span><br><span class="line">$CheckoutCounter = <span class="keyword">new</span> CheckoutCounter(<span class="keyword">new</span> Cash());</span><br><span class="line">$CheckoutCounter-&gt;pay();</span><br><span class="line"></span><br><span class="line"><span class="comment">//付現</span></span><br><span class="line">$CheckoutCounter = <span class="keyword">new</span> CheckoutCounter(<span class="keyword">new</span> Card());</span><br><span class="line">$CheckoutCounter-&gt;pay();</span><br><span class="line"></span><br><span class="line"><span class="comment">//行動支付</span></span><br><span class="line">$CheckoutCounter = <span class="keyword">new</span> CheckoutCounter(<span class="keyword">new</span> Mobile());</span><br><span class="line">$CheckoutCounter-&gt;pay();</span><br></pre></td></tr></table></figure>
+<h3 id="類別圖-3"><a class="markdownIt-Anchor" href="#類別圖-3"></a> 類別圖</h3>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/GBOANzW.png"  alt="" /></p>
+<h4 id="plant-uml-3"><a class="markdownIt-Anchor" href="#plant-uml-3"></a> plant uml</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line"></span><br><span class="line">skinparam classAttributeIconSize 0</span><br><span class="line"></span><br><span class="line">interface IPayment&#123;</span><br><span class="line">&#123;method&#125; + pay():string</span><br><span class="line">&#125;</span><br><span class="line">class Cash &#123;</span><br><span class="line">&#123;method&#125; + pay():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Card &#123;</span><br><span class="line">&#123;method&#125; + pay():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Mobile &#123;</span><br><span class="line">&#123;method&#125; + pay():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class CheckoutCounter &#123;</span><br><span class="line">&#123;field&#125; - IPayment $Payment</span><br><span class="line">&#123;method&#125; + pay():string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">CheckoutCounter .down.&gt; IPayment : Abstract Dependent</span><br><span class="line">Cash .up.|&gt; IPayment : Implements Interface</span><br><span class="line">Card .up.|&gt; IPayment : Implements Interface</span><br><span class="line">Mobile .up.|&gt; IPayment : Implements Interface</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>我們新增了一個IPayment介面，讓這個介面去規定Cash、Card、Mobile三種付款方式應該具有的行為，而現在不管甚麼樣的類別，只要該類別有去實作IPayment介面，則他就可以被CheckoutCounter使用，這個地方我們的依賴關係就由依賴實體的類別轉化成去依賴IPayment介面，這個就是所謂的&quot;依賴抽象&quot;。</p>
+<p>再來我們拿上面的估算方法去測量一下新的寫法的依賴測量分數</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CheckoutCounter</th>
+<th>Cash</th>
+<th>Card</th>
+<th>Mobile</th>
+<th>IPayment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CheckoutCounter</td>
+<td>-</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Cash</td>
+<td>0</td>
+<td>-</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Card</td>
+<td>0</td>
+<td>0</td>
+<td>-</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Mobile</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>-</td>
+<td>1</td>
+</tr>
+<tr>
+<td>IPayment</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>在新的寫法中我們獲得的依賴測量分數為(8/5)=1.6，降低了耦合的程度</p>
+<p>從比較重構前後的類別圖來看，其實我們可以觀察到我們的依賴關係出現了一點變化，從單方面的高階模組依賴低階模組變成無論高階或低階的模組都依賴於介面(抽象)，對於高階模組來說她依賴的是低階模組的介面(抽象)，而對於低階模組來說也是只要依賴於自己的介面(抽象)就可以。並且如果今天要再新增另外的付款方式，我只要新增一個類別去實作IPayment的介面，即可很輕易的被CheckoutCounter帶入去做使用，在系統內部解決了開放封閉原則的問題。</p>
+<p>在簡化過的類別圖上他的轉變會像是這樣</p>
+<h3 id="類別圖-4"><a class="markdownIt-Anchor" href="#類別圖-4"></a> 類別圖</h3>
+<p><img src="/" class="lazyload" data-src="https://i.imgur.com/LGI8bnE.png"  alt="" /></p>
+<h4 id="plant-uml-4"><a class="markdownIt-Anchor" href="#plant-uml-4"></a> plant uml</h4>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line"></span><br><span class="line">skinparam classAttributeIconSize 0</span><br><span class="line"></span><br><span class="line">package before&#123;</span><br><span class="line">class Service1</span><br><span class="line">class Component1</span><br><span class="line">Service1 .down.&gt; Component1 : Concrete Dependent</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">package after&#123;</span><br><span class="line">class Service2</span><br><span class="line">class Component2</span><br><span class="line">interface IComponent2</span><br><span class="line">Service2 .down.&gt; IComponent2 : Abstract Dependent</span><br><span class="line">Component2 .up.|&gt; IComponent2 : Implements Interface</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+<p>由上面的變化可以看出，我們本來從單方向的依賴，轉為去依賴某種介面，而這種依賴關係的轉向，正式DIP中的Inversion(反轉)所想表達的意思。</p>
+<h2 id="inversion-of-control-控制反轉"><a class="markdownIt-Anchor" href="#inversion-of-control-控制反轉"></a> Inversion of Control - 控制反轉</h2>
+<p>接下來介紹常常會跟DIP一起出現的一個原則，<br />
+IoC - Inversion of Control(控制反轉)</p>
+<p><a href="https://en.wikipedia.org/wiki/Inversion_of_control" target="_blank" rel="noopener">Wiki</a></p>
+<blockquote>
+<p>In software engineering, inversion of control (IoC) is a programming principle. IoC inverts the flow of control as compared to traditional control flow. In IoC, custom-written portions of a computer program receive the flow of control from a generic framework.</p>
+<blockquote>
+<p>軟體工程中，控制反轉是一種程式撰寫原則。相對於傳統的控制流程來說，IoC反轉了整個控制的流向。在IoC中，程式自定義的編寫部分會被動的接收來自框架的控制流。</p>
+</blockquote>
+</blockquote>
+<h2 id="控制反轉-反轉什麼"><a class="markdownIt-Anchor" href="#控制反轉-反轉什麼"></a> 控制&quot;反轉&quot;? 反轉什麼?</h2>
+<p>由上面的例子來說，可以看到原本的付款服務都是由收銀台去決定去控制，對比新版本的程式來說，新版本的程式將決定跟控制的權力交到使用者手中，這種控制權的移交，將控制由系統內部往外拉，從而由外部去做控制，這樣的控制權的轉移也就是控制反轉的&quot;反轉&quot;所代表的意思，上面的例子其實已經也同時實現了IoC。</p>
+<p>這種方式很好的實現了<a href="https://en.wiktionary.org/wiki/Hollywood_principle" target="_blank" rel="noopener">&quot;好萊塢守則&quot;</a></p>
+<blockquote>
+<p>Don’t call us, we’ll call you.</p>
+<blockquote>
+<p>別找我們，我們找你。</p>
+</blockquote>
+</blockquote>
+<h2 id="幾種實踐ioc的方式"><a class="markdownIt-Anchor" href="#幾種實踐ioc的方式"></a> 幾種實踐IOC的方式</h2>
+<p>DIP與IoC常常相輔相成的成對出現，當我將依賴轉化為抽象的時候，常常會伴隨著我必須要將管理依賴的權責移交出去。<br />
+轉化為抽象的時候實現DIP，而將管理權責移交出去的時候則實現Ioc。</p>
+<p>然而，為了達成鬆散耦合的目的，實現這些原則，古聖先賢們其實研發了不少種模式可以套用及實踐。</p>
+<ol>
+<li>四人幫歸類的Creational Pattern</li>
+<li>Dependency Injection(依賴注入)</li>
+<li>Service Locator</li>
+<li>Dependency Lookup</li>
+<li>…待補充</li>
+</ol>
+</div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SOLID/">SOLID</a></div><div class="post_share"></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2020/09/11/DesignPattern/Composite/"><img class="prev_cover lazyload" data-src="https://picsum.photos/id/1078/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Design Patterns - Structural - Composite Pattern 組合模式</div></div></a></div><div class="next-post pull_right"><a href="/2020/08/16/DesignPattern/AbstractFactory/"><img class="next_cover lazyload" data-src="https://picsum.photos/id/252/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Design Patterns - Creational - Abstract Factory Pattern 抽象工廠模式</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相關推薦</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/12/11/DesignPattern/SOLID_SRP/" title="SOLID - SRP - 單一職責原則 （Single Responsibility Principle）"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/594/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-12-11</div><div class="relatedPosts_title">SOLID - SRP - 單一職責原則 （Single Responsibility Principle）</div></div></a></div></div><div class="clear_both"></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Mobius</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="閱讀模式"></i><i class="fa fa-plus" id="font_plus" title="放大字體"></i><i class="fa fa-minus" id="font_minus" title="縮小字體"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="夜間模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="設置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目錄" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到頂部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>$(function () {
+  $('span.katex-display').wrap('<div class="katex-wrap"></div>')
+})</script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script id="ribbon_piao" mobile="false" src="/js/third-party/piao.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>

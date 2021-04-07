@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="zh-TW" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>簡潔架構 - Chapter 25 - 層與邊界 | Mobius</title><meta name="description" content="簡潔架構 - Chapter 25 - 層與邊界"><meta name="keywords" content="Clean Architecture,讀書會報告"><meta name="author" content="Mobius,dopamine908@gmail.com"><meta name="copyright" content="Mobius"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/favicon.ico"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="twitter:card" content="summary"><meta name="twitter:title" content="簡潔架構 - Chapter 25 - 層與邊界"><meta name="twitter:description" content="簡潔架構 - Chapter 25 - 層與邊界"><meta name="twitter:image" content="https://picsum.photos/id/1064/800/600"><meta property="og:type" content="article"><meta property="og:title" content="簡潔架構 - Chapter 25 - 層與邊界"><meta property="og:url" content="https://dopamine908.github.io/2020/04/04/CleanArchitecture/ch25/"><meta property="og:site_name" content="Mobius"><meta property="og:description" content="簡潔架構 - Chapter 25 - 層與邊界"><meta property="og:image" content="https://picsum.photos/id/1064/800/600"><script src="https://cdn.jsdelivr.net/npm/js-cookie/dist/js.cookie.min.js"></script><script>var autoChangeMode = '1'
+var t = Cookies.get("theme")
+if (autoChangeMode == '1'){
+  var isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches
+  var isLightMode = window.matchMedia("(prefers-color-scheme: light)").matches
+  var isNotSpecified = window.matchMedia("(prefers-color-scheme: no-preference)").matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined){
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport){
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour < 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+  }
+  } else if (t == 'light') activateLightMode()
+  else activateDarkMode()
+
+} else if (autoChangeMode == '2'){
+  now = new Date();
+  hour = now.getHours();
+  isNight = hour < 6 || hour >= 18
+  if(t === undefined) isNight? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode() 
+} else {
+  if ( t == 'dark' ) activateDarkMode()
+  else if ( t == 'light') activateLightMode()
+}
+
+function activateDarkMode(){
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+    document.querySelector('meta[name="theme-color"]').setAttribute('content','#000')
+  }
+}
+function activateLightMode(){
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null){
+  document.querySelector('meta[name="theme-color"]').setAttribute('content','#fff')
+  }
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><link rel="canonical" href="https://dopamine908.github.io/2020/04/04/CleanArchitecture/ch25/"><link rel="prev" title="簡潔架構 - Chapter 26 - 主元件" href="https://dopamine908.github.io/2020/04/05/CleanArchitecture/ch26/"><link rel="next" title="簡潔架構 - Chapter 24 - 部分邊界" href="https://dopamine908.github.io/2020/04/04/CleanArchitecture/ch24/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  copy: {
+    success: '複製成功',
+    error: '複製錯誤',
+    noSupport: '瀏覽器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '鍵將本頁加入書籤'
+  },
+  runtime_unit: '天',
+  runtime: true,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: {"bookmark":{"message_prev":"按","message_next":"鍵將本頁加入書籤"},"chs_to_cht":"你已切換為繁體","cht_to_chs":"你已切換為簡體","day_to_night":"你已切換為深色模式","night_to_day":"你已切換為淺色模式","bgLight":"#49b1f5","bgDark":"#2d3035","position":"bottom-right"},
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  highlightShrink: 'false',
+  isFontAwesomeV5: false,
+  isPhotoFigcaption: false
+  
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isSidebar: true  
+  }</script><noscript><style>
+#page-header {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.0"></head><body><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">38</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">標籤</div><div class="length_num">30</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分類</div><div class="length_num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div></div></div><i class="fa fa-arrow-right on" id="toggle-sidebar" aria-hidden="true">     </i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目錄</div><div class="sidebar-toc__progress"><span class="progress-notice">你已經讀了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#chapter-25-層與邊界"><span class="toc-text"> Chapter 25 - 層與邊界</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#簡潔的架構"><span class="toc-text"> 簡潔的架構？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#跨越流"><span class="toc-text"> 跨越流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分割流"><span class="toc-text"> 分割流</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#結論"><span class="toc-text"> 結論</span></a></li></ol></li></ol></div></div></div><div id="body-wrap"><div class="post-bg" id="nav" style="background-image: url(https://picsum.photos/id/1064/800/600)"><div id="page-header"><span class="pull_left" id="blog_name"><a class="blog_title" id="site-name" href="/">Mobius</a></span><span class="pull_right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> Categories</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fa fa-bars fa-fw" aria-hidden="true"></i></a></span></span></div><div id="post-info"><div id="post-title"><div class="posttitle">簡潔架構 - Chapter 25 - 層與邊界</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="發表於 2020-04-04 20:42:04"><i class="fa fa-calendar" aria-hidden="true"></i> 發表於 2020-04-04</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新於 2020-04-23 20:45:59"><i class="fa fa-history" aria-hidden="true"></i> 更新於 2020-04-23</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"> </div><div class="meta-thirdline"><span class="post-meta-pv-cv"><i class="fa fa-eye post-meta__icon" aria-hidden="true"> </i><span>閱讀量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></div><main class="layout_post" id="content-inner"><article id="post"><div id="article-container"><h1 id="chapter-25-層與邊界"><a class="markdownIt-Anchor" href="#chapter-25-層與邊界"></a> Chapter 25 - 層與邊界</h1>
+<p>如果我們將系統看作是由三個元件組成的：UI、業務規則跟資料庫。假設我們要設計一個簡單的電腦遊戲，UI處理玩家到遊戲規則的所有訊息，遊戲規則則以某種資料結構儲存遊戲的狀態。讓我們以這個遊戲最簡單的形式為基底，我們將在這樣的架構上加點東西。<br/></p>
+<p>假設我們要保留基底文字的UI，但要將遊戲規則解耦開來，以便我們可以在不同國家的版本上使用不同的語言。如果原始碼的依賴關係被正確管理，則會如下圖顯示，任何數量的UI都可以重複使用同一套的規則。</p>
+<p><img src="/" class="lazyload" data-src="25-1.png"  alt="" /><br/></p>
+<p>再來，假設我們想要遊戲可以切換儲存的硬體機制，或許是儲存在RAM，或許是儲存在雲端上。我們不希望遊戲規則知道任何有關硬體儲存機制的事情，所以依賴關係必須按照依賴規則進行適當的定向，如下圖。</p>
+<p><img src="/" class="lazyload" data-src="25-2.png"  alt="" /><br/></p>
+<h2 id="簡潔的架構"><a class="markdownIt-Anchor" href="#簡潔的架構"></a> 簡潔的架構？</h2>
+<p>顯而易見的，我們可以將「簡潔的架構」的設計應用在這個地方，但我們是否真的找到了所有重要的架構邊界呢？<br/></p>
+<p>例如，語系並非是UI發生變化的唯一要素，或許我今天需要將文字顯示在聊天視窗、或是遊戲的文字對話筐中。這意味著我們的架構中存在一個潛在的邊界，或許我們應該建構一個跨越邊界的API，將語系及通訊機制隔離開來，如下圖所示。</p>
+<p><img src="/" class="lazyload" data-src="25-3.png"  alt="" /><br/></p>
+<p>虛線框定義了API的抽象元件，如果我們先去除各種抽象元件的實作部分，單純專除在API抽象元件上去簡化圖表，我們可以得到下圖。</p>
+<p><img src="/" class="lazyload" data-src="25-4.png"  alt="" /><br/></p>
+<p>注意上圖的箭頭方向，所有的箭頭都使指向上方的，這個方向是相當合理的，因為GameRules是包含最高層級策略的元件。<br/></p>
+<p>這個設計有效的將資料流化劃分為兩個流，左邊關注於使用這資訊，右邊關注於資料的持久性。兩個留在頂端GameRules相遇，GameRules作為兩個資料流的最終處理器。</p>
+<h2 id="跨越流"><a class="markdownIt-Anchor" href="#跨越流"></a> 跨越流</h2>
+<p>考慮相同的例子，有可能因為需求的改變使得架構的設計並不能只是資料流。試想一下，我們可能需要跟其他玩家一同在網路上通同遊玩這款遊戲，在這種情況下，我們需要一個網路元件，如下圖所示，我們把資料流分成了三個流，並且全部都由GameRules控制。</p>
+<p><img src="/" class="lazyload" data-src="25-5.png"  alt="" /><br/></p>
+<p>所以，隨著需求越來越複雜，元件結構可能會分割成許多這樣的流。</p>
+<h2 id="分割流"><a class="markdownIt-Anchor" href="#分割流"></a> 分割流</h2>
+<p>事實上，當然不可能所有的狀況下所有的流都會在對頂端相遇，假設除了GameRules以外我們還存在著一組更高級的策略，一套用來判斷玩家血量的策略。<br/></p>
+<p>較低級的機制策略向更高級的策略宣告事件，而高級的策略將管理玩家的各種狀態。如下圖所示。</p>
+<p><img src="/" class="lazyload" data-src="25-6.png"  alt="" /><br/></p>
+<p>這樣就功德圓滿了嗎？如果需求繼續更動，這個遊戲變成一個大型多人線上遊戲，MoveManagement在玩家的電腦本地端進行處理，PlayerManagement由伺服器進行處理。PlayerManagement為連接過來的MoveManagement提供一個微服務的API，這種情況下PlayerManagement與MoveManagement之間存在一個完整的架構邊界，如下圖。</p>
+<p><img src="/" class="lazyload" data-src="25-7.png"  alt="" /><br/></p>
+<h2 id="結論"><a class="markdownIt-Anchor" href="#結論"></a> 結論</h2>
+<p>如上述各種情況，其實因應需求的更動我們必須做出相對應的架構更動，以及更新我們原本設計的架構邊界，這些例子的目的主要是想表示，<code>處處都存在架構的邊界</code>。<br/><br />
+如果我們忽略邊界存在的必要性，而延後了加入邊界的時機，那將會付出比較大的代價。而我們又不應該預設各種架構邊界的抽象性，通常來說，<code>過度的工程設計會比不足的工程設計還要來得糟糕</code>。<br/><br />
+總結來說，我們必須反覆觀察，仔細判斷，權衡成本。讓架構邊界伴隨著產品去成長。</p>
+</div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Clean-Architecture/">Clean Architecture</a><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></div><div class="post_share"></div></div><nav class="pagination_post" id="pagination"><div class="prev-post pull_left"><a href="/2020/04/05/CleanArchitecture/ch26/"><img class="prev_cover lazyload" data-src="https://picsum.photos/id/1081/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">簡潔架構 - Chapter 26 - 主元件</div></div></a></div><div class="next-post pull_right"><a href="/2020/04/04/CleanArchitecture/ch24/"><img class="next_cover lazyload" data-src="https://picsum.photos/id/1050/800/600" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">簡潔架構 - Chapter 24 - 部分邊界</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fa fa-fw fa-thumbs-up" aria-hidden="true"></i><span> 相關推薦</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/03/21/CleanArchitecture/ch12/" title="簡潔架構 - Chapter 12 - 元件"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/0/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-03-21</div><div class="relatedPosts_title">簡潔架構 - Chapter 12 - 元件</div></div></a></div><div class="relatedPosts_item"><a href="/2020/03/22/CleanArchitecture/ch13/" title="簡潔架構 - Chapter 13 - 元件內聚性"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/10/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-03-22</div><div class="relatedPosts_title">簡潔架構 - Chapter 13 - 元件內聚性</div></div></a></div><div class="relatedPosts_item"><a href="/2020/03/23/CleanArchitecture/ch14/" title="簡潔架構 - Chapter 14 - 元件耦合性"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/1031/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-03-23</div><div class="relatedPosts_title">簡潔架構 - Chapter 14 - 元件耦合性</div></div></a></div><div class="relatedPosts_item"><a href="/2020/04/05/CleanArchitecture/ch26/" title="簡潔架構 - Chapter 26 - 主元件"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/1081/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-04-05</div><div class="relatedPosts_title">簡潔架構 - Chapter 26 - 主元件</div></div></a></div><div class="relatedPosts_item"><a href="/2020/04/11/CleanArchitecture/ch27/" title="簡潔架構 - Chapter 27"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/156/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-04-11</div><div class="relatedPosts_title">簡潔架構 - Chapter 27</div></div></a></div><div class="relatedPosts_item"><a href="/2020/04/13/CleanArchitecture/ch28/" title="簡潔架構 - Chapter 28 - 測試邊界"><img class="relatedPosts_cover lazyload"data-src="https://picsum.photos/id/145/800/600"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> 2020-04-13</div><div class="relatedPosts_title">簡潔架構 - Chapter 28 - 測試邊界</div></div></a></div></div><div class="clear_both"></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Mobius</div><div class="framework-info"><span>Power by </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><i class="fa fa-book" id="readmode" title="閱讀模式"></i><i class="fa fa-plus" id="font_plus" title="放大字體"></i><i class="fa fa-minus" id="font_minus" title="縮小字體"></i><i class="darkmode fa fa-moon-o" id="darkmode" title="夜間模式"></i></div><div id="rightside-config-show"><div id="rightside_config" title="設置"><i class="fa fa-cog" aria-hidden="true"></i></div><i class="fa fa-list-ul close" id="mobile-toc-button" title="目錄" aria-hidden="true"></i><i class="fa fa-arrow-up" id="go-up" title="回到頂部" aria-hidden="true"></i></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script>$(function () {
+  $('span.katex-display').wrap('<div class="katex-wrap"></div>')
+})</script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script id="ribbon_piao" mobile="false" src="/js/third-party/piao.js"></script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@latest/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/lazysizes@latest/lazysizes.min.js" async=""></script></body></html>
