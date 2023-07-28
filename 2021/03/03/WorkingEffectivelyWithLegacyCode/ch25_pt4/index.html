@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4) | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)13. 連接替換在物件導向的語言中有很多方法可以讓我們去替換物件，例如讓偽造的類別去實作與要替換的類別同一個物件，或是去繼承相同的基底類別，但在像是 C 這樣的程序式語言裡面卻沒辦法這麼做。 before例如下面這個函數，如果不用預處理手段，就完全沒辦法在編譯期將其替換為另一個函數 1vo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)">
+<meta property="og:url" content="https://dopamine908.github.io/2021/03/03/WorkingEffectivelyWithLegacyCode/ch25_pt4/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)13. 連接替換在物件導向的語言中有很多方法可以讓我們去替換物件，例如讓偽造的類別去實作與要替換的類別同一個物件，或是去繼承相同的基底類別，但在像是 C 這樣的程序式語言裡面卻沒辦法這麼做。 before例如下面這個函數，如果不用預處理手段，就完全沒辦法在編譯期將其替換為另一個函數 1vo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/178/800/600">
+<meta property="article:published_time" content="2021-03-03T13:26:14.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.238Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="讀書會報告">
+<meta property="article:tag" content="Test">
+<meta property="article:tag" content="Refactoring">
+<meta property="article:tag" content="Legacy Code">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/178/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2021/03/03/WorkingEffectivelyWithLegacyCode/ch25_pt4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-03-03T13:26:14.000Z" title="Created 2021-03-03 13:26:14">2021-03-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Working-Effectively-with-Legacy-Code-Ch25-解依賴技術-4"><a href="#Working-Effectively-with-Legacy-Code-Ch25-解依賴技術-4" class="headerlink" title="Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)"></a>Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)</h1><h2 id="13-連接替換"><a href="#13-連接替換" class="headerlink" title="13. 連接替換"></a>13. 連接替換</h2><p>在物件導向的語言中有很多方法可以讓我們去替換物件，例如讓偽造的類別去實作與要替換的類別同一個物件，或是去繼承相同的基底類別，但在像是 C 這樣的程序式語言裡面卻沒辦法這麼做。</p>
+<h3 id="before"><a href="#before" class="headerlink" title="before"></a>before</h3><p>例如下面這個函數，如果不用預處理手段，就完全沒辦法在編譯期將其替換為另一個函數</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">account_deposit</span><span class="params">(<span class="type">int</span> amount)</span> </span><br></pre></td></tr></table></figure>
+
+<h3 id="after"><a href="#after" class="headerlink" title="after"></a>after</h3><p>我們可以使用 <strong>連接替換(Link Subsitution)</strong> 來將他替換為另外一個函數。</p>
+<p>首先要建立一個 <strong>啞元函式庫(dummy library)</strong> ，裡面放的假造函式簽章必須要跟原來的函式相同，並在偽造的函式內撰寫你用來感測的內容</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">account_deposit</span><span class="params">(<span class="type">int</span> amount)</span> </span><br><span class="line">&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">Call</span> *<span class="title">call</span> =</span></span><br><span class="line">		(<span class="keyword">struct</span> Call *)<span class="built_in">calloc</span>(<span class="number">1</span>, <span class="keyword">sizeof</span> (<span class="keyword">struct</span> Cal));</span><br><span class="line">	call-&gt;type = ACC_DEPOSIT; </span><br><span class="line">	call-&gt;arg0 = amount; </span><br><span class="line">	append(g_calls, call);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>例如以上的程式碼，他建立了一個全域的列表，該列表裡包含了每一次函式被呼叫的相關資訊，在測試時我們便可以透過這個列表去確認函式是否照正確的順序被呼叫</p>
+<h2 id="14-參數化建構子"><a href="#14-參數化建構子" class="headerlink" title="14. 參數化建構子"></a>14. 參數化建構子</h2><p>如果你用建構子內去構築依賴關係，那最好的解依賴方式就是將建立的過程外部化</p>
+<h3 id="before-1"><a href="#before-1" class="headerlink" title="before"></a>before</h3><p>像是下方例子，我們在 <code>MailChecker</code> 中建構 <code>$Receiver</code> ，而這種狀況在要加入測試的時候會相當棘手，我們很難去偽造 <code>$Receiver</code></p>
+<p><strong>MailChecker</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MailChecker</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$Receiver</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;Receiver = <span class="keyword">new</span> <span class="title class_">MailReceiver</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="after-1"><a href="#after-1" class="headerlink" title="after"></a>after</h3><p>我們可以將建構的過程移動到另外一個 <code>initialMailReceiver()</code> 去，並將要綁定的實體給參數化，最後將建構子的內容也變成去委託 <code>initialMailReceiver()</code> 做生成的動作</p>
+<p>這樣改的好處是我在測試中也可以透過 <code>initialMailReceiver()</code> 去將偽造的 <code>MailReceiver</code> 給注入以達到感測的效果，並且也不會影響到原本與該類別合作的所有依賴類別</p>
+<p><strong>MailChecker</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MailChecker</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$Receiver</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">initialMailReceiver</span>(<span class="keyword">new</span> <span class="title class_">MailReceiver</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">initialMailReceiver</span>(<span class="params">MailReceiver <span class="variable">$Receiver</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;Receiver = <span class="variable">$Receiver</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但這樣做也是有缺點的，今天當我們需要在建構子上加入新的參數的時候，可能會導致對參數類型的進一步依賴</p>
+<h2 id="15-參數化方法"><a href="#15-參數化方法" class="headerlink" title="15. 參數化方法"></a>15. 參數化方法</h2><p>假設你有一個方法，該方法在內部建立了物件，而你需要透過替換物件來實作感測或分離，最簡單的辦法就是將在內部生成的物件改由從外部傳送進來</p>
+<p>這邊使用的例子會跟書上有些不同，書上使用了一個在跑測試的狀況作為例子，但筆者覺得會有點混淆這個方法的主軸，所以將例子改為比較像產品程式碼的範例</p>
+<h3 id="before-2"><a href="#before-2" class="headerlink" title="before"></a>before</h3><p>底下是一個畫圓的方法，我在方法內部生成了一張畫布 <code>Canvas</code> ，最後畫完了再將他回傳</p>
+<p><strong>Draw</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Draw</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">drawCircle</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$Canvas</span> = <span class="keyword">new</span> <span class="title class_">Canvas</span>();</span><br><span class="line">        <span class="comment">// draw circle on canvas</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$Canvas</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="after-2"><a href="#after-2" class="headerlink" title="after"></a>after</h3><p>我新增了另外一個 <code>drawCircleOnCanvas()</code> 方法，並將原本的實作內容複製過去，然後將我們想拿來實作感測的畫布 <code>Canvas</code> 改為用變數注入的方式，然後再將原本的 <code>drawCircle()</code> 的實作給轉發過去</p>
+<p><strong>Draw</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Draw</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">drawCircle</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">drawCircleOnCanvas</span>(<span class="keyword">new</span> <span class="title class_">Canvas</span>());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">drawCircleOnCanvas</span>(<span class="params">Canvas <span class="variable">$canvas</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// draw circle on canvas</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$canvas</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="16-樸素化參數"><a href="#16-樸素化參數" class="headerlink" title="16. 樸素化參數"></a>16. 樸素化參數</h2><p>有時候我們會遇到將一個類別納入測試需要付出很大的成本的狀況，這時候為了獲得一些必要的分離，則可採用本章節的技術</p>
+<h3 id="before-3"><a href="#before-3" class="headerlink" title="before"></a>before</h3><p>我們有一個 <code>Sequence</code> 類別，他代表音樂合成器中的一個音軌，我們期望加入一個 <code>hasGapFor()</code> 方法以便我們判斷有沒有可能在某個音軌的區間段放入另外一段音軌</p>
+<p>理想的情況下我們應該要將 <code>hasGapFor()</code> 方法放入 <code>Sequence</code> 類別，並為他編寫測試去做感測，但不幸的是 <code>Sequence</code> 類別是一個依賴了過多類別的「黑洞類別」</p>
+<p><strong>SequenceTest</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SequenceTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@test</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hasGapFor</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//Arrange</span></span><br><span class="line">        <span class="variable">$baseSequence</span> = <span class="keyword">new</span> <span class="title class_">Sequence</span>(); <span class="comment">// 依賴過多</span></span><br><span class="line">        <span class="variable">$baseSequence</span>-&gt;<span class="title function_ invoke__">push_back</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="variable">$baseSequence</span>-&gt;<span class="title function_ invoke__">push_back</span>(<span class="number">0</span>);</span><br><span class="line">        <span class="variable">$baseSequence</span>-&gt;<span class="title function_ invoke__">push_back</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        <span class="variable">$pattern</span> = <span class="keyword">new</span> <span class="title class_">Sequence</span>(); <span class="comment">// 依賴過多</span></span><br><span class="line">        <span class="variable">$pattern</span>-&gt;<span class="title function_ invoke__">push_back</span>(<span class="number">1</span>);</span><br><span class="line">        <span class="variable">$pattern</span>-&gt;<span class="title function_ invoke__">push_back</span>(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Assert</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertTrue</span>(<span class="variable">$baseSequence</span>-&gt;<span class="title function_ invoke__">hasGapFor</span>(<span class="variable">$pattern</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Sequence</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sequence</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="comment">/*假設在建構過程中依賴了相當多的類別*/</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// mass assign dependent</span></span><br><span class="line">        <span class="comment">// 過多依賴導致感測與分離困難</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">push_back</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$int</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="after-3"><a href="#after-3" class="headerlink" title="after"></a>after</h3><p>為了在這種情況下加入新的功能並佐以測試，我們先新增一個新的 <code>SequenceHelper</code> 類別，並期望將 <code>hasGapFor()</code> 的實作委託到<code>SequenceHelper</code> 類別中的 <code>SequenceHasGapFor()</code> 方法，當然我們必須要先在原本的 <code>hasGapFor()</code> 將一些依賴的狀況給整理好，讓<code>SequenceHelper</code> 類別中的 <code>SequenceHasGapFor()</code> 方法實作可以具有可測試性</p>
+<p><strong>SequenceTest</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SequenceTest</span> <span class="keyword">extends</span> <span class="title">TestCase</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@test</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hasGapFor</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//Arrange</span></span><br><span class="line">        <span class="variable">$baseSequence</span> = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line">        <span class="variable">$pattern</span> = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">//Actual</span></span><br><span class="line">        <span class="variable">$SequenceHelper</span> = <span class="keyword">new</span> <span class="title class_">SequenceHelper</span>();</span><br><span class="line">        <span class="variable">$actual</span> = <span class="variable">$SequenceHelper</span>-&gt;<span class="title function_ invoke__">SequenceHasGapFor</span>(<span class="variable">$baseSequence</span>, <span class="variable">$pattern</span>);</span><br><span class="line">        <span class="comment">//Assert</span></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertTrue</span>(<span class="variable">$actual</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Sequence</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sequence</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="comment">/*假設在建構過程中依賴了相當多的類別*/</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// mass assign dependent</span></span><br><span class="line">        <span class="comment">// 過多依賴導致感測與分離困難</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">push_back</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$int</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hasGapFor</span>(<span class="params">Sequence <span class="variable">$pattern</span></span>): <span class="title">bool</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$baseRepresentation</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getDurationCopy</span>();</span><br><span class="line">        <span class="variable">$patternRepresentation</span> = <span class="variable">$pattern</span>-&gt;<span class="title function_ invoke__">getDurationCopy</span>();</span><br><span class="line">        <span class="variable">$SequenceHelper</span> = <span class="keyword">new</span> <span class="title class_">SequenceHelper</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$SequenceHelper</span>-&gt;<span class="title function_ invoke__">SequenceHasGapFor</span>(<span class="variable">$baseRepresentation</span>, <span class="variable">$patternRepresentation</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">getDurationCopy</span>(<span class="params"></span>): <span class="title">array</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$result</span> = [];</span><br><span class="line">        <span class="comment">// 處理資料的部分</span></span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$result</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>SequenceHelper</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SequenceHelper</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">SequenceHasGapFor</span>(<span class="params"><span class="variable">$baseSequence</span>, <span class="variable">$pattern</span></span>): <span class="title">bool</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用這樣的模式去修改後，確實可以用符合我們期待的成本加入測試並實作我們想要的特性了，但這個做法其實伴隨了不少缺點，以上述的例子來說</p>
+<ol>
+<li>暴露了 <code>Sequence</code> 類別的內部表示<ul>
+<li><code>getDurationCopy()</code> 整理的過程會直接或間接透露<code>Sequence</code> 類別的內部資訊</li>
+</ul>
+</li>
+<li>令 <code>Sequence</code> 類別的實作更難以理解，因為我們將本應該在 <code>Sequence</code> 職責的方法拿到另外一個地方去撰寫</li>
+<li>寫了一些沒有測試覆蓋的程式碼<ul>
+<li>上述例子來說，我們無法對 <code>getDurationCopy()</code> 加以測試</li>
+</ul>
+</li>
+<li>在系統中存在重複的資料<ul>
+<li><code>getDurationCopy()</code> 的資料整理過程或許會將某些不應該有兩份的資料複製出去</li>
+</ul>
+</li>
+<li>拖延了問題，事實上我們並沒有解開 <code>Sequence</code> 類別對於其他物件的依賴</li>
+</ol>
+<blockquote>
+<p>作者認為這個方法算是不得已中的選擇，當構築依賴的成本真的相當昂貴而不值得馬上投資的時候則可以用此方法，如果狀況允許，可以優先使用別種手法已達到可加入測試又能解依賴的效果</p>
+</blockquote>
+<h2 id="小記"><a href="#小記" class="headerlink" title="小記"></a>小記</h2><p>在 14 、 15 小節中提及的方法，筆者有將他針對 PHP 去做特化，所以對於方法的名稱會經過重新命名，而在有些程式語言中，如 Java 、 C++ 、 C# ，可以使用相同方法名稱但不同的簽章代表不同的方法，原文中的例子也是使用這樣的形式去達成參數化的目的，如下面範例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// before</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MailChecker</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MailChecker</span><span class="params">(<span class="type">int</span> checkPeriodSecond)</span>&#123;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// after</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MailChecker</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MailChecker</span><span class="params">(<span class="type">int</span> checkPeriodSecond)</span>&#123;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MailChecker</span><span class="params">(MailReceiver receiver, <span class="type">int</span> checkPeriodSecond)</span>&#123;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a><a class="post-meta__tags" href="/tags/Test/">Test</a><a class="post-meta__tags" href="/tags/Refactoring/">Refactoring</a><a class="post-meta__tags" href="/tags/Legacy-Code/">Legacy Code</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Working-Effectively-with-Legacy-Code-Ch25-%E8%A7%A3%E4%BE%9D%E8%B3%B4%E6%8A%80%E8%A1%93-4"><span class="toc-number">1.</span> <span class="toc-text">Working Effectively with Legacy Code - Ch25 - 解依賴技術 (4)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#13-%E9%80%A3%E6%8E%A5%E6%9B%BF%E6%8F%9B"><span class="toc-number">1.1.</span> <span class="toc-text">13. 連接替換</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#before"><span class="toc-number">1.1.1.</span> <span class="toc-text">before</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#after"><span class="toc-number">1.1.2.</span> <span class="toc-text">after</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-%E5%8F%83%E6%95%B8%E5%8C%96%E5%BB%BA%E6%A7%8B%E5%AD%90"><span class="toc-number">1.2.</span> <span class="toc-text">14. 參數化建構子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#before-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">before</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#after-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">after</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-%E5%8F%83%E6%95%B8%E5%8C%96%E6%96%B9%E6%B3%95"><span class="toc-number">1.3.</span> <span class="toc-text">15. 參數化方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#before-2"><span class="toc-number">1.3.1.</span> <span class="toc-text">before</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#after-2"><span class="toc-number">1.3.2.</span> <span class="toc-text">after</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-%E6%A8%B8%E7%B4%A0%E5%8C%96%E5%8F%83%E6%95%B8"><span class="toc-number">1.4.</span> <span class="toc-text">16. 樸素化參數</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#before-3"><span class="toc-number">1.4.1.</span> <span class="toc-text">before</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#after-3"><span class="toc-number">1.4.2.</span> <span class="toc-text">after</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E8%A8%98"><span class="toc-number">1.5.</span> <span class="toc-text">小記</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

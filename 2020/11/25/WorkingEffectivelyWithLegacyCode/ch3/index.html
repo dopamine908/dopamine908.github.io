@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Working Effectively with Legacy Code - Ch3 - 感測和分離 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Working Effectively with Legacy Code - Ch3 - 感測和分離通常來說，我們想要將測試安置到位，有兩個理由去解除依賴:  感測：有時候我們想測試的類別會對其他類別做出影響，我們就需要透過解除依賴去「感測」這些影響 分離：當我們無法將一部份的程式碼放入測試工具中去執行時，通常需要透過解除依賴將這塊程式碼「分離」出來  通常來說，這兩個面向是伴隨著彼此而出現的，試">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Working Effectively with Legacy Code - Ch3 - 感測和分離">
+<meta property="og:url" content="https://dopamine908.github.io/2020/11/25/WorkingEffectivelyWithLegacyCode/ch3/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="Working Effectively with Legacy Code - Ch3 - 感測和分離通常來說，我們想要將測試安置到位，有兩個理由去解除依賴:  感測：有時候我們想測試的類別會對其他類別做出影響，我們就需要透過解除依賴去「感測」這些影響 分離：當我們無法將一部份的程式碼放入測試工具中去執行時，通常需要透過解除依賴將這塊程式碼「分離」出來  通常來說，這兩個面向是伴隨著彼此而出現的，試">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/168/800/600">
+<meta property="article:published_time" content="2020-11-25T20:56:15.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.238Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="讀書會報告">
+<meta property="article:tag" content="Test">
+<meta property="article:tag" content="Refactoring">
+<meta property="article:tag" content="Legacy Code">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/168/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2020/11/25/WorkingEffectivelyWithLegacyCode/ch3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Working Effectively with Legacy Code - Ch3 - 感測和分離',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Working Effectively with Legacy Code - Ch3 - 感測和分離</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2020-11-25T20:56:15.000Z" title="Created 2020-11-25 20:56:15">2020-11-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Working Effectively with Legacy Code - Ch3 - 感測和分離"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Working-Effectively-with-Legacy-Code-Ch3-感測和分離"><a href="#Working-Effectively-with-Legacy-Code-Ch3-感測和分離" class="headerlink" title="Working Effectively with Legacy Code - Ch3 - 感測和分離"></a>Working Effectively with Legacy Code - Ch3 - 感測和分離</h1><p>通常來說，我們想要將測試安置到位，有兩個理由去解除依賴:</p>
+<ol>
+<li><strong>感測</strong>：有時候我們想測試的類別會對其他類別做出影響，我們就需要透過解除依賴去「感測」這些影響</li>
+<li><strong>分離</strong>：當我們無法將一部份的程式碼放入測試工具中去執行時，通常需要透過解除依賴將這塊程式碼「分離」出來</li>
+</ol>
+<p>通常來說，這兩個面向是伴隨著彼此而出現的，試想因為一部分的程式碼無法被測試，所以我就將這部分給<strong>分離</strong>出來，而他獨立出來後，或許class之間的互動就成為了新的測試議題，我們便會想要<strong>感測</strong>分離出來的class是否被正確的影響。</p>
+<p>本書提及了相當多的解除依賴技術，而在這之中最主要的一項技術是：<strong>偽裝成合作者</strong>(fake object)</p>
+<h2 id="偽裝成合作者"><a href="#偽裝成合作者" class="headerlink" title="偽裝成合作者"></a>偽裝成合作者</h2><h3 id="偽物件"><a href="#偽物件" class="headerlink" title="偽物件"></a>偽物件</h3><p>偽物件就是那些在測試中，用來代替被測試的類別的「合作者」的物件。底下我們看一個例子。</p>
+<p>假設在一個POS系統中有一個 Sale 類別(如下圖)，Sale中含有一個 scan 的 function，當我們要掃條碼的時候就會呼叫這個 function，並且呼叫之後會在收銀機上顯示商品的名稱及價格。</p>
+<p><img src="https://i.imgur.com/dih0v3p.png"></p>
+<p>那麼我們該如何對這個function去作測試呢?如果收銀機的顯示也寫在這個 function 裡面(直接依賴於硬體)，那我們會很難感測功能是否正常，所以在這邊我們可以嘗試先將收銀機獨立出來，調整為下圖的樣子。</p>
+<p><img src="https://i.imgur.com/YFWHZlh.png"></p>
+<p>我們新加入了一個 ArtR56Display 類別，該類別包含收銀機顯示器的所有功能程式碼。使用 ArtR56Display 的時候，我們只需要將我們想顯示的文字給 ArtR56Display 裡面負責顯示的 function 即可。</p>
+<p>再來我們將 ArtR56Display 中負責顯示的 function 提取 interface 出來，改成下圖的設計</p>
+<p><img src="https://i.imgur.com/JviOp12.jpg"></p>
+<p>如此一來，Sale 現在不只可以跟 ArtR56Display 合作，還可以跟任何有時作 Display 這個 interface 的類別合作，所以我們在這裡加上一個 FakeDisplay，讓他扮演偽物件的腳色。</p>
+<p>底下示範了用 FakeDisplay 來取代 ArtR56Display 在測試中的寫法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sale</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> Display diaplay;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Sale</span><span class="params">(Display display)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.display = display;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">sacn</span><span class="params">(String barcode)</span> &#123;</span><br><span class="line">        ...</span><br><span class="line">        <span class="type">String</span> <span class="variable">itemLine</span> <span class="operator">=</span> <span class="comment">/*do something get itemLine*/</span></span><br><span class="line">        diplay.showLine(itemLine);</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FakeDisplay</span> <span class="keyword">implements</span> <span class="title class_">Display</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">String</span> <span class="variable">lastLine</span> <span class="operator">=</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">showLine</span><span class="params">(String line)</span> &#123;</span><br><span class="line">        lastLine = line;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getLastLine</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> lastLine;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Test</span></span><br><span class="line"><span class="keyword">import</span> junit.framwork.*</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SaleTest</span> extend TestCase</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">FakeDisplay</span> <span class="variable">display</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FakeDisplay</span>();</span><br><span class="line">    <span class="type">Sale</span> <span class="variable">sale</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sale</span>(display);</span><br><span class="line">    sale.scan(<span class="string">&#x27;1&#x27;</span>);</span><br><span class="line">    assertEquals(<span class="string">&#x27;text that we expected&#x27;</span>, display.getLastLine())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="偽物件的兩面性"><a href="#偽物件的兩面性" class="headerlink" title="偽物件的兩面性"></a>偽物件的兩面性</h3><p>把焦點放在 FakeDisplay 上，他提供了 showLine() 給 Sale 使用，同時也為測試提供了 getLastLine()，這使得我們在能夠如期使用功能的同時，還能夠去驗證。</p>
+<h3 id="偽物件手法的核心理念"><a href="#偽物件手法的核心理念" class="headerlink" title="偽物件手法的核心理念"></a>偽物件手法的核心理念</h3><p>偽物件的實作途徑有很多種，例如在物件導向的程式語言中，我們可以用像是上面的例子般的類別來實作。在非物件導向的程式語言中，得可以定義一個替代的函數來達成偽裝的目的。</p>
+<h3 id="仿物件"><a href="#仿物件" class="headerlink" title="仿物件"></a>仿物件</h3><p>仿物件(mock object)，一種可以在內部進行斷言檢查的偽物件。如果我們將上面的測試改寫成用仿物件會長的像下面這樣。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> junit.framwork.*</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SaleTest</span> extend TestCase</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">MockDisplay</span> <span class="variable">display</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MockDisplay</span>();</span><br><span class="line">    display.setException(<span class="string">&#x27;showLine&#x27;</span>, <span class="string">&#x27;item name and price&#x27;</span>);</span><br><span class="line">    <span class="type">Sale</span> <span class="variable">sale</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sale</span>();</span><br><span class="line">    sale.scan(<span class="string">&#x27;1&#x27;</span>);</span><br><span class="line">    display.verify();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a><a class="post-meta__tags" href="/tags/Test/">Test</a><a class="post-meta__tags" href="/tags/Refactoring/">Refactoring</a><a class="post-meta__tags" href="/tags/Legacy-Code/">Legacy Code</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Working-Effectively-with-Legacy-Code-Ch3-%E6%84%9F%E6%B8%AC%E5%92%8C%E5%88%86%E9%9B%A2"><span class="toc-number">1.</span> <span class="toc-text">Working Effectively with Legacy Code - Ch3 - 感測和分離</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%BD%E8%A3%9D%E6%88%90%E5%90%88%E4%BD%9C%E8%80%85"><span class="toc-number">1.1.</span> <span class="toc-text">偽裝成合作者</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%BD%E7%89%A9%E4%BB%B6"><span class="toc-number">1.1.1.</span> <span class="toc-text">偽物件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%BD%E7%89%A9%E4%BB%B6%E7%9A%84%E5%85%A9%E9%9D%A2%E6%80%A7"><span class="toc-number">1.1.2.</span> <span class="toc-text">偽物件的兩面性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%BD%E7%89%A9%E4%BB%B6%E6%89%8B%E6%B3%95%E7%9A%84%E6%A0%B8%E5%BF%83%E7%90%86%E5%BF%B5"><span class="toc-number">1.1.3.</span> <span class="toc-text">偽物件手法的核心理念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%BF%E7%89%A9%E4%BB%B6"><span class="toc-number">1.1.4.</span> <span class="toc-text">仿物件</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

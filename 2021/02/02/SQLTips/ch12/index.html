@@ -1,0 +1,255 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式前言除了寫出可以運作的 SQL 外，對於 SQL 的維護也是相當重要，所以本章節將討論在撰寫 SQL 上的可讀性。 資料表設計名稱與意義在 SQL 中對應的欄位、資料表、索引應該都要賦予有意義的命名 SQL 中可以使用的三種文字  英文字母 數字 底線（ _ ）  雖然有些 SQL 系統也承認像是 $、#、* 之類的符號，但作者建議大">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式">
+<meta property="og:url" content="https://dopamine908.github.io/2021/02/02/SQLTips/ch12/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式前言除了寫出可以運作的 SQL 外，對於 SQL 的維護也是相當重要，所以本章節將討論在撰寫 SQL 上的可讀性。 資料表設計名稱與意義在 SQL 中對應的欄位、資料表、索引應該都要賦予有意義的命名 SQL 中可以使用的三種文字  英文字母 數字 底線（ _ ）  雖然有些 SQL 系統也承認像是 $、#、* 之類的符號，但作者建議大">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/1048/800/600">
+<meta property="article:published_time" content="2021-02-02T11:22:29.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.238Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="讀書會報告">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/1048/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2021/02/02/SQLTips/ch12/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-02-02T11:22:29.000Z" title="Created 2021-02-02 11:22:29">2021-02-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="SQL達人的現場工作筆記-Ch12-SQL程式設計的模式"><a href="#SQL達人的現場工作筆記-Ch12-SQL程式設計的模式" class="headerlink" title="SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式"></a>SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>除了寫出可以運作的 SQL 外，對於 SQL 的維護也是相當重要，所以本章節將討論在撰寫 SQL 上的可讀性。</p>
+<h2 id="資料表設計"><a href="#資料表設計" class="headerlink" title="資料表設計"></a>資料表設計</h2><h3 id="名稱與意義"><a href="#名稱與意義" class="headerlink" title="名稱與意義"></a>名稱與意義</h3><p>在 SQL 中對應的欄位、資料表、索引應該都要賦予有意義的命名</p>
+<p>SQL 中可以使用的三種文字</p>
+<ol>
+<li>英文字母</li>
+<li>數字</li>
+<li>底線（ _ ）</li>
+</ol>
+<p>雖然有些 SQL 系統也承認像是 $、#、* 之類的符號，但作者建議大家不要去使用，因為有可能會在需要將資料庫移植到別的系統上的時候出問題（例如：MySQL 移植到 Postgres）</p>
+<p>另外作者也告訴大家請不要使用保留字（例如：Primary）當作命名，這會增加混亂</p>
+<h3 id="屬性與欄位"><a href="#屬性與欄位" class="headerlink" title="屬性與欄位"></a>屬性與欄位</h3><p>比起將資料表涉及為 <a target="_blank" rel="noopener" href="https://looker.com/blog/sql-processing-and-data-analysis-with-the-eav-model">EAV(實體屬性值)</a> 的方式，更建議將各種資料用途拆開，讓欄位去說明資料的本質</p>
+<h2 id="撰寫程式的方針"><a href="#撰寫程式的方針" class="headerlink" title="撰寫程式的方針"></a>撰寫程式的方針</h2><h3 id="註解"><a href="#註解" class="headerlink" title="註解"></a>註解</h3><p>在 clean code 裡面有討論到，我們應該要盡量讓命名取代註解<br>但作者認為 SQL 絕對應該要給註解，他給出的理由有二</p>
+<ol>
+<li>SQL 為宣告型語言，所以很難寫出像其他程式語言那種「能夠自己解釋自己的程式碼」</li>
+<li>SQL 幾乎無法 step by step 去檢驗錯誤</li>
+</ol>
+<p>註解的寫法有下列兩種</p>
+<ol>
+<li><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 單行註解</span></span><br><span class="line"><span class="comment">-- 從 SomeTable 取出 col_1</span></span><br><span class="line"><span class="keyword">SELECT</span> col_1</span><br><span class="line"><span class="keyword">FROM</span> SomeTable</span><br></pre></td></tr></table></figure>
+</li>
+<li><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">多行註解</span></span><br><span class="line"><span class="comment">從 SomeTable 取出 col_1 */</span></span><br><span class="line"><span class="keyword">SELECT</span> col_1</span><br><span class="line"><span class="keyword">FROM</span> SomeTable</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>SQL 的程式碼可以像下面這樣參雜註解增加可讀性</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> col_1</span><br><span class="line"><span class="keyword">FROM</span> SomeTable</span><br><span class="line"><span class="keyword">WHERE</span> col_1 <span class="operator">=</span> <span class="string">&#x27;a&#x27;</span></span><br><span class="line"><span class="keyword">AND</span> col_2 <span class="operator">=</span> <span class="string">&#x27;b&#x27;</span></span><br><span class="line"><span class="comment">-- 以下的條件將指定 col_3 為 c 或 d 其中一個 </span></span><br><span class="line"><span class="keyword">AND</span> col_3 <span class="keyword">IN</span> (<span class="string">&#x27;c&#x27;</span>, <span class="string">&#x27;d&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-----------------------------------------</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> col_1 <span class="comment">--從 SomeTable 取出 col_1</span></span><br><span class="line"><span class="keyword">FROM</span> SomeTable</span><br></pre></td></tr></table></figure>
+<h3 id="縮排"><a href="#縮排" class="headerlink" title="縮排"></a>縮排</h3><p>簡單的說就是 SQL 的程式碼必須要縮排才容易閱讀，不過書中並沒有對於縮排規範有詳細的描述。</p>
+<p>但我去找了一下關於 SQL 撰寫的 Style 規範，發現了 <a target="_blank" rel="noopener" href="https://www.sqlstyle.guide/zh-tw/">SQL Style Guide</a> 這個網站，有興趣可以去看一下</p>
+<h3 id="空白字元"><a href="#空白字元" class="headerlink" title="空白字元"></a>空白字元</h3><p>簡單的說就是文字排版要適當的插入空白才比較好閱讀，在 <a target="_blank" rel="noopener" href="https://www.sqlstyle.guide/zh-tw/">SQL Style Guide</a> 也有提到關於加入空白的時機的規範</p>
+<h3 id="大寫與小寫"><a href="#大寫與小寫" class="headerlink" title="大寫與小寫"></a>大寫與小寫</h3><p>請將保留字大寫，欄位名稱小寫，範例如下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> first_name <span class="keyword">AS</span> fn</span><br><span class="line">  <span class="keyword">FROM</span> staff <span class="keyword">AS</span> s1</span><br><span class="line">  <span class="keyword">JOIN</span> students <span class="keyword">AS</span> s2</span><br><span class="line">    <span class="keyword">ON</span> s2.mentor_id <span class="operator">=</span> s1.staff_num;</span><br></pre></td></tr></table></figure>
+
+<h3 id="逗號"><a href="#逗號" class="headerlink" title="逗號"></a>逗號</h3><p>作者介紹了一種「前逗號」的排版方式，如範例</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> col_1</span><br><span class="line">      ,col_2</span><br><span class="line">      ,col_3</span><br><span class="line">      ,col_4</span><br><span class="line">  <span class="keyword">FROM</span> tab_A</span><br></pre></td></tr></table></figure>
+
+<p>這種排版有兩個優點</p>
+<ol>
+<li>假如直接刪除範例 code 的第四行 col_4 的部分也不會出錯，反之如果採用「後逗號」的方式則會報錯</li>
+<li>編輯器可以做快速編輯（筆者：這點我想對於現在的編輯器來說比較沒有影響，畢竟功能都相當強大了）</li>
+</ol>
+<p>不過作者自己也表示，這種做法其實有損於「易讀性」，只是這樣的做法有些優點，所以拿出來討論一下，當自己評估優點對開發來說相當重要的時候，或許也可以採用</p>
+<p>另外， <a target="_blank" rel="noopener" href="https://www.sqlstyle.guide/zh-tw/">SQL Style Guide</a> 是提倡「後逗號」的做法的</p>
+<h3 id="不使用萬用字元"><a href="#不使用萬用字元" class="headerlink" title="不使用萬用字元"></a>不使用萬用字元</h3><p>使用萬用字元 <code>*</code> 除了會拿出多餘的資料，對於效能造成影響外，也會對可讀性造成影響</p>
+<p>在使用 <code>*</code> 的狀況下，我們並沒有辦法一眼看出我們拿出來的實際的東西是什麼，往往都還要經由去比對原本資料表的欄位才知道有什麼欄位可以用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- X</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> SomeTable</span><br><span class="line"></span><br><span class="line"><span class="comment">-- O</span></span><br><span class="line"><span class="keyword">SELECT</span> col_1, col_2 <span class="keyword">FROM</span> SomeTable</span><br></pre></td></tr></table></figure>
+
+<h3 id="不在-ORDER-BY-使用欄位編號"><a href="#不在-ORDER-BY-使用欄位編號" class="headerlink" title="不在 ORDER BY 使用欄位編號"></a>不在 ORDER BY 使用欄位編號</h3><p>在使用 ORDER BY 的時候可以用欄位編號代替實際的欄位名稱，但這樣非常難閱讀，此功能也被 SQL-92 列為將來要刪除的功能</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- X</span></span><br><span class="line"><span class="keyword">SELECT</span> col_1, col_2 <span class="keyword">FROM</span> SomeTable <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="number">1</span>, <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- O</span></span><br><span class="line"><span class="keyword">SELECT</span> col_1, col_2 <span class="keyword">FROM</span> SomeTable <span class="keyword">ORDER</span> <span class="keyword">BY</span> col_1, col_2;</span><br></pre></td></tr></table></figure>
+
+<h3 id="學習標準語"><a href="#學習標準語" class="headerlink" title="學習標準語"></a>學習標準語</h3><p>在眾多程式語言中， SQL 算是「方言」比較多的類型（在 MySQL 、 Postgres 中都有自己的特化語法），如果使用這些「方言」去撰寫的話，在移植資料庫系統的時候就會有很大的問題，所以建議盡量使用標準化的語法去撰寫 SQL</p>
+<h3 id="左派與右派（？）"><a href="#左派與右派（？）" class="headerlink" title="左派與右派（？）"></a>左派與右派（？）</h3><h3 id="驅逐關聯子查詢"><a href="#驅逐關聯子查詢" class="headerlink" title="驅逐關聯子查詢"></a>驅逐關聯子查詢</h3><p>關聯子查詢的語法困難，又不容易除錯，也無法獨立執行</p>
+<h3 id="從-FROM-陳述句開始撰寫"><a href="#從-FROM-陳述句開始撰寫" class="headerlink" title="從 FROM 陳述句開始撰寫"></a>從 FROM 陳述句開始撰寫</h3><p>一般來說我們在撰寫 SQL 的習慣都是從 SELECT 開始撰寫，但是 SQL 底層的執行順序卻是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FROM -&gt; WHERE -&gt; GROUP BY -&gt; HAVING -&gt; SELECT</span><br></pre></td></tr></table></figure>
+
+<p>作者認為，當 SQL 語法相當複雜的時候可能會帶有很巨大的 SELECT 區塊，這時候如果從 FROM 開始寫的話，會比較容易知道下條件的邏輯，而且也能夠遵循 SQL 執行的脈絡</p>
+<p>不過筆者認為，這個跟「前逗號」一樣都蠻違反我們所習慣的規則的，況且當 SQL 語句相當複雜的時候，會造成理解上的障礙的也不見得會是 SELECT 區塊</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a><a class="post-meta__tags" href="/tags/SQL/">SQL</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL%E9%81%94%E4%BA%BA%E7%9A%84%E7%8F%BE%E5%A0%B4%E5%B7%A5%E4%BD%9C%E7%AD%86%E8%A8%98-Ch12-SQL%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E7%9A%84%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">SQL達人的現場工作筆記 - Ch12 - SQL程式設計的模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E8%A1%A8%E8%A8%AD%E8%A8%88"><span class="toc-number">1.2.</span> <span class="toc-text">資料表設計</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8D%E7%A8%B1%E8%88%87%E6%84%8F%E7%BE%A9"><span class="toc-number">1.2.1.</span> <span class="toc-text">名稱與意義</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%AC%E6%80%A7%E8%88%87%E6%AC%84%E4%BD%8D"><span class="toc-number">1.2.2.</span> <span class="toc-text">屬性與欄位</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%92%B0%E5%AF%AB%E7%A8%8B%E5%BC%8F%E7%9A%84%E6%96%B9%E9%87%9D"><span class="toc-number">1.3.</span> <span class="toc-text">撰寫程式的方針</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A8%BB%E8%A7%A3"><span class="toc-number">1.3.1.</span> <span class="toc-text">註解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B8%AE%E6%8E%92"><span class="toc-number">1.3.2.</span> <span class="toc-text">縮排</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E7%99%BD%E5%AD%97%E5%85%83"><span class="toc-number">1.3.3.</span> <span class="toc-text">空白字元</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%A7%E5%AF%AB%E8%88%87%E5%B0%8F%E5%AF%AB"><span class="toc-number">1.3.4.</span> <span class="toc-text">大寫與小寫</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%97%E8%99%9F"><span class="toc-number">1.3.5.</span> <span class="toc-text">逗號</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E4%BD%BF%E7%94%A8%E8%90%AC%E7%94%A8%E5%AD%97%E5%85%83"><span class="toc-number">1.3.6.</span> <span class="toc-text">不使用萬用字元</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%9C%A8-ORDER-BY-%E4%BD%BF%E7%94%A8%E6%AC%84%E4%BD%8D%E7%B7%A8%E8%99%9F"><span class="toc-number">1.3.7.</span> <span class="toc-text">不在 ORDER BY 使用欄位編號</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%B8%E7%BF%92%E6%A8%99%E6%BA%96%E8%AA%9E"><span class="toc-number">1.3.8.</span> <span class="toc-text">學習標準語</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A6%E6%B4%BE%E8%88%87%E5%8F%B3%E6%B4%BE%EF%BC%88%EF%BC%9F%EF%BC%89"><span class="toc-number">1.3.9.</span> <span class="toc-text">左派與右派（？）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A9%85%E9%80%90%E9%97%9C%E8%81%AF%E5%AD%90%E6%9F%A5%E8%A9%A2"><span class="toc-number">1.3.10.</span> <span class="toc-text">驅逐關聯子查詢</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%9E-FROM-%E9%99%B3%E8%BF%B0%E5%8F%A5%E9%96%8B%E5%A7%8B%E6%92%B0%E5%AF%AB"><span class="toc-number">1.3.11.</span> <span class="toc-text">從 FROM 陳述句開始撰寫</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

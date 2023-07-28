@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼) | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼) 按照「程序」來組織商業邏輯，其中每一個程序負責處理來自展示層的單一請求  大多數的商業邏輯都可以被視為一系列的交易(transaction)，每一個交易都有自己的 Transactin Script ， Transactin Script 主要是將這些邏輯組織封裝成為單一程序。 運作原理原理舉個例子來說迷，如果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼)">
+<meta property="og:url" content="https://dopamine908.github.io/2023/04/25/PatternsOfEnterpriseApplicationArchitecture/ch9-1/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼) 按照「程序」來組織商業邏輯，其中每一個程序負責處理來自展示層的單一請求  大多數的商業邏輯都可以被視為一系列的交易(transaction)，每一個交易都有自己的 Transactin Script ， Transactin Script 主要是將這些邏輯組織封裝成為單一程序。 運作原理原理舉個例子來說迷，如果">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/137/800/600">
+<meta property="article:published_time" content="2023-04-25T23:11:42.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.238Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="讀書會報告">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/137/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2023/04/25/PatternsOfEnterpriseApplicationArchitecture/ch9-1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼)',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2023-04-25T23:11:42.000Z" title="Created 2023-04-25 23:11:42">2023-04-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼)"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="企業軟體架構模式-ch9-1-Transaction-Script-交易指令碼"><a href="#企業軟體架構模式-ch9-1-Transaction-Script-交易指令碼" class="headerlink" title="企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼)"></a>企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼)</h1><blockquote>
+<p>按照「程序」來組織商業邏輯，<br>其中每一個程序負責處理來自展示層的單一請求</p>
+</blockquote>
+<p>大多數的商業邏輯都可以被視為一系列的交易(transaction)，每一個交易都有自己的 <strong>Transactin Script</strong> ， <strong>Transactin Script</strong> 主要是將這些邏輯組織封裝成為單一程序。</p>
+<h2 id="運作原理"><a href="#運作原理" class="headerlink" title="運作原理"></a>運作原理</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>舉個例子來說迷，如果我的需求是「預定一間旅館的房間」，那麼我會在我的預定程序中找到「檢查剩餘空房間」、「計算住宿價格」、「更新資料庫」等邏輯，而 <strong>Transactin Script</strong> 則是將這些邏輯封裝在預定房間的程序中。</p>
+<h3 id="位置與分層"><a href="#位置與分層" class="headerlink" title="位置與分層"></a>位置與分層</h3><p><strong>Transactin Script</strong> 放置的位置取決於你的軟體分層，不過作者推薦你盡量的將 <strong>Transactin Script</strong> 與其他分層隔離，另外不要讓你的 <strong>Transactin Script</strong> 去呼叫任何來自展示層的邏輯，這會讓你在修改和測試 <strong>Transactin Script</strong> 變得困難。</p>
+<h3 id="實踐方式"><a href="#實踐方式" class="headerlink" title="實踐方式"></a>實踐方式</h3><p>你可以透過兩種方式將 <strong>Transactin Script</strong> 組織到類別中。</p>
+<h4 id="Transactin-Script-類別"><a href="#Transactin-Script-類別" class="headerlink" title="Transactin Script 類別"></a><strong>Transactin Script</strong> 類別</h4><p>你可以組織一個類別，包含多個 <strong>Transactin Script</strong> ，其中這些 <strong>Transactin Script</strong> 是有相同主題的。</p>
+<h4 id="Command-Pattern"><a href="#Command-Pattern" class="headerlink" title="Command Pattern"></a>Command Pattern</h4><p>另外一種方式是透過設計模式中的「命令模式」(<a target="_blank" rel="noopener" href="https://refactoring.guru/design-patterns/command">Command Pattern</a>)</p>
+<h2 id="使用時機"><a href="#使用時機" class="headerlink" title="使用時機"></a>使用時機</h2><h3 id="優勢"><a href="#優勢" class="headerlink" title="優勢"></a>優勢</h3><p><strong>Transactin Script</strong> 最大的好處就是贏在他的簡單性，對只有少量邏輯的應用程式來說，它非常好理解。</p>
+<h3 id="劣勢"><a href="#劣勢" class="headerlink" title="劣勢"></a>劣勢</h3><p>但隨著商業模式變得複雜，使用這個模式要保持良好的設計狀態就會變得很困難。這邊要注意一個問題，有些程式邏輯在很多交易中都會使用到，這點會讓整體的重複變得很多。</p>
+<h3 id="改善的方向"><a href="#改善的方向" class="headerlink" title="改善的方向"></a>改善的方向</h3><p>而將這些重複邏輯仔細地做分解可以解決這個問題，而更複雜的商業領域可能就會需要建置一個 <strong>Domain Model</strong> (領域模型，ch 9.2)來達成更好的設計。</p>
+<h2 id="範例：收入確認"><a href="#範例：收入確認" class="headerlink" title="範例：收入確認"></a>範例：收入確認</h2><p>針對這個模式，書中有給一個在「收入確認」上的範例情境。</p>
+<h3 id="收入確認問題"><a href="#收入確認問題" class="headerlink" title="收入確認問題"></a>收入確認問題</h3><p>收入確認是商業系統中常見的問題，有的時候商業上賣出東西可能是一次付清也可能是分期付款，而分期付款的帳面又不能算是一次入帳，他可能平分成好幾個月的金額，然後每個月入帳一些。</p>
+<h3 id="Code-Example"><a href="#Code-Example" class="headerlink" title="Code Example"></a>Code Example</h3><p>書上原本會利用這個情境使用兩個範例作為說明，這邊為了好做說明，筆者會將整理簡化，只用一個範例來說明。</p>
+<p>底下我們將會製作一個 <strong>Transactin Script</strong> 來計算，<strong>合約在「某個日期」以前已經確認的收款金額</strong>。</p>
+<p>以下是資料表設計</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">left to right direction</span><br><span class="line"></span><br><span class="line">&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27; Tables &#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">class products &lt;&lt; (T,#ADD1B2) &gt;&gt; &#123;</span><br><span class="line">    id : int</span><br><span class="line">    --</span><br><span class="line">    name : string</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class contracts &lt;&lt; (T,#ADD1B2) &gt;&gt; &#123;</span><br><span class="line">    id : int</span><br><span class="line">    --</span><br><span class="line">    product_id : int</span><br><span class="line">    --</span><br><span class="line">    revenue : int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class revenue_recognitions &lt;&lt; (T,#ADD1B2) &gt;&gt; &#123;</span><br><span class="line">    id : int</span><br><span class="line">    --</span><br><span class="line">    contract_id : int</span><br><span class="line">    --</span><br><span class="line">    amount : int</span><br><span class="line">    --</span><br><span class="line">    recognized_at : timestamp</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27; Join Relations &#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">products::id &quot;1&quot;--&quot;*&quot; contracts::product_id</span><br><span class="line">contracts::id &quot;1&quot;--&quot;*&quot; revenue_recognitions::contract_id</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BC%81%E6%A5%AD%E8%BB%9F%E9%AB%94%E6%9E%B6%E6%A7%8B%E6%A8%A1%E5%BC%8F-ch9-1-Transaction-Script-%E4%BA%A4%E6%98%93%E6%8C%87%E4%BB%A4%E7%A2%BC"><span class="toc-number">1.</span> <span class="toc-text">企業軟體架構模式 - ch9.1 Transaction Script (交易指令碼)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%8B%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.</span> <span class="toc-text">運作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-number">1.1.1.</span> <span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%8D%E7%BD%AE%E8%88%87%E5%88%86%E5%B1%A4"><span class="toc-number">1.1.2.</span> <span class="toc-text">位置與分層</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%A6%E8%B8%90%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.3.</span> <span class="toc-text">實踐方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Transactin-Script-%E9%A1%9E%E5%88%A5"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">Transactin Script 類別</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Command-Pattern"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">Command Pattern</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E6%99%82%E6%A9%9F"><span class="toc-number">1.2.</span> <span class="toc-text">使用時機</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%84%AA%E5%8B%A2"><span class="toc-number">1.2.1.</span> <span class="toc-text">優勢</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A3%E5%8B%A2"><span class="toc-number">1.2.2.</span> <span class="toc-text">劣勢</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9%E5%96%84%E7%9A%84%E6%96%B9%E5%90%91"><span class="toc-number">1.2.3.</span> <span class="toc-text">改善的方向</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AF%84%E4%BE%8B%EF%BC%9A%E6%94%B6%E5%85%A5%E7%A2%BA%E8%AA%8D"><span class="toc-number">1.3.</span> <span class="toc-text">範例：收入確認</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B6%E5%85%A5%E7%A2%BA%E8%AA%8D%E5%95%8F%E9%A1%8C"><span class="toc-number">1.3.1.</span> <span class="toc-text">收入確認問題</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Code-Example"><span class="toc-number">1.3.2.</span> <span class="toc-text">Code Example</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

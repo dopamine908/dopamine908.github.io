@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.5 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.56.3 支援適應未來和可用性的功能一個好的測試框架會提供一些讓你可以因應未來變化的一些功能，如：  遞迴假物件 對行為和驗證忽略預設參數 非嚴格驗證與行為 大範圍偽造  6.3.1 遞迴假物件遞迴假物件是在函數回傳其他物件時的一種特殊行為，這些回傳物件會自動產生假物件。 Humanable.php 1234interfa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.5">
+<meta property="og:url" content="https://dopamine908.github.io/2021/05/09/UnitTestArt/ch6_sec6-3_6-5/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.56.3 支援適應未來和可用性的功能一個好的測試框架會提供一些讓你可以因應未來變化的一些功能，如：  遞迴假物件 對行為和驗證忽略預設參數 非嚴格驗證與行為 大範圍偽造  6.3.1 遞迴假物件遞迴假物件是在函數回傳其他物件時的一種特殊行為，這些回傳物件會自動產生假物件。 Humanable.php 1234interfa">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/153/800/600">
+<meta property="article:published_time" content="2021-05-09T13:42:52.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.238Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="讀書會報告">
+<meta property="article:tag" content="Test">
+<meta property="article:tag" content="Unit Test">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/153/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2021/05/09/UnitTestArt/ch6_sec6-3_6-5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.5',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.5</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-05-09T13:42:52.000Z" title="Created 2021-05-09 13:42:52">2021-05-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.5"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="單元測試的藝術-Ch6-深入瞭解隔離框架-Sec-6-3-6-5"><a href="#單元測試的藝術-Ch6-深入瞭解隔離框架-Sec-6-3-6-5" class="headerlink" title="單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.5"></a>單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.5</h1><h2 id="6-3-支援適應未來和可用性的功能"><a href="#6-3-支援適應未來和可用性的功能" class="headerlink" title="6.3 支援適應未來和可用性的功能"></a>6.3 支援適應未來和可用性的功能</h2><p>一個好的測試框架會提供一些讓你可以因應未來變化的一些功能，如：</p>
+<ul>
+<li>遞迴假物件</li>
+<li>對行為和驗證忽略預設參數</li>
+<li>非嚴格驗證與行為</li>
+<li>大範圍偽造</li>
+</ul>
+<h3 id="6-3-1-遞迴假物件"><a href="#6-3-1-遞迴假物件" class="headerlink" title="6.3.1 遞迴假物件"></a>6.3.1 遞迴假物件</h3><p>遞迴假物件是在函數回傳其他物件時的一種特殊行為，這些回傳物件會自動產生假物件。</p>
+<p><strong>Humanable.php</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Humanable</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">generatePerson</span>(<span class="params"></span>): <span class="title">Humanable</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Person.php</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Humanable</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">generatePerson</span>(<span class="params"></span>): <span class="title">Humanable</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Test</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@test</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">GeneratePerson</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="variable">$stubPerson</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">createStub</span>(<span class="title class_">Person</span>::<span class="variable language_">class</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// generatePerson() 會返回假的 Humanable</span></span><br><span class="line"></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertInstanceOf</span>(</span><br><span class="line">        <span class="title class_">Humanable</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="variable">$stubPerson</span>-&gt;<span class="title function_ invoke__">generatePerson</span>()</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertInstanceOf</span>(</span><br><span class="line">        <span class="title class_">Humanable</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="variable">$stubPerson</span>-&gt;<span class="title function_ invoke__">generatePerson</span>()-&gt;<span class="title function_ invoke__">generatePerson</span>()</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertInstanceOf</span>(</span><br><span class="line">        <span class="title class_">Humanable</span>::<span class="variable language_">class</span>,</span><br><span class="line">        <span class="variable">$stubPerson</span>-&gt;<span class="title function_ invoke__">generatePerson</span>()-&gt;<span class="title function_ invoke__">generatePerson</span>()-&gt;<span class="title function_ invoke__">generatePerson</span>()</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>這個功能為什麼會重要呢？你需要告訴測試關於偽造的每個特定的 API 資訊越少，測試和產品程式碼細部的實作關聯就越少，將來產品程式碼產生異動時，需要對測試做的修改也就越少。</p>
+<h3 id="6-3-2-預設忽略參數"><a href="#6-3-2-預設忽略參數" class="headerlink" title="6.3.2 預設忽略參數"></a>6.3.2 預設忽略參數</h3><p>忽略參數的寫法可以增加測試程式的可讀性，以及免去設定預設參數的時間成本</p>
+<p><strong>Pay.php</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pay</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">byCreditCard</span>(<span class="params"><span class="keyword">array</span> <span class="variable">$order_list</span>, <span class="keyword">string</span> <span class="variable">$credit_card_no</span>, <span class="keyword">int</span> <span class="variable">$money</span>, Humanable <span class="variable">$user</span></span>): <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;真實回傳&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Payment.php</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Payment</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> Pay</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$pay</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">Pay <span class="variable">$pay</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;pay = <span class="variable">$pay</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">payByCreditCard</span>(<span class="params"></span>): <span class="title">bool</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$result</span> = <span class="variable language_">$this</span>-&gt;pay-&gt;<span class="title function_ invoke__">byCreditCard</span>([], <span class="string">&#x27;str&#x27;</span>, <span class="number">0</span>, <span class="keyword">new</span> <span class="title class_">Person</span>());</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$result</span> == <span class="string">&#x27;參數忽略！&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Test</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@test</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">MethodBeTest_StubWantStub</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//Arrange</span></span><br><span class="line">    <span class="variable">$stubPay</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">createStub</span>(<span class="title class_">Pay</span>::<span class="variable language_">class</span>);</span><br><span class="line">    <span class="comment">// 參數都不填寫，強制讓他回傳&#x27;參數忽略！&#x27;</span></span><br><span class="line">    <span class="variable">$stubPay</span>-&gt;<span class="title function_ invoke__">method</span>(<span class="string">&#x27;byCreditCard&#x27;</span>)-&gt;<span class="title function_ invoke__">willReturn</span>(<span class="string">&#x27;參數忽略！&#x27;</span>);</span><br><span class="line">    <span class="variable">$Payment</span> = <span class="keyword">new</span> <span class="title class_">Payment</span>(<span class="variable">$stubPay</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Act</span></span><br><span class="line">    <span class="variable">$actual</span> = <span class="variable">$Payment</span>-&gt;<span class="title function_ invoke__">payByCreditCard</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Assert</span></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="variable">$actual</span>);</span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertTrue</span>(<span class="variable">$actual</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@test</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">MethodBeTest_RealWantStub</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="variable">$Payment</span> = <span class="keyword">new</span> <span class="title class_">Payment</span>(<span class="keyword">new</span> <span class="title class_">Pay</span>());</span><br><span class="line">    <span class="variable">$actual</span> = <span class="variable">$Payment</span>-&gt;<span class="title function_ invoke__">payByCreditCard</span>();</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="variable">$actual</span>);</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">assertFalse</span>(<span class="variable">$actual</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-3-大範圍偽造"><a href="#6-3-3-大範圍偽造" class="headerlink" title="6.3.3 大範圍偽造"></a>6.3.3 大範圍偽造</h3><p>大範圍偽造是一次偽造多個方法的能力，我們可以指定某個物件上的多個函數都回傳相同的預設值，或是只對回傳值為特定型別的方法去指定預設回傳值</p>
+<p>p.s. 在 phpunit 中我沒有找到類似的功能，如果有人知道還請分享</p>
+<h3 id="6-3-4-假物件的非嚴格行為"><a href="#6-3-4-假物件的非嚴格行為" class="headerlink" title="6.3.4 假物件的非嚴格行為"></a>6.3.4 假物件的非嚴格行為</h3><p>嚴格的模擬物件可能會在兩種狀況下導致失敗：</p>
+<ol>
+<li>對他呼叫了非預期的方法</li>
+<li>沒有對他預期的方法進行呼叫</li>
+</ol>
+<p>作者表示第一種狀況尤其讓他困擾，有時候我們根本不在乎工作單元內部物件之間的內部協議，那麼我們就不需要去對他們之間的互動進行驗證</p>
+<p>我們可以對於模擬物件(<code>createMock()</code>)省略一些斷言，讓工作單元與他的互動驗證變薄弱，例如：省略 <code>-&gt;expected($this-&gt;once())</code> 、 <code>-&gt;with($params)</code></p>
+<h3 id="6-3-5-非嚴格模擬物件"><a href="#6-3-5-非嚴格模擬物件" class="headerlink" title="6.3.5 非嚴格模擬物件"></a>6.3.5 非嚴格模擬物件</h3><p>非嚴格模擬物件允許你對他進行任何的方法呼叫，即便這個方法不在原本的預期內。對於有回傳值的方法呼叫，非嚴格模擬物件會回傳給你一個預設值，如果回傳的是一個參考型別，非嚴格模擬物件就會回傳給你 <code>null</code> 。前面所提到的遞迴假物件則是這種非嚴格模擬物件運作機制下的一種特例。</p>
+<h2 id="6-4-隔離框架設計反模式"><a href="#6-4-隔離框架設計反模式" class="headerlink" title="6.4 隔離框架設計反模式"></a>6.4 隔離框架設計反模式</h2><h3 id="6-4-1-概念混淆"><a href="#6-4-1-概念混淆" class="headerlink" title="6.4.1 概念混淆"></a>6.4.1 概念混淆</h3><p>也叫做模擬過量，作者曾在前面章節一再重申，一個測試理應最多只會出現一個模擬物件 (Mock Objects)，有的時候測試框架再提供我們虛設常式與模擬物件的時候，會使用同樣的 api 命名，但這樣其實會混淆我們的目標，導致測試的可讀性變差。</p>
+<p>以下是一個不好的範例：</p>
+<p><strong>before</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Test</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ctor_WhenViewhasError_CallsLogger</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> view = <span class="keyword">new</span> Mock&lt;IView&gt;();</span><br><span class="line">    <span class="keyword">var</span> logger = <span class="keyword">new</span> Mock&lt;ILogger&gt;();</span><br><span class="line">    Presenter p = <span class="keyword">new</span> Presenter(view.Object, logger.Object);</span><br><span class="line">    view.Raise(v =&gt; v.ErrorOccured += <span class="literal">null</span>, <span class="string">&quot;fake error&quot;</span>);</span><br><span class="line">    logger.Verify(log =&gt;</span><br><span class="line">        log.LogError(It.Is&lt;<span class="built_in">string</span>&gt;(s=&gt; s.Contains(<span class="string">&quot;fake error&quot;</span>))));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>要怎麼避免這樣的事情發生呢？</p>
+<ul>
+<li>在 api 中對 mock 和 stub 使用明確的詞彙。（這個可能就只能在選用測試框架的時候做考量，因為偽造的 api 應該都是測試框架提供的）</li>
+<li>在 api 中都不要用 mock 和 stub 這樣的詞彙，例如都叫 Fake ，或者像是 NSubstitute 中我們會都使用 <code>Substitute&lt;Something&gt;</code>。（此點同上，與選用的測試框架有關係）</li>
+<li>修改變數命名以區分虛設常式與模擬物件，如 <code>mockXXX</code> 和 <code>stubXXX</code> 這樣的命名。（實際上我們能做到的大概只有這點）</li>
+</ul>
+<p><strong>after</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Test</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ctor_WhenViewhasError_CallsLogger</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">var</span> stubView = <span class="keyword">new</span> Mock&lt;IView&gt;();</span><br><span class="line">    <span class="keyword">var</span> mockLogger = <span class="keyword">new</span> Mock&lt;ILogger&gt;();</span><br><span class="line">    Presenter p= <span class="keyword">new</span> Presenter(stubView.Object, mockLogger.Object);</span><br><span class="line">    stubView.Raise(view=&gt; view.ErrorOccured += <span class="literal">null</span>, <span class="string">&quot;fake error&quot;</span>);</span><br><span class="line">    mockLogger.Verify(logger =&gt;</span><br><span class="line">      logger.LogError(It.Is&lt;<span class="built_in">string</span>&gt;(s=&gt;s.Contains(<span class="string">&quot;fake error&quot;</span>))));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6-4-2-錄製與重播"><a href="#6-4-2-錄製與重播" class="headerlink" title="6.4.2 錄製與重播"></a>6.4.2 錄製與重播</h3><p>隔離框架中提供的錄製與重播功能大大降低了測試程式的可讀性，讀測試的人需要在測試中來回反覆確認前後的對應關係才有辦法看清楚測試的全貌。</p>
+<p><strong>before</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Test</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ShouldIgnoreRespondentsThatDoesNotExistRecordPlayback</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 準備</span></span><br><span class="line">    <span class="keyword">var</span> guid = Guid.NewGuid();</span><br><span class="line">    <span class="comment">// 一部分的執行</span></span><br><span class="line">    IEventRaiser executeRaiser;</span><br><span class="line">    <span class="keyword">using</span>(_mocks.Record())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 準備 (還是在驗證?)</span></span><br><span class="line">       Expect.Call(_view.Respondents).Return(<span class="keyword">new</span>[] &#123;guid.ToString()&#125;);</span><br><span class="line">       Expect.Call(_repository.GetById(guid)).Return(<span class="literal">null</span>);</span><br><span class="line">        <span class="comment">// 一部分的執行</span></span><br><span class="line">        _view.ExecuteOperation += <span class="literal">null</span>;</span><br><span class="line">        executeRaiser = LastCall.IgnoreArguments()</span><br><span class="line">            .Repeat.Any()</span><br><span class="line">            .GetEventRaiser();</span><br><span class="line">       <span class="comment">// 驗證</span></span><br><span class="line">       Expect.Call(_view.OperationErrors = <span class="literal">null</span>)</span><br><span class="line">            .IgnoreArguments()</span><br><span class="line">            .Constraints(List.IsIn(<span class="string">&quot;Non-existant respondent: &quot;</span> + guid));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">using</span>(_mocks.Playback())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 準備</span></span><br><span class="line">        <span class="keyword">new</span> BulkRespondentPresenter(_view, _repository);</span><br><span class="line">        <span class="comment">// 執行</span></span><br><span class="line">        executeRaiser.Raise(<span class="literal">null</span>, EventArgs.Empty);</span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下我們將上面的過程改寫成使用 3A 的模式(arrange-act-asser)去撰寫</p>
+<p><strong>after</strong></p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">Test</span>]</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ShouldIgnoreRespondentsThatDoesNotExist</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Arrange</span></span><br><span class="line">    <span class="keyword">var</span> guid = Guid.NewGuid();</span><br><span class="line">    _viewMock.Setup(x =&gt; x.Respondents).Returns(<span class="keyword">new</span>[] &#123; guid.ToString() &#125;);</span><br><span class="line">    _repositoryMock.Setup(x =&gt; x.GetById(guid)).Returns(() =&gt; <span class="literal">null</span>);</span><br><span class="line">    <span class="comment">// Act</span></span><br><span class="line">    _viewMock.Raise(x =&gt; x.ExecuteOperation += <span class="literal">null</span>, EventArgs.Empty);</span><br><span class="line">    <span class="comment">// Assert</span></span><br><span class="line">    _viewMock.VerifySet(x =&gt; x.OperationErrors =</span><br><span class="line">    It.Is&lt;IList&lt;<span class="built_in">string</span>&gt;&gt;(l=&gt;l.Contains(<span class="string">&quot;Non-existant respondent: &quot;</span>+guid)));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-4-3-黏性行為"><a href="#6-4-3-黏性行為" class="headerlink" title="6.4.3 黏性行為"></a>6.4.3 黏性行為</h3><p>一但我們告訴了假物件的方法在被呼叫時應該以何種方式運作，我們很有可能會在我們的每次測試去對這個假物件設定「現在應該做什麼」的答案，儘管你的測試並不在乎這些行為。</p>
+<p>為了解決這個問題，隔離框架可以給行為加入預設的「黏性(stickiness)」，可以為某種方法設定他預設的行為，這讓測試本身不需要知道他合作的對象方法會如何運作，而那時的呼叫對眼前的測試來說也並不重要。</p>
+<h3 id="6-4-4-語法過於複雜"><a href="#6-4-4-語法過於複雜" class="headerlink" title="6.4.4 語法過於複雜"></a>6.4.4 語法過於複雜</h3><p>有些測試框架在使用了一段時間後，你還是很難記住如何進行基本操作，這會影響使用者寫程式的體驗，增加讀寫測試的成本。</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 開頭使用大寫字母 A 來建立物件</span></span><br><span class="line"><span class="keyword">var</span> lollipop = A.Fake&lt;ICandy&gt;();</span><br><span class="line"><span class="keyword">var</span> shop = A.Fake&lt;ICandyShop&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 設定一個方法要回傳簡單值</span></span><br><span class="line">A.CallTo(() =&gt; shop.GetTopSellingCandy()).Returns(lollipop);</span><br><span class="line">A.CallTo(() =&gt; foo.Bar(A&lt;<span class="built_in">string</span>&gt;.Ignored, <span class="string">&quot;second argument&quot;</span>))</span><br><span class="line">    .Throws(<span class="keyword">new</span> Exception());</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 把假物件的物件執行個體當作一般物件用</span></span><br><span class="line"><span class="keyword">var</span> developer = <span class="keyword">new</span> SweetTooth();</span><br><span class="line">developer.BuyTastiestCandy(shop);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 驗證的語法就跟一般設定方法行為一樣</span></span><br><span class="line"><span class="comment">// 無需額外學習使用一個新的 API</span></span><br><span class="line">A.CallTo(() =&gt; shop.BuyCandy(lollipop)).MustHaveHappened();</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-5-小結"><a href="#6-5-小結" class="headerlink" title="6.5 小結"></a>6.5 小結</h2><ul>
+<li>測試框架分為：受限的跟不受限的隔離框架，選擇框架時要理解一個框架的能力和他本身的限制</li>
+<li>支援適應未來性和可用價值的隔離框架可以讓你的單元測試工作變得更輕鬆</li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a><a class="post-meta__tags" href="/tags/Test/">Test</a><a class="post-meta__tags" href="/tags/Unit-Test/">Unit Test</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E7%9A%84%E8%97%9D%E8%A1%93-Ch6-%E6%B7%B1%E5%85%A5%E7%9E%AD%E8%A7%A3%E9%9A%94%E9%9B%A2%E6%A1%86%E6%9E%B6-Sec-6-3-6-5"><span class="toc-number">1.</span> <span class="toc-text">單元測試的藝術 - Ch6 深入瞭解隔離框架 - Sec. 6.3 ~ 6.5</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#6-3-%E6%94%AF%E6%8F%B4%E9%81%A9%E6%87%89%E6%9C%AA%E4%BE%86%E5%92%8C%E5%8F%AF%E7%94%A8%E6%80%A7%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="toc-number">1.1.</span> <span class="toc-text">6.3 支援適應未來和可用性的功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-1-%E9%81%9E%E8%BF%B4%E5%81%87%E7%89%A9%E4%BB%B6"><span class="toc-number">1.1.1.</span> <span class="toc-text">6.3.1 遞迴假物件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-2-%E9%A0%90%E8%A8%AD%E5%BF%BD%E7%95%A5%E5%8F%83%E6%95%B8"><span class="toc-number">1.1.2.</span> <span class="toc-text">6.3.2 預設忽略參數</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-3-%E5%A4%A7%E7%AF%84%E5%9C%8D%E5%81%BD%E9%80%A0"><span class="toc-number">1.1.3.</span> <span class="toc-text">6.3.3 大範圍偽造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-4-%E5%81%87%E7%89%A9%E4%BB%B6%E7%9A%84%E9%9D%9E%E5%9A%B4%E6%A0%BC%E8%A1%8C%E7%82%BA"><span class="toc-number">1.1.4.</span> <span class="toc-text">6.3.4 假物件的非嚴格行為</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-5-%E9%9D%9E%E5%9A%B4%E6%A0%BC%E6%A8%A1%E6%93%AC%E7%89%A9%E4%BB%B6"><span class="toc-number">1.1.5.</span> <span class="toc-text">6.3.5 非嚴格模擬物件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-4-%E9%9A%94%E9%9B%A2%E6%A1%86%E6%9E%B6%E8%A8%AD%E8%A8%88%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.2.</span> <span class="toc-text">6.4 隔離框架設計反模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-1-%E6%A6%82%E5%BF%B5%E6%B7%B7%E6%B7%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">6.4.1 概念混淆</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-2-%E9%8C%84%E8%A3%BD%E8%88%87%E9%87%8D%E6%92%AD"><span class="toc-number">1.2.2.</span> <span class="toc-text">6.4.2 錄製與重播</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-3-%E9%BB%8F%E6%80%A7%E8%A1%8C%E7%82%BA"><span class="toc-number">1.2.3.</span> <span class="toc-text">6.4.3 黏性行為</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-4-%E8%AA%9E%E6%B3%95%E9%81%8E%E6%96%BC%E8%A4%87%E9%9B%9C"><span class="toc-number">1.2.4.</span> <span class="toc-text">6.4.4 語法過於複雜</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-5-%E5%B0%8F%E7%B5%90"><span class="toc-number">1.3.</span> <span class="toc-text">6.5 小結</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

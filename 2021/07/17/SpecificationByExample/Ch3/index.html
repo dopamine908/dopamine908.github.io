@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>團隊如何交付正確的軟體 - ch3 - 活的說明文件 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="團隊如何交付正確的軟體 - ch3 - 活的說明文件一般來說， Spec. 實例化 (Specification by Example , SBE) 有兩種比較流行的模型  以驗收測試為中心的模型 通稱為「驗收測試驅動開發」(Acceptance Test-Driven Development, ATDD) 著重自動化測試，優點是可以使開發目標更明確，也能確實防止功能退化   以系統行為規範為主導">
+<meta property="og:type" content="article">
+<meta property="og:title" content="團隊如何交付正確的軟體 - ch3 - 活的說明文件">
+<meta property="og:url" content="https://dopamine908.github.io/2021/07/17/SpecificationByExample/Ch3/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="團隊如何交付正確的軟體 - ch3 - 活的說明文件一般來說， Spec. 實例化 (Specification by Example , SBE) 有兩種比較流行的模型  以驗收測試為中心的模型 通稱為「驗收測試驅動開發」(Acceptance Test-Driven Development, ATDD) 著重自動化測試，優點是可以使開發目標更明確，也能確實防止功能退化   以系統行為規範為主導">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/137/800/600">
+<meta property="article:published_time" content="2021-07-17T14:25:44.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.238Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="讀書會報告">
+<meta property="article:tag" content="Test">
+<meta property="article:tag" content="BDD">
+<meta property="article:tag" content="ATDD">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/137/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2021/07/17/SpecificationByExample/Ch3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '團隊如何交付正確的軟體 - ch3 - 活的說明文件',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">團隊如何交付正確的軟體 - ch3 - 活的說明文件</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-07-17T14:25:44.000Z" title="Created 2021-07-17 14:25:44">2021-07-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="團隊如何交付正確的軟體 - ch3 - 活的說明文件"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="團隊如何交付正確的軟體-ch3-活的說明文件"><a href="#團隊如何交付正確的軟體-ch3-活的說明文件" class="headerlink" title="團隊如何交付正確的軟體 - ch3 - 活的說明文件"></a>團隊如何交付正確的軟體 - ch3 - 活的說明文件</h1><p>一般來說， Spec. 實例化 (Specification by Example , SBE) 有兩種比較流行的模型</p>
+<ul>
+<li>以驗收測試為中心的模型<ul>
+<li>通稱為「驗收測試驅動開發」(Acceptance Test-Driven Development, ATDD)</li>
+<li>著重自動化測試，優點是可以使開發目標更明確，也能確實防止功能退化</li>
+</ul>
+</li>
+<li>以系統行為規範為主導的模型<ul>
+<li>通稱為「行為驅動開發」(Behavior-Driven Development, BDD)</li>
+<li>著重於制定系統行為的場景，透過協作來釐清 spec ，建立專案關係人與交付團隊之間的共識。此模式也認為透過自動化測試來防止功能退化相當重要。</li>
+</ul>
+</li>
+</ul>
+<p>這兩種模式沒有優劣的分別，不同模型有不同的用途在，書中提到如果團隊有許多功能品質上的問題，那麼以驗收測試為中心的模型效用比較好。當一切運行順暢，針對中期或短期軟體的交付說明來說的話，以系統行為規範為主導的模型會比較好用。</p>
+<p>這兩個模型中主要都是將 spec 可以去做實例化，共通的好處在於，<strong>透過自動化測試來預防功能的退化</strong>。</p>
+<h2 id="為什麼我們需要權威的說明文件"><a href="#為什麼我們需要權威的說明文件" class="headerlink" title="為什麼我們需要權威的說明文件"></a>為什麼我們需要權威的說明文件</h2><p>通常我們會遇到一種狀況，面對一個新的系統，我們會拿到一份「並不完全正確的系統文件」（如果很幸運你遇到的系統有文件的話），而我們深知要在修改完功能之後再文件上做出對應的修改是一件成本相當高的事情，所以往往我們也不會真的去看文件，而是直接從程式碼反覆推敲系統的各種運作，而這種逆向工程通常是一件無法完成的任務。</p>
+<p>理想的方式是建立一個易於維護且維護成本低，即使頻繁修改底層的程式碼結構，也可以與系統功能保持一致的說明文件系統。</p>
+<p>那麼，有什麼方式可以符合上面所說的說明文件系統呢？</p>
+<h2 id="測試可以是好的說明文件"><a href="#測試可以是好的說明文件" class="headerlink" title="測試可以是好的說明文件"></a>測試可以是好的說明文件</h2><p>而自動化測試則相反，要找出需要修改的地方相當容易，但找出來之後的程式修改卻不見得真的容易修改，以驗收測試為中心的模型方法，常常會忽略其容易帶來這樣的影響。</p>
+<p>所以其重點在於，建立清楚及易於維護的測試，如果測試寫得很清楚，那麼其實就不需要其他類型的說明文件了。</p>
+<p>但支援系統演進的不是測試，而是說明文件，所以建構出易於維護的說明文件才是我們的目的，而如果有可以自動化執行、且維護成本低、又描述得清楚的測試的話，那麼就剛剛好符合我們的目的了。</p>
+<h2 id="根據可執行的需求規格建立說明文件"><a href="#根據可執行的需求規格建立說明文件" class="headerlink" title="根據可執行的需求規格建立說明文件"></a>根據可執行的需求規格建立說明文件</h2><p>當軟體系統持續的接受可以執行的 spec 的驗證時，我們的系統就會按照我們期望的運作模式去運作， spec 會與系統行為始終保持一致。而將這些實例化之後的 spec 蒐集起來，則是本書指的 <strong>Living Documentation</strong>。</p>
+<h2 id="以說明文件為中心的模型具備哪些好處"><a href="#以說明文件為中心的模型具備哪些好處" class="headerlink" title="以說明文件為中心的模型具備哪些好處"></a>以說明文件為中心的模型具備哪些好處</h2><ol>
+<li>spec 實例化採用說明文件為中心的模型可以幫助團隊建立有用的說明文件</li>
+<li>持續使用 spec 實例化並將他導入工作，往後便不需要花費大量的時間在系統考古跟驗證上</li>
+<li>側重於業務程序的說明文件可以避免過度關心技術性的 spec ，還可以保持 spec 從系統角度去關心系統應該做的事，而不是關注在測試腳本上</li>
+</ol>
+<p>但 spec 過去抽象可能是以說明文件為中心的模型的一個潛在陷阱。</p>
+<h2 id="重點回顧"><a href="#重點回顧" class="headerlink" title="重點回顧"></a>重點回顧</h2><ul>
+<li>spec 實例化有幾種不同的模型，不同的模型有不同的用途</li>
+<li>spec 實例化可以讓你漸進式的建置一個良好的說明文件系統</li>
+<li>Living Documentation 是交付程序的重要產物，與程式碼一樣重要</li>
+<li>側重於建立業務程序的說明文件系統，可避免在長期維護 spec 和測試時所造成的大部分常見問題</li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a><a class="post-meta__tags" href="/tags/Test/">Test</a><a class="post-meta__tags" href="/tags/BDD/">BDD</a><a class="post-meta__tags" href="/tags/ATDD/">ATDD</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%98%E9%9A%8A%E5%A6%82%E4%BD%95%E4%BA%A4%E4%BB%98%E6%AD%A3%E7%A2%BA%E7%9A%84%E8%BB%9F%E9%AB%94-ch3-%E6%B4%BB%E7%9A%84%E8%AA%AA%E6%98%8E%E6%96%87%E4%BB%B6"><span class="toc-number">1.</span> <span class="toc-text">團隊如何交付正確的軟體 - ch3 - 活的說明文件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E6%88%91%E5%80%91%E9%9C%80%E8%A6%81%E6%AC%8A%E5%A8%81%E7%9A%84%E8%AA%AA%E6%98%8E%E6%96%87%E4%BB%B6"><span class="toc-number">1.1.</span> <span class="toc-text">為什麼我們需要權威的說明文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%AC%E8%A9%A6%E5%8F%AF%E4%BB%A5%E6%98%AF%E5%A5%BD%E7%9A%84%E8%AA%AA%E6%98%8E%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.</span> <span class="toc-text">測試可以是好的說明文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B9%E6%93%9A%E5%8F%AF%E5%9F%B7%E8%A1%8C%E7%9A%84%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E5%BB%BA%E7%AB%8B%E8%AA%AA%E6%98%8E%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">根據可執行的需求規格建立說明文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A5%E8%AA%AA%E6%98%8E%E6%96%87%E4%BB%B6%E7%82%BA%E4%B8%AD%E5%BF%83%E7%9A%84%E6%A8%A1%E5%9E%8B%E5%85%B7%E5%82%99%E5%93%AA%E4%BA%9B%E5%A5%BD%E8%99%95"><span class="toc-number">1.4.</span> <span class="toc-text">以說明文件為中心的模型具備哪些好處</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E9%BB%9E%E5%9B%9E%E9%A1%A7"><span class="toc-number">1.5.</span> <span class="toc-text">重點回顧</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

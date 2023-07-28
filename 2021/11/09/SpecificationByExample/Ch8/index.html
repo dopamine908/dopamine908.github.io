@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>團隊如何交付正確的軟體 - ch8 - 提煉需求規格 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="團隊如何交付正確的軟體 - ch8 - 提煉需求規格成功的團隊在討論關鍵實例後，不會直接使用原本的例子，他們會從中**提煉 spec(Refining the specification)**。他們會從關鍵實例中提取精華，將其轉化成清楚且明確的定義，並去除不相關的細節。  附帶實例的 Spec. 即為驗收測試  一個良好的 spec ，再與實例結合後，其實就是有效的驗收測試所描述的功能   一個優">
+<meta property="og:type" content="article">
+<meta property="og:title" content="團隊如何交付正確的軟體 - ch8 - 提煉需求規格">
+<meta property="og:url" content="https://dopamine908.github.io/2021/11/09/SpecificationByExample/Ch8/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="團隊如何交付正確的軟體 - ch8 - 提煉需求規格成功的團隊在討論關鍵實例後，不會直接使用原本的例子，他們會從中**提煉 spec(Refining the specification)**。他們會從關鍵實例中提取精華，將其轉化成清楚且明確的定義，並去除不相關的細節。  附帶實例的 Spec. 即為驗收測試  一個良好的 spec ，再與實例結合後，其實就是有效的驗收測試所描述的功能   一個優">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/137/800/600">
+<meta property="article:published_time" content="2021-11-09T14:25:44.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.238Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="讀書會報告">
+<meta property="article:tag" content="Test">
+<meta property="article:tag" content="BDD">
+<meta property="article:tag" content="ATDD">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/137/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2021/11/09/SpecificationByExample/Ch8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '團隊如何交付正確的軟體 - ch8 - 提煉需求規格',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">團隊如何交付正確的軟體 - ch8 - 提煉需求規格</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-11-09T14:25:44.000Z" title="Created 2021-11-09 14:25:44">2021-11-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="團隊如何交付正確的軟體 - ch8 - 提煉需求規格"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="團隊如何交付正確的軟體-ch8-提煉需求規格"><a href="#團隊如何交付正確的軟體-ch8-提煉需求規格" class="headerlink" title="團隊如何交付正確的軟體 - ch8 - 提煉需求規格"></a>團隊如何交付正確的軟體 - ch8 - 提煉需求規格</h1><p>成功的團隊在討論關鍵實例後，不會直接使用原本的例子，他們會從中**提煉 spec(Refining the specification)**。他們會從關鍵實例中提取精華，將其轉化成清楚且明確的定義，並去除不相關的細節。</p>
+<blockquote>
+<p>附帶實例的 Spec. 即為驗收測試</p>
+<blockquote>
+<p>一個良好的 spec ，再與實例結合後，其實就是有效的驗收測試所描述的功能</p>
+</blockquote>
+</blockquote>
+<h2 id="一個優質的需求規格範例"><a href="#一個優質的需求規格範例" class="headerlink" title="一個優質的需求規格範例"></a>一個優質的需求規格範例</h2><h3 id="免費送貨服務"><a href="#免費送貨服務" class="headerlink" title="免費送貨服務"></a>免費送貨服務</h3><ul>
+<li>VIP 用戶購買一定量的書籍後，為其提供免運費服務。免運費服務不提供給普通用戶。</li>
+<li>要獲得免運非服務必須要購買至少五本書籍</li>
+</ul>
+<h3 id="實例"><a href="#實例" class="headerlink" title="實例"></a>實例</h3><table>
+<thead>
+<tr>
+<th>客戶類型</th>
+<th>購物車中的產品</th>
+<th>送貨服務</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VIP</td>
+<td>5 本書</td>
+<td>免費、標準</td>
+</tr>
+<tr>
+<td>VIP</td>
+<td>4 本書</td>
+<td>標準</td>
+</tr>
+<tr>
+<td>普通</td>
+<td>10 本書</td>
+<td>標準</td>
+</tr>
+<tr>
+<td>VIP</td>
+<td>5 台洗衣機</td>
+<td>標準</td>
+</tr>
+<tr>
+<td>VIP</td>
+<td>5 本書、1 台洗衣機</td>
+<td>標準</td>
+</tr>
+</tbody></table>
+<h2 id="提煉需求規格時需要關注的要點"><a href="#提煉需求規格時需要關注的要點" class="headerlink" title="提煉需求規格時需要關注的要點"></a>提煉需求規格時需要關注的要點</h2><p>理想的情況下，附帶實例的 spec 應該從業務角度明確地定義所需的功能，而不是去定義系統該如何運作，在完成了功能之後， spec 將會成為系統的說明文件</p>
+<p>好的 spec 應該要符合下面所說的要點：</p>
+<h3 id="實例要精確可測"><a href="#實例要精確可測" class="headerlink" title="實例要精確可測"></a>實例要精確可測</h3><p>spec 必須是衡量成功與否的客觀標準，他必須包含可驗證的資訊。</p>
+<h3 id="腳本不是需求規格"><a href="#腳本不是需求規格" class="headerlink" title="腳本不是需求規格"></a>腳本不是需求規格</h3><p>spec 解釋系統在做什麼，他盡可能以最直接的方式關注在業務邏輯上。 spec 叫剪短，也較容易理解。</p>
+<h4 id="thumbsdown-不要使用程式的描述"><a href="#thumbsdown-不要使用程式的描述" class="headerlink" title=":thumbsdown: - 不要使用程式的描述"></a>:thumbsdown: - 不要使用程式的描述</h4><p>提防關於系統應該如何工作的描述，想想什麼才是系統應該做到的事</p>
+<h3 id="需求規格應關注在業務的功能，而非軟體的設計"><a href="#需求規格應關注在業務的功能，而非軟體的設計" class="headerlink" title="需求規格應關注在業務的功能，而非軟體的設計"></a>需求規格應關注在業務的功能，而非軟體的設計</h3><p>spec 不應該牽扯到軟體設計，他應該要能解釋業務功能，但對於軟體該如何執行則不該有任何規定，其目的有二</p>
+<ol>
+<li>讓開發人員找出當下最佳的解決方案</li>
+<li>便於未來開發人員改善他們的設計</li>
+</ol>
+<h4 id="thumbsdown-避免編寫與程式碼緊密耦合的需求規格"><a href="#thumbsdown-避免編寫與程式碼緊密耦合的需求規格" class="headerlink" title=":thumbsdown: - 避免編寫與程式碼緊密耦合的需求規格"></a>:thumbsdown: - 避免編寫與程式碼緊密耦合的需求規格</h4><ul>
+<li>與程式碼緊密耦合、密切反應軟體實作方式的 spec 會讓測試變得脆弱</li>
+<li>spec 如果出自於軟體實作內容，例如提及資料庫或是物件類別名稱。請重組 spec 避免使用此種類型的概念，才能讓 spec 更易於理解及維護</li>
+</ul>
+<h4 id="thumbsdown-不要用臨時的解決方案來解決需求規格中的技術困難點（適用於：處理遺留系統時）"><a href="#thumbsdown-不要用臨時的解決方案來解決需求規格中的技術困難點（適用於：處理遺留系統時）" class="headerlink" title=":thumbsdown: - 不要用臨時的解決方案來解決需求規格中的技術困難點（適用於：處理遺留系統時）"></a>:thumbsdown: - 不要用臨時的解決方案來解決需求規格中的技術困難點（適用於：處理遺留系統時）</h4><p>遺留系統（Legancy System）常常存有一些技術怪僻，如果此時將臨時的解決方案加入到 spec 中，往往會把 spec 綁定到實作細節上</p>
+<h4 id="thumbsdown-不要深陷在-UI-的細節裡（適用於：處理-Web-專案）"><a href="#thumbsdown-不要深陷在-UI-的細節裡（適用於：處理-Web-專案）" class="headerlink" title=":thumbsdown: - 不要深陷在 UI 的細節裡（適用於：處理 Web 專案）"></a>:thumbsdown: - 不要深陷在 UI 的細節裡（適用於：處理 Web 專案）</h4><p>與其糾結在 UI 的細節（應該是指樣式類的東西）中，不如考慮使用者在網站上的操作流程還來得更有用</p>
+<h3 id="需求規格應該是不言自明的"><a href="#需求規格應該是不言自明的" class="headerlink" title="需求規格應該是不言自明的"></a>需求規格應該是不言自明的</h3><h4 id="thumbsup-使用敘述性的標題並使用短篇幅闡釋目標"><a href="#thumbsup-使用敘述性的標題並使用短篇幅闡釋目標" class="headerlink" title=":thumbsup: - 使用敘述性的標題並使用短篇幅闡釋目標"></a>:thumbsup: - 使用敘述性的標題並使用短篇幅闡釋目標</h4><p>標題應該要可以總結出該 spec 的意圖，並嘗試用不超過一段的篇幅去解釋 spec 的目標以及實例的結構</p>
+<h4 id="thumbsup-展示給別人看並保持沈默"><a href="#thumbsup-展示給別人看並保持沈默" class="headerlink" title=":thumbsup: - 展示給別人看並保持沈默"></a>:thumbsup: - 展示給別人看並保持沈默</h4><p><strong>適用於：獨自邊些需求規格時<br>目的：檢視需求規格是否可以不言自明</strong></p>
+<p>你可以在對方看完你的 spec 後請對方闡述 spec 的意圖，看看是否有符合你所描述的真正意圖</p>
+<h4 id="thumbsdown-不要過度定義實例"><a href="#thumbsdown-不要過度定義實例" class="headerlink" title=":thumbsdown: - 不要過度定義實例"></a>:thumbsdown: - 不要過度定義實例</h4><p>關鍵實例過多反而會讓看的人眼花撩亂、難以理解，且實際執行驗證的時間成本也會大增</p>
+<blockquote>
+<p>不要試圖覆蓋所有的狀況</p>
+</blockquote>
+<h4 id="thumbsup-由基本的範例入手，再逐步擴大（適用於：使用許多參數組合描述業務規則）"><a href="#thumbsup-由基本的範例入手，再逐步擴大（適用於：使用許多參數組合描述業務規則）" class="headerlink" title=":thumbsup: - 由基本的範例入手，再逐步擴大（適用於：使用許多參數組合描述業務規則）"></a>:thumbsup: - 由基本的範例入手，再逐步擴大（適用於：使用許多參數組合描述業務規則）</h4><h3 id="需求規格應集中在焦點上"><a href="#需求規格應集中在焦點上" class="headerlink" title="需求規格應集中在焦點上"></a>需求規格應集中在焦點上</h3><p>一個 spec 應該一間單獨的事情：一條業務規則、一個功能，或單一程序中的一個步驟。<br>聚焦的 spec 有兩個好處</p>
+<ol>
+<li>較為簡短 &gt; 較好理解</li>
+<li>更易於維護</li>
+</ol>
+<h4 id="thumbsup-在需求規格中使用「Given-When-Then」語言"><a href="#thumbsup-在需求規格中使用「Given-When-Then」語言" class="headerlink" title=":thumbsup: - 在需求規格中使用「Given - When - Then」語言"></a>:thumbsup: - 在需求規格中使用「Given - When - Then」語言</h4><p>（或是 Arrange - Actual - Assert）<br>目的：讓測試更容易理解</p>
+<p>一般來說，一個 spec 應該要聲明背景環境，指定一個單一的動作，接著定義預測的後置條件</p>
+<h4 id="thumbsdown-不要在需求規格中明確設置所有相依關係（適用於：處理複雜的相依關係＼引用完整性時）"><a href="#thumbsdown-不要在需求規格中明確設置所有相依關係（適用於：處理複雜的相依關係＼引用完整性時）" class="headerlink" title=":thumbsdown: - 不要在需求規格中明確設置所有相依關係（適用於：處理複雜的相依關係＼引用完整性時）"></a>:thumbsdown: - 不要在需求規格中明確設置所有相依關係（適用於：處理複雜的相依關係＼引用完整性時）</h4><p>例如需要複雜配置的資料驅動專案中，物件通常不能被單獨建立<br>許多團隊會錯誤的將前置條件都放入 spec 中，雖然會讓 spec 更完整，但同時也互造成 spec 更加難以閱讀及理解</p>
+<h4 id="thumbsup-在自動化曾中應用預設值"><a href="#thumbsup-在自動化曾中應用預設值" class="headerlink" title=":thumbsup: - 在自動化曾中應用預設值"></a>:thumbsup: - 在自動化曾中應用預設值</h4><p><strong>建立有效的物件是自動化曾的職責</strong></p>
+<p>自動化層可以預先使用合理的預設值來填充物件，並設置相依關係。</p>
+<h4 id="thumbsdown-不要總是依賴預設值（適用於：有許多屬性的物件）"><a href="#thumbsdown-不要總是依賴預設值（適用於：有許多屬性的物件）" class="headerlink" title=":thumbsdown: - 不要總是依賴預設值（適用於：有許多屬性的物件）"></a>:thumbsdown: - 不要總是依賴預設值（適用於：有許多屬性的物件）</h4><p>如果一個實例的關鍵屬性與自動化層提供的預設值相匹配，儘管可以省略，但明確定義出來仍然是明智的做法</p>
+<h3 id="需求規格應使用領域語言"><a href="#需求規格應使用領域語言" class="headerlink" title="需求規格應使用領域語言"></a>需求規格應使用領域語言</h3><p>功能性的 spec 對於使用者、業務分析師、測試人員、開發人員以及任何想要了解系統的人都相當重要。所以 spec 必須使用每個人都能夠理解的語言來編寫，且使用的語言必須有一致性（統一語言）</p>
+<h2 id="重點回顧"><a href="#重點回顧" class="headerlink" title="重點回顧"></a>重點回顧</h2><ul>
+<li>不要直接使用初始實例，要對他們提煉 spec</li>
+<li>為了充分利用實例，最終的 spec 應該是精確的、可測的、不言自明的、聚焦的、以領域語言所編寫，且與業務功能相關</li>
+<li>spec 中要避免使用腳本，也要避免論及軟體設計</li>
+<li>不要試圖覆蓋所有使用案例。 spec 不是用來替代組合回歸測試的</li>
+<li>所有重要的使用案例，都得從一個範例開始設置，並逐步增加值得程式設計師及測試人員特別關注的例子</li>
+<li>在 spec 、軟體設計以及測試中定義並且使用統一語言</li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a><a class="post-meta__tags" href="/tags/Test/">Test</a><a class="post-meta__tags" href="/tags/BDD/">BDD</a><a class="post-meta__tags" href="/tags/ATDD/">ATDD</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9C%98%E9%9A%8A%E5%A6%82%E4%BD%95%E4%BA%A4%E4%BB%98%E6%AD%A3%E7%A2%BA%E7%9A%84%E8%BB%9F%E9%AB%94-ch8-%E6%8F%90%E7%85%89%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC"><span class="toc-number">1.</span> <span class="toc-text">團隊如何交付正確的軟體 - ch8 - 提煉需求規格</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%80%8B%E5%84%AA%E8%B3%AA%E7%9A%84%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E7%AF%84%E4%BE%8B"><span class="toc-number">1.1.</span> <span class="toc-text">一個優質的需求規格範例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%8D%E8%B2%BB%E9%80%81%E8%B2%A8%E6%9C%8D%E5%8B%99"><span class="toc-number">1.1.1.</span> <span class="toc-text">免費送貨服務</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%A6%E4%BE%8B"><span class="toc-number">1.1.2.</span> <span class="toc-text">實例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%90%E7%85%89%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E6%99%82%E9%9C%80%E8%A6%81%E9%97%9C%E6%B3%A8%E7%9A%84%E8%A6%81%E9%BB%9E"><span class="toc-number">1.2.</span> <span class="toc-text">提煉需求規格時需要關注的要點</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%A6%E4%BE%8B%E8%A6%81%E7%B2%BE%E7%A2%BA%E5%8F%AF%E6%B8%AC"><span class="toc-number">1.2.1.</span> <span class="toc-text">實例要精確可測</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%85%B3%E6%9C%AC%E4%B8%8D%E6%98%AF%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC"><span class="toc-number">1.2.2.</span> <span class="toc-text">腳本不是需求規格</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsdown-%E4%B8%8D%E8%A6%81%E4%BD%BF%E7%94%A8%E7%A8%8B%E5%BC%8F%E7%9A%84%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">:thumbsdown: - 不要使用程式的描述</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E6%87%89%E9%97%9C%E6%B3%A8%E5%9C%A8%E6%A5%AD%E5%8B%99%E7%9A%84%E5%8A%9F%E8%83%BD%EF%BC%8C%E8%80%8C%E9%9D%9E%E8%BB%9F%E9%AB%94%E7%9A%84%E8%A8%AD%E8%A8%88"><span class="toc-number">1.2.3.</span> <span class="toc-text">需求規格應關注在業務的功能，而非軟體的設計</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsdown-%E9%81%BF%E5%85%8D%E7%B7%A8%E5%AF%AB%E8%88%87%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%B7%8A%E5%AF%86%E8%80%A6%E5%90%88%E7%9A%84%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">:thumbsdown: - 避免編寫與程式碼緊密耦合的需求規格</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsdown-%E4%B8%8D%E8%A6%81%E7%94%A8%E8%87%A8%E6%99%82%E7%9A%84%E8%A7%A3%E6%B1%BA%E6%96%B9%E6%A1%88%E4%BE%86%E8%A7%A3%E6%B1%BA%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E4%B8%AD%E7%9A%84%E6%8A%80%E8%A1%93%E5%9B%B0%E9%9B%A3%E9%BB%9E%EF%BC%88%E9%81%A9%E7%94%A8%E6%96%BC%EF%BC%9A%E8%99%95%E7%90%86%E9%81%BA%E7%95%99%E7%B3%BB%E7%B5%B1%E6%99%82%EF%BC%89"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">:thumbsdown: - 不要用臨時的解決方案來解決需求規格中的技術困難點（適用於：處理遺留系統時）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsdown-%E4%B8%8D%E8%A6%81%E6%B7%B1%E9%99%B7%E5%9C%A8-UI-%E7%9A%84%E7%B4%B0%E7%AF%80%E8%A3%A1%EF%BC%88%E9%81%A9%E7%94%A8%E6%96%BC%EF%BC%9A%E8%99%95%E7%90%86-Web-%E5%B0%88%E6%A1%88%EF%BC%89"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">:thumbsdown: - 不要深陷在 UI 的細節裡（適用於：處理 Web 專案）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E6%87%89%E8%A9%B2%E6%98%AF%E4%B8%8D%E8%A8%80%E8%87%AA%E6%98%8E%E7%9A%84"><span class="toc-number">1.2.4.</span> <span class="toc-text">需求規格應該是不言自明的</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsup-%E4%BD%BF%E7%94%A8%E6%95%98%E8%BF%B0%E6%80%A7%E7%9A%84%E6%A8%99%E9%A1%8C%E4%B8%A6%E4%BD%BF%E7%94%A8%E7%9F%AD%E7%AF%87%E5%B9%85%E9%97%A1%E9%87%8B%E7%9B%AE%E6%A8%99"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">:thumbsup: - 使用敘述性的標題並使用短篇幅闡釋目標</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsup-%E5%B1%95%E7%A4%BA%E7%B5%A6%E5%88%A5%E4%BA%BA%E7%9C%8B%E4%B8%A6%E4%BF%9D%E6%8C%81%E6%B2%88%E9%BB%98"><span class="toc-number">1.2.4.2.</span> <span class="toc-text">:thumbsup: - 展示給別人看並保持沈默</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsdown-%E4%B8%8D%E8%A6%81%E9%81%8E%E5%BA%A6%E5%AE%9A%E7%BE%A9%E5%AF%A6%E4%BE%8B"><span class="toc-number">1.2.4.3.</span> <span class="toc-text">:thumbsdown: - 不要過度定義實例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsup-%E7%94%B1%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AF%84%E4%BE%8B%E5%85%A5%E6%89%8B%EF%BC%8C%E5%86%8D%E9%80%90%E6%AD%A5%E6%93%B4%E5%A4%A7%EF%BC%88%E9%81%A9%E7%94%A8%E6%96%BC%EF%BC%9A%E4%BD%BF%E7%94%A8%E8%A8%B1%E5%A4%9A%E5%8F%83%E6%95%B8%E7%B5%84%E5%90%88%E6%8F%8F%E8%BF%B0%E6%A5%AD%E5%8B%99%E8%A6%8F%E5%89%87%EF%BC%89"><span class="toc-number">1.2.4.4.</span> <span class="toc-text">:thumbsup: - 由基本的範例入手，再逐步擴大（適用於：使用許多參數組合描述業務規則）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E6%87%89%E9%9B%86%E4%B8%AD%E5%9C%A8%E7%84%A6%E9%BB%9E%E4%B8%8A"><span class="toc-number">1.2.5.</span> <span class="toc-text">需求規格應集中在焦點上</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsup-%E5%9C%A8%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E4%B8%AD%E4%BD%BF%E7%94%A8%E3%80%8CGiven-When-Then%E3%80%8D%E8%AA%9E%E8%A8%80"><span class="toc-number">1.2.5.1.</span> <span class="toc-text">:thumbsup: - 在需求規格中使用「Given - When - Then」語言</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsdown-%E4%B8%8D%E8%A6%81%E5%9C%A8%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E4%B8%AD%E6%98%8E%E7%A2%BA%E8%A8%AD%E7%BD%AE%E6%89%80%E6%9C%89%E7%9B%B8%E4%BE%9D%E9%97%9C%E4%BF%82%EF%BC%88%E9%81%A9%E7%94%A8%E6%96%BC%EF%BC%9A%E8%99%95%E7%90%86%E8%A4%87%E9%9B%9C%E7%9A%84%E7%9B%B8%E4%BE%9D%E9%97%9C%E4%BF%82%EF%BC%BC%E5%BC%95%E7%94%A8%E5%AE%8C%E6%95%B4%E6%80%A7%E6%99%82%EF%BC%89"><span class="toc-number">1.2.5.2.</span> <span class="toc-text">:thumbsdown: - 不要在需求規格中明確設置所有相依關係（適用於：處理複雜的相依關係＼引用完整性時）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsup-%E5%9C%A8%E8%87%AA%E5%8B%95%E5%8C%96%E6%9B%BE%E4%B8%AD%E6%87%89%E7%94%A8%E9%A0%90%E8%A8%AD%E5%80%BC"><span class="toc-number">1.2.5.3.</span> <span class="toc-text">:thumbsup: - 在自動化曾中應用預設值</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#thumbsdown-%E4%B8%8D%E8%A6%81%E7%B8%BD%E6%98%AF%E4%BE%9D%E8%B3%B4%E9%A0%90%E8%A8%AD%E5%80%BC%EF%BC%88%E9%81%A9%E7%94%A8%E6%96%BC%EF%BC%9A%E6%9C%89%E8%A8%B1%E5%A4%9A%E5%B1%AC%E6%80%A7%E7%9A%84%E7%89%A9%E4%BB%B6%EF%BC%89"><span class="toc-number">1.2.5.4.</span> <span class="toc-text">:thumbsdown: - 不要總是依賴預設值（適用於：有許多屬性的物件）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E8%A6%8F%E6%A0%BC%E6%87%89%E4%BD%BF%E7%94%A8%E9%A0%98%E5%9F%9F%E8%AA%9E%E8%A8%80"><span class="toc-number">1.2.6.</span> <span class="toc-text">需求規格應使用領域語言</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E9%BB%9E%E5%9B%9E%E9%A1%A7"><span class="toc-number">1.3.</span> <span class="toc-text">重點回顧</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

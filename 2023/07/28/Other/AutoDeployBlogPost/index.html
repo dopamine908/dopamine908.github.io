@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>部落格復活之路 pt.1 - 自動更新 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="部落格復活之路 pt.1 - 自動更新荒廢兩年終於復活的部落格筆者我的 部落格 自從兩年前換了工作之後，一路荒廢更新到前陣子，在生活中心有所轉移後，決定要來直面我荒廢已久的部落格了。 這兩年間雖然時不時也會寫點筆記、製作些讀書會有關的報告，但卻毫無更新動力。於是就把這些文章暗自存在 hackmd.io 上沒有發佈。 兩年的時間不長不短，但久到我可以忘記我的部落格專案是存在哪一個 Github Re">
+<meta property="og:type" content="article">
+<meta property="og:title" content="部落格復活之路 pt.1 - 自動更新">
+<meta property="og:url" content="https://dopamine908.github.io/2023/07/28/Other/AutoDeployBlogPost/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="部落格復活之路 pt.1 - 自動更新荒廢兩年終於復活的部落格筆者我的 部落格 自從兩年前換了工作之後，一路荒廢更新到前陣子，在生活中心有所轉移後，決定要來直面我荒廢已久的部落格了。 這兩年間雖然時不時也會寫點筆記、製作些讀書會有關的報告，但卻毫無更新動力。於是就把這些文章暗自存在 hackmd.io 上沒有發佈。 兩年的時間不長不短，但久到我可以忘記我的部落格專案是存在哪一個 Github Re">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/137/800/600">
+<meta property="article:published_time" content="2023-07-28T20:23:03.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.234Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="CI&#x2F;CD">
+<meta property="article:tag" content="Blog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/137/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2023/07/28/Other/AutoDeployBlogPost/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '部落格復活之路 pt.1 - 自動更新',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">部落格復活之路 pt.1 - 自動更新</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2023-07-28T20:23:03.000Z" title="Created 2023-07-28 20:23:03">2023-07-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%97%A5%E5%B8%B8%E9%96%8B%E7%99%BC%E7%AD%86%E8%A8%98/">日常開發筆記</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="部落格復活之路 pt.1 - 自動更新"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="部落格復活之路-pt-1-自動更新"><a href="#部落格復活之路-pt-1-自動更新" class="headerlink" title="部落格復活之路 pt.1 - 自動更新"></a>部落格復活之路 pt.1 - 自動更新</h1><h2 id="荒廢兩年終於復活的部落格"><a href="#荒廢兩年終於復活的部落格" class="headerlink" title="荒廢兩年終於復活的部落格"></a>荒廢兩年終於復活的部落格</h2><p>筆者我的 <a href="https://dopamine908.github.io/">部落格</a> 自從兩年前換了工作之後，一路荒廢更新到前陣子，在生活中心有所轉移後，決定要來直面我荒廢已久的部落格了。</p>
+<p>這兩年間雖然時不時也會寫點筆記、製作些讀書會有關的報告，但卻毫無更新動力。於是就把這些文章暗自存在 hackmd.io 上沒有發佈。</p>
+<p>兩年的時間不長不短，但久到我可以忘記我的部落格專案是存在哪一個 Github Repository 了，基本也忘記了部落格框架的使用方法，檔案架構… etc。</p>
+<p>簡單來說，在悠久且漫長的歲月中，我什麼都不記得了！</p>
+<h3 id="復活之路"><a href="#復活之路" class="headerlink" title="復活之路"></a>復活之路</h3><p>腦袋一片空白要怎麼復活部落格？這時候有一個愛寫部落格的好友就很重要了，筆者在這邊鼓勵大家多多結交愛寫部落格的朋友，你有什麼問題直接投靠就對了。</p>
+<p><strong>所以本文致謝 <a target="_blank" rel="noopener" href="https://github.com/YNCBearz">Bear</a> 在筆者最徬徨無助的時候猶如雪中送炭般的給予筆者人生前進道路中的一盞明光</strong></p>
+<p>實際上呢，也真的是辛苦 <a target="_blank" rel="noopener" href="https://github.com/YNCBearz">Bear</a> 了，一步一步引領著我，帶我回想起來悠久流長的歲月中，部落格的使用、建立、部署方式。</p>
+<h2 id="自動更新部落格？"><a href="#自動更新部落格？" class="headerlink" title="自動更新部落格？"></a>自動更新部落格？</h2><p>筆者的部落格是由 <a target="_blank" rel="noopener" href="https://hexo.io/zh-tw/">Hexo</a> 搭配 <a target="_blank" rel="noopener" href="https://markdown.tw/">Markdown</a> 語法及 <a target="_blank" rel="noopener" href="https://pages.github.com/">Github Page</a> 建立的，寫部落格的方式就是寫寫 markdown 然後使用些指令去預覽，並且在確定要 po 文的時候下部署指令。</p>
+<h4 id="預覽部落格"><a href="#預覽部落格" class="headerlink" title="預覽部落格"></a>預覽部落格</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo server</span><br></pre></td></tr></table></figure>
+
+<h4 id="部署部落格"><a href="#部署部落格" class="headerlink" title="部署部落格"></a>部署部落格</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>至於關於 Hexo 的操作、部落格運作方式、如何建立…之類的事情，我們把這些議題留到之後的文章記錄。（工程師的 TODO，有緣就會實作了）</p>
+<h3 id="關於更新部落格"><a href="#關於更新部落格" class="headerlink" title="關於更新部落格"></a>關於更新部落格</h3><p>荒廢更新部落格的這兩年，筆者也是有所成長，變得更<span style="color:red"><strong>懶惰</strong></span>了！</p>
+<blockquote>
+<p>懶惰是本部落格三大核心精神之一</p>
+</blockquote>
+<p>所以呢，每次寫完部落格要更新到部落格的 Github Repository 之後還要部署，這要兩步驟欸，簡直太麻煩了吧！</p>
+<p>好啦，其實是最近弄了一些 CI&#x2F;CD 有關的東西，然後單純的想說：「如果我可以只要 push ，然後其他事情自動化腳本都會幫我搞定那不是很好嗎？」</p>
+<p>於是乎我找到了最近很常打交道的 <a target="_blank" rel="noopener" href="https://docs.github.com/en/actions">Github Action</a>，開始尋找有沒懶人包可以讓我更懶一點的完成這件事情。</p>
+<h2 id="官方推薦"><a href="#官方推薦" class="headerlink" title="官方推薦"></a>官方推薦</h2><p>在東翻西找的過程中，在 Hexo 的官方文件裡找到了<a target="_blank" rel="noopener" href="https://hexo.io/zh-tw/docs/github-pages">在 Github Page 部署的 Github Action Workflow yml 寫法</a>。</p>
+<p>Hexo 果然沒有忽落廣大的懶人們，連這一步都幫我們想好了，那麼我們就來嘗試使用它給的 yml 檔吧！</p>
+<h2 id="跟想像中不一樣"><a href="#跟想像中不一樣" class="headerlink" title="跟想像中不一樣"></a>跟想像中不一樣</h2><p>結果在一番嘗試後，Github Action 的狀態都顯示成功，但我看頁面都沒有更新，所以我又仔細了繼續看文件（理論上應該是一開始就要先看完比較對，但我看到可以直接貼的 yml 就見獵心喜…），結果發現文件下方有這麼一段說明</p>
+<blockquote>
+<ol start="5">
+<li>當部屬作業完成後，產生的頁面會放在儲存庫中的 gh-pages 分支。</li>
+<li>在儲存庫中前往 Settings &gt; Pages &gt; Source，並將 branch 改為 gh-pages。</li>
+</ol>
+<h4 id="專案頁面"><a href="#專案頁面" class="headerlink" title="專案頁面"></a>專案頁面</h4><p>如果你希望網站部署在 &lt;你的 GitHub 用戶名&gt;.github.io 的子目錄中：</p>
+<ol>
+<li>開啟你在 GitHub 的儲存庫，並前往 Settings 頁面。更改你的 Repository name 使你的部落格網址變成 username.github.io&#x2F;repository</li>
+</ol>
+</blockquote>
+<p>於是我查看了分支，的確這個腳本幫我部署到了 <code>gh-pages</code> 分支，並且查看了 <a href="https://dopamine908.github.io/new_blog">https://dopamine908.github.io/new_blog</a> 頁面（沒錯我的 repository 名稱就是那麼粗暴的叫做 new_blog），結果發現這邊有我最近的更新內容，看起來好像一點也沒錯。</p>
+<p>但這不是我要的啊！我原本期望是更新完之後可以在 <a href="https://dopamine908.github.io/">https://dopamine908.github.io</a> 就可以簡單地看到最新的內容了，但是這個腳本的行為卻不是那樣，於是乎我又在東翻西找有沒有什麼設定可以做調整，但都搜尋無果。</p>
+<p>而這個腳本中的 <a target="_blank" rel="noopener" href="https://github.com/marketplace/actions/github-pages-action">Github Action Package : peaceiris&#x2F;actions-gh-pages</a> 裡面似乎也沒有相關設定可以調整。（又或許有只是筆者我沒能悉知這些內容，畢竟筆者沒有耐心慢慢看文件…如果您知道還懇請開示）</p>
+<h2 id="自幹吧"><a href="#自幹吧" class="headerlink" title="自幹吧"></a>自幹吧</h2><p>不就是一行部署指令嗎？我自己寫也可以（吧）！</p>
+<p>所以又到了發揮工程師黃金價值的時刻了，來！自幹一個吧！</p>
+<p>於是乎經過了一番冒險，為您呈現的是最後的腳本本人。</p>
+<h4 id="github-workflows-auto-deploy-blog-yml"><a href="#github-workflows-auto-deploy-blog-yml" class="headerlink" title=".github&#x2F;workflows&#x2F;auto-deploy-blog.yml"></a><a target="_blank" rel="noopener" href="https://github.com/dopamine908/new_blog/blob/master/.github/workflows/auto-deploy-blog.yml">.github&#x2F;workflows&#x2F;auto-deploy-blog.yml</a></h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Auto</span> <span class="string">Deploy</span> <span class="string">Blog</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">master</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">pages:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">permissions:</span></span><br><span class="line">      <span class="attr">contents:</span> <span class="string">write</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">token:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets._GITHUB_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">          <span class="attr">submodules:</span> <span class="string">recursive</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">webfactory/ssh-agent@v0.7.0</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">ssh-private-key:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.SSH_PRIVATE_KEY</span> <span class="string">&#125;&#125;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Use</span> <span class="string">Node.js</span> <span class="number">16.</span><span class="string">x</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/setup-node@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">node-version:</span> <span class="string">&#x27;16&#x27;</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Cache</span> <span class="string">NPM</span> <span class="string">dependencies</span></span><br><span class="line">        <span class="attr">uses:</span> <span class="string">actions/cache@v2</span></span><br><span class="line">        <span class="attr">with:</span></span><br><span class="line">          <span class="attr">path:</span> <span class="string">node_modules</span></span><br><span class="line">          <span class="attr">key:</span> <span class="string">$&#123;&#123;</span> <span class="string">runner.OS</span> <span class="string">&#125;&#125;-npm-cache</span></span><br><span class="line">          <span class="attr">restore-keys:</span> <span class="string">|</span></span><br><span class="line"><span class="string">            $&#123;&#123; runner.OS &#125;&#125;-npm-cache</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">Dependencies</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">npm</span> <span class="string">install</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Build</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">npm</span> <span class="string">run</span> <span class="string">build</span></span><br><span class="line">      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">hexo-cli</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          npm install -g hexo-cli</span></span><br><span class="line"><span class="string">          hexo version</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Set</span> <span class="string">Git</span> <span class="string">Information</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          git config --global user.email &quot;dopamine908@gmail.com&quot;</span></span><br><span class="line"><span class="string">          git config --global user.name &quot;Mobius&quot;</span></span><br><span class="line"><span class="string"></span>      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span></span><br><span class="line">        <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">          hexo clean </span></span><br><span class="line"><span class="string">          hexo deploy</span></span><br></pre></td></tr></table></figure>
+
+<p>接下來挑幾個重點稍微說明下好了</p>
+<h3 id="on"><a href="#on" class="headerlink" title="on"></a>on</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">on:</span></span><br><span class="line">  <span class="attr">push:</span></span><br><span class="line">    <span class="attr">branches:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
+<p>這裡主要是在指定，當我的 <code>master</code> 分支被 push 之後，即觸發這個 workflow，會特別提這個是因為現行大家的 git 版本不太一樣，舊版本的主分支會使用 <code>master</code> ，新版本的主分支會使用 <code>mian</code>，如果您是新版本的，別忘記將這個值修改為 <code>main</code>。</p>
+<h3 id="secrets-GITHUB-TOKEN"><a href="#secrets-GITHUB-TOKEN" class="headerlink" title="secrets._GITHUB_TOKEN"></a>secrets._GITHUB_TOKEN</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line">  <span class="attr">with:</span></span><br><span class="line">    <span class="attr">token:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets._GITHUB_TOKEN</span> <span class="string">&#125;&#125;</span></span><br><span class="line">    <span class="attr">submodules:</span> <span class="string">recursive</span></span><br></pre></td></tr></table></figure>
+
+<p>這邊因為會需要取用個人的專案權限，所以這邊會使用到 <code>secrets._GITHUB_TOKEN</code> 這個值，這邊會需要到個人的 </p>
+<p>Settings &gt; Developer Settings &gt; Personal Access Token 去新增一把新的 token</p>
+<p><img src="https://hackmd.io/_uploads/HJFbVybin.png"></p>
+<p>並且將這把 token 新增到</p>
+<p>Github Repository &gt; Settings &gt; Secret and Variable &gt; Actions</p>
+<p><img src="https://hackmd.io/_uploads/BJkSSkbs2.png"></p>
+<h3 id="secrets-SSH-PRIVATE-KEY"><a href="#secrets-SSH-PRIVATE-KEY" class="headerlink" title="secrets.SSH_PRIVATE_KEY"></a>secrets.SSH_PRIVATE_KEY</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">webfactory/ssh-agent@v0.7.0</span></span><br><span class="line">  <span class="attr">with:</span></span><br><span class="line">    <span class="attr">ssh-private-key:</span> <span class="string">$&#123;&#123;</span> <span class="string">secrets.SSH_PRIVATE_KEY</span> <span class="string">&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>這邊我們最終想要將部落格專案打包好的東西發佈 Github Page Repository 中，你可以想像，我們要在 Github Action Runner 的主機中去 push code 到另一個自己的 Github Repository 中，乍看之下挺完美的，但是！</p>
+<p>Github Action Runner 每次被呼叫都是一個新的空白的環境，一個空白的環境裝了 git 就可以推 code 到你的任何專案嗎？</p>
+<p>即便是 pubilc 的專案也不行吧？這樣太恐怖了，我們總是需要些身份驗證的機制。</p>
+<p>忘記從什麼時候開始的，github 在你 push code 的時候已經強制需要換成 ssh-angent 的驗證機制了，這中間可是有一些設定流程要做的，於是乎在這邊筆者找到了一個專門在幹照這件事情的 <a target="_blank" rel="noopener" href="https://github.com/marketplace/actions/webfactory-ssh-agent">Github Action Package : webfactory&#x2F;ssh-agent</a>，所以我們只要簡單的設定下 ssh-angent 相關的內容就可以了</p>
+<p>首先參照<a target="_blank" rel="noopener" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">這邊</a>的指令生產公鑰、私鑰。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C &quot;your_email@example.com&quot;</span><br></pre></td></tr></table></figure>
+<p>再來將你的私鑰內容新增到</p>
+<p>Github Repository &gt; Settings &gt; Secret and Variable &gt; Actions</p>
+<p><img src="https://hackmd.io/_uploads/BkkjOy-jh.png"></p>
+<p>並且將公鑰新增到 Settings &gt; SSH and GPG Keys</p>
+<p><img src="https://hackmd.io/_uploads/BkXztyZo3.png"></p>
+<p>如此一來就完成了設定可以 push 到別的專案的權限了～</p>
+<h3 id="Install-hexo-cli"><a href="#Install-hexo-cli" class="headerlink" title="Install hexo-cli"></a>Install hexo-cli</h3><p>在一連串基礎環境設定(如：安裝 nodejs, 設定快取)之後，最重要的 Hexo 打包工具還沒有安裝，所以這邊我們就安裝一下 <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-cli">hexo-cli</a></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">hexo-cli</span></span><br><span class="line">  <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">    npm install -g hexo-cli</span></span><br><span class="line"><span class="string">    hexo version</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Set-Git-Information"><a href="#Set-Git-Information" class="headerlink" title="Set Git Information"></a>Set Git Information</h3><p>在最後要 push 之前我們還缺少了一點 git 相關的設定，這裡將設定補上。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Set</span> <span class="string">Git</span> <span class="string">Information</span></span><br><span class="line">  <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">    git config --global user.email &quot;dopamine908@gmail.com&quot;</span></span><br><span class="line"><span class="string">    git config --global user.name &quot;Mobius&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Deploy"><a href="#Deploy" class="headerlink" title="Deploy"></a>Deploy</h3><p>最後一哩路，將 Hexo 的部署指令新增上去！</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Deploy</span></span><br><span class="line">  <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">    hexo clean </span></span><br><span class="line"><span class="string">    hexo deploy</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="最終成果"><a href="#最終成果" class="headerlink" title="最終成果"></a>最終成果</h2><p>經過了一連串的努力我們終於可以快樂的在 push 部落格文章之後</p>
+<p>在部落格的 Github Repository &gt; Actions 中看到我們自動被觸發的 Action</p>
+<p><img src="https://hackmd.io/_uploads/H1PthJWjh.png"></p>
+<p>點進去就可以看到腳本執行的過程跟 logs</p>
+<p><img src="https://hackmd.io/_uploads/S1Kepkbin.png"></p>
+<p>於是乎，寫部落格這件事情的阻礙又更少了，皆大歡喜～皆大歡喜～</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://hexo.io/zh-tw/">Hexo</a></li>
+<li><a target="_blank" rel="noopener" href="https://markdown.tw/">Markdown</a></li>
+<li><a target="_blank" rel="noopener" href="https://pages.github.com/">Github Page</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.github.com/en/actions">Github Action</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/marketplace/actions/github-pages-action">Github Action Package : peaceiris&#x2F;actions-gh-pages</a> </li>
+<li><a target="_blank" rel="noopener" href="https://github.com/marketplace/actions/webfactory-ssh-agent">Github Action Package : webfactory&#x2F;ssh-agent</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">Generating a new SSH key and adding it to the ssh-agent</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-cli">hexo-cli</a></li>
+<li><a target="_blank" rel="noopener" href="https://hackmd.io/@CynthiaChuang/Generating-a-Ssh-Key-and-Adding-It-to-the-Github">https://hackmd.io/@CynthiaChuang/Generating-a-Ssh-Key-and-Adding-It-to-the-Github</a></li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CI-CD/">CI/CD</a><a class="post-meta__tags" href="/tags/Blog/">Blog</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%83%A8%E8%90%BD%E6%A0%BC%E5%BE%A9%E6%B4%BB%E4%B9%8B%E8%B7%AF-pt-1-%E8%87%AA%E5%8B%95%E6%9B%B4%E6%96%B0"><span class="toc-number">1.</span> <span class="toc-text">部落格復活之路 pt.1 - 自動更新</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8D%92%E5%BB%A2%E5%85%A9%E5%B9%B4%E7%B5%82%E6%96%BC%E5%BE%A9%E6%B4%BB%E7%9A%84%E9%83%A8%E8%90%BD%E6%A0%BC"><span class="toc-number">1.1.</span> <span class="toc-text">荒廢兩年終於復活的部落格</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BE%A9%E6%B4%BB%E4%B9%8B%E8%B7%AF"><span class="toc-number">1.1.1.</span> <span class="toc-text">復活之路</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8B%95%E6%9B%B4%E6%96%B0%E9%83%A8%E8%90%BD%E6%A0%BC%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">自動更新部落格？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A0%90%E8%A6%BD%E9%83%A8%E8%90%BD%E6%A0%BC"><span class="toc-number">1.2.0.1.</span> <span class="toc-text">預覽部落格</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2%E9%83%A8%E8%90%BD%E6%A0%BC"><span class="toc-number">1.2.0.2.</span> <span class="toc-text">部署部落格</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%9C%E6%96%BC%E6%9B%B4%E6%96%B0%E9%83%A8%E8%90%BD%E6%A0%BC"><span class="toc-number">1.2.1.</span> <span class="toc-text">關於更新部落格</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%98%E6%96%B9%E6%8E%A8%E8%96%A6"><span class="toc-number">1.3.</span> <span class="toc-text">官方推薦</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%9F%E6%83%B3%E5%83%8F%E4%B8%AD%E4%B8%8D%E4%B8%80%E6%A8%A3"><span class="toc-number">1.4.</span> <span class="toc-text">跟想像中不一樣</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%88%E6%A1%88%E9%A0%81%E9%9D%A2"><span class="toc-number">1.4.0.1.</span> <span class="toc-text">專案頁面</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%B9%B9%E5%90%A7"><span class="toc-number">1.5.</span> <span class="toc-text">自幹吧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#github-workflows-auto-deploy-blog-yml"><span class="toc-number">1.5.0.1.</span> <span class="toc-text">.github&#x2F;workflows&#x2F;auto-deploy-blog.yml</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#on"><span class="toc-number">1.5.1.</span> <span class="toc-text">on</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#secrets-GITHUB-TOKEN"><span class="toc-number">1.5.2.</span> <span class="toc-text">secrets._GITHUB_TOKEN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#secrets-SSH-PRIVATE-KEY"><span class="toc-number">1.5.3.</span> <span class="toc-text">secrets.SSH_PRIVATE_KEY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Install-hexo-cli"><span class="toc-number">1.5.4.</span> <span class="toc-text">Install hexo-cli</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Set-Git-Information"><span class="toc-number">1.5.5.</span> <span class="toc-text">Set Git Information</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy"><span class="toc-number">1.5.6.</span> <span class="toc-text">Deploy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%B5%82%E6%88%90%E6%9E%9C"><span class="toc-number">1.6.</span> <span class="toc-text">最終成果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">1.7.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

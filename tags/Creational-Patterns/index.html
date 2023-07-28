@@ -1,0 +1,170 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Tag: Creational Patterns | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Laziness, Impatience and Hubris">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mobius">
+<meta property="og:url" content="https://dopamine908.github.io/tags/Creational-Patterns/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="Laziness, Impatience and Hubris">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://dopamine908.github.io/img/mobius_stripe.png">
+<meta property="article:author" content="Mobius Wu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://dopamine908.github.io/img/mobius_stripe.png"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/tags/Creational-Patterns/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Tag: Creational Patterns',
+  isPost: false,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2023-07-28 12:33:20'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="tag"><div class="article-sort-title">Tag - Creational Patterns</div><div class="article-sort"><div class="article-sort-item year">2020</div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-08-16T16:44:20.000Z" title="Created 2020-08-16 16:44:20">2020-08-16</time></div><a class="article-sort-item-title" href="/2020/08/16/DesignPattern/AbstractFactory/" title="Design Patterns - Creational - Abstract Factory Pattern 抽象工廠模式">Design Patterns - Creational - Abstract Factory Pattern 抽象工廠模式</a></div></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-07-22T15:14:50.000Z" title="Created 2020-07-22 15:14:50">2020-07-22</time></div><a class="article-sort-item-title" href="/2020/07/22/DesignPattern/FactoryMethod/" title="Design Patterns - Creational - Factory Method Pattern 工廠方法模式">Design Patterns - Creational - Factory Method Pattern 工廠方法模式</a></div></div><div class="article-sort-item no-article-cover"><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2020-07-11T19:24:55.000Z" title="Created 2020-07-11 19:24:55">2020-07-11</time></div><a class="article-sort-item-title" href="/2020/07/11/DesignPattern/Prototype/" title="Design Patterns - Creational - Prototype Pattern 原型模式">Design Patterns - Creational - Prototype Pattern 原型模式</a></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Git/"><span class="card-category-list-name">Git</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Laravel/"><span class="card-category-list-name">Laravel</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/PHP/"><span class="card-category-list-name">PHP</span><span class="card-category-list-count">4</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Testing-Laravel/"><span class="card-category-list-name">Testing Laravel</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%97%A5%E5%B8%B8%E9%96%8B%E7%99%BC%E7%AD%86%E8%A8%98/"><span class="card-category-list-name">日常開發筆記</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/"><span class="card-category-list-name">讀書會報告</span><span class="card-category-list-count">47</span></a></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/Job/" style="font-size: 1.14em; color: #999b9d">Job</a> <a href="/tags/Design-Pattern/" style="font-size: 1.1em; color: #999">Design Pattern</a> <a href="/tags/Test/" style="font-size: 1.46em; color: #99a7bb">Test</a> <a href="/tags/Pipeline/" style="font-size: 1.1em; color: #999">Pipeline</a> <a href="/tags/Design-Patterns/" style="font-size: 1.3em; color: #99a1ac">Design Patterns</a> <a href="/tags/Laravel-Helper/" style="font-size: 1.1em; color: #999">Laravel Helper</a> <a href="/tags/WTF-PHP/" style="font-size: 1.1em; color: #999">WTF PHP</a> <a href="/tags/Artisan/" style="font-size: 1.1em; color: #999">Artisan</a> <a href="/tags/CI-CD/" style="font-size: 1.1em; color: #999">CI/CD</a> <a href="/tags/ATDD/" style="font-size: 1.14em; color: #999b9d">ATDD</a> <a href="/tags/Command/" style="font-size: 1.14em; color: #999b9d">Command</a> <a href="/tags/Query/" style="font-size: 1.1em; color: #999">Query</a> <a href="/tags/Notification/" style="font-size: 1.1em; color: #999">Notification</a> <a href="/tags/Refactoring/" style="font-size: 1.34em; color: #99a3b0">Refactoring</a> <a href="/tags/Controller/" style="font-size: 1.1em; color: #999">Controller</a> <a href="/tags/Coding-Style/" style="font-size: 1.1em; color: #999">Coding Style</a> <a href="/tags/%E5%A4%A7%E8%A9%B1-AWS-%E9%9B%B2%E7%AB%AF%E6%9E%B6%E6%A7%8B/" style="font-size: 1.18em; color: #999ca1">大話 AWS 雲端架構</a> <a href="/tags/Crontab/" style="font-size: 1.14em; color: #999b9d">Crontab</a> <a href="/tags/Behavioral-Patterns/" style="font-size: 1.22em; color: #999ea4">Behavioral Patterns</a> <a href="/tags/%E6%8F%90%E5%8D%87%E7%A8%8B%E5%BC%8F%E8%A8%AD%E8%A8%88%E5%B8%AB%E7%9A%84%E9%9D%A2%E8%A9%A6%E5%8A%9B/" style="font-size: 1.18em; color: #999ca1">提升程式設計師的面試力</a> <a href="/tags/Unit-Test/" style="font-size: 1.22em; color: #999ea4">Unit Test</a> <a href="/tags/Blog/" style="font-size: 1.1em; color: #999">Blog</a> <a href="/tags/Structural-Patterns/" style="font-size: 1.1em; color: #999">Structural Patterns</a> <a href="/tags/PSR/" style="font-size: 1.1em; color: #999">PSR</a> <a href="/tags/SQL/" style="font-size: 1.18em; color: #999ca1">SQL</a> <a href="/tags/%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B/" style="font-size: 1.1em; color: #999">資料結構</a> <a href="/tags/BDD/" style="font-size: 1.14em; color: #999b9d">BDD</a> <a href="/tags/Clean-Architecture/" style="font-size: 1.38em; color: #99a4b4">Clean Architecture</a> <a href="/tags/Laravel/" style="font-size: 1.34em; color: #99a3b0">Laravel</a> <a href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/" style="font-size: 1.5em; color: #99a9bf">讀書會報告</a> <a href="/tags/Schedule/" style="font-size: 1.14em; color: #999b9d">Schedule</a> <a href="/tags/API/" style="font-size: 1.14em; color: #999b9d">API</a> <a href="/tags/AWS/" style="font-size: 1.18em; color: #999ca1">AWS</a> <a href="/tags/Creational-Patterns/" style="font-size: 1.18em; color: #999ca1">Creational Patterns</a> <a href="/tags/PHP/" style="font-size: 1.42em; color: #99a6b7">PHP</a> <a href="/tags/SOLID/" style="font-size: 1.14em; color: #999b9d">SOLID</a> <a href="/tags/SSH/" style="font-size: 1.1em; color: #999">SSH</a> <a href="/tags/Git/" style="font-size: 1.1em; color: #999">Git</a> <a href="/tags/Queue/" style="font-size: 1.14em; color: #999b9d">Queue</a> <a href="/tags/Legacy-Code/" style="font-size: 1.26em; color: #999fa8">Legacy Code</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span><a class="card-more-btn" href="/archives/" title="More">
+    <i class="fas fa-angle-right"></i></a></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/07/"><span class="card-archive-list-date">July 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/04/"><span class="card-archive-list-date">April 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2023/02/"><span class="card-archive-list-date">February 2023</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/11/"><span class="card-archive-list-date">November 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/10/"><span class="card-archive-list-date">October 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/09/"><span class="card-archive-list-date">September 2022</span><span class="card-archive-list-count">2</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/08/"><span class="card-archive-list-date">August 2022</span><span class="card-archive-list-count">1</span></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/07/"><span class="card-archive-list-date">July 2022</span><span class="card-archive-list-count">1</span></a></li></ul></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

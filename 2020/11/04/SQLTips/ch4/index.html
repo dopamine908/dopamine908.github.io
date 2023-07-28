@@ -1,0 +1,657 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULL | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULLIntro一般來說，普遍上的程式語言都會有布林值的資料類型(bool、boolean)，可以用作二元邏輯的判斷或是運算，而 SQL 除了 true 、 false 以外還另外追加了 unknown 這個第三值。所以 SQL 體系中，我們稱這種邏輯體系為三元邏輯(three-valued logic)。 起因是由於關連式資料庫的體系中具">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULL">
+<meta property="og:url" content="https://dopamine908.github.io/2020/11/04/SQLTips/ch4/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULLIntro一般來說，普遍上的程式語言都會有布林值的資料類型(bool、boolean)，可以用作二元邏輯的判斷或是運算，而 SQL 除了 true 、 false 以外還另外追加了 unknown 這個第三值。所以 SQL 體系中，我們稱這種邏輯體系為三元邏輯(three-valued logic)。 起因是由於關連式資料庫的體系中具">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/1047/800/600">
+<meta property="article:published_time" content="2020-11-04T10:14:29.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.238Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="讀書會報告">
+<meta property="article:tag" content="SQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/1047/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2020/11/04/SQLTips/ch4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULL',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULL</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2020-11-04T10:14:29.000Z" title="Created 2020-11-04 10:14:29">2020-11-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULL"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="SQL達人的現場工作筆記-Ch4-三元邏輯運算與NULL"><a href="#SQL達人的現場工作筆記-Ch4-三元邏輯運算與NULL" class="headerlink" title="SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULL"></a>SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULL</h1><h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>一般來說，普遍上的程式語言都會有布林值的資料類型(bool、boolean)，可以用作二元邏輯的判斷或是運算，而 SQL 除了 true 、 false 以外還另外追加了 unknown 這個第三值。所以 SQL 體系中，我們稱這種邏輯體系為三元邏輯(three-valued logic)。</p>
+<p>起因是由於關連式資料庫的體系中具有 NULL 這個值，所以運算的時候必須將其納入考慮，也因為三元邏輯的判斷有時候相當詭異，所以常常會伴隨著一些很怪的結果。</p>
+<h2 id="理論篇"><a href="#理論篇" class="headerlink" title="理論篇"></a>理論篇</h2><h3 id="你知道嗎？其實有兩種NULL。那到底是三元邏輯還是四元邏輯？"><a href="#你知道嗎？其實有兩種NULL。那到底是三元邏輯還是四元邏輯？" class="headerlink" title="你知道嗎？其實有兩種NULL。那到底是三元邏輯還是四元邏輯？"></a>你知道嗎？其實有兩種NULL。那到底是三元邏輯還是四元邏輯？</h3><p>兩種 NULL 分別是</p>
+<ol>
+<li>Unknown 未知值<blockquote>
+<p>我們無法得知某個戴太陽眼鏡的人的眼睛顏色，這種叫做「未知值」，他有這個屬性，但我們不知道</p>
+</blockquote>
+</li>
+<li>Not Applicable, Inapplicable 不適性值<blockquote>
+<p>像是冰箱的眼睛顏色，由於他本身並不賦予這種屬性，我們無論如何都無法得知，這種叫做「不適性值」<br>常常在表格中看到的 N&#x2F;A 符號，就是 Not Applicable 的縮寫</p>
+</blockquote>
+</li>
+</ol>
+<p>雖然說有兩種 NULL ，但 SQL 中其實只有一種（書中並未提及確切是哪一種，但依前後文的語意判斷大概是囊括上面兩種NULL）</p>
+<h3 id="為什麼不寫成「-NULL」？必須寫成「is-NULL」？"><a href="#為什麼不寫成「-NULL」？必須寫成「is-NULL」？" class="headerlink" title="為什麼不寫成「&#x3D;NULL」？必須寫成「is NULL」？"></a>為什麼不寫成「&#x3D;NULL」？必須寫成「is NULL」？</h3><p><strong>tb1_A</strong></p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>col_1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>test</td>
+</tr>
+<tr>
+<td>2</td>
+<td>NULL</td>
+</tr>
+</tbody></table>
+<p>當我在 tb1_A 資料表用下方 SQL 查詢的時候，會返回空的結果，而不是 id&#x3D;2 的資料</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `tb1_A` <span class="keyword">WHERE</span> `col_1` <span class="operator">=</span> <span class="keyword">NULL</span></span><br></pre></td></tr></table></figure>
+
+<p>我必須將 SQL 改為使用<code>IS NULL</code>才能如期找到 id&#x3D;2 的資料</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `tb1_A` <span class="keyword">WHERE</span> `col_1` <span class="keyword">IS</span> <span class="keyword">NULL</span></span><br></pre></td></tr></table></figure>
+
+<p>這是因為 where 語句只會回傳條件判斷結果為 true 的列而已（例如：如果要找尋<code>`col_1` = &#39;test&#39;</code>，那在 id&#x3D;1 那列， SQL 評斷‘ col_1 的值等於 test ’為 true ，所以 id&#x3D;1 則會被回傳），而如果比較結果為<code>false</code>或者<code>unknown</code>的話是不會被回傳的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 以下的比對都會回傳 unknown 的結果</span></span><br><span class="line"><span class="number">1</span> <span class="operator">=</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="number">2</span> <span class="operator">&gt;</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="number">3</span> <span class="operator">&lt;</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="number">4</span> <span class="operator">&lt;&gt;</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="keyword">NULL</span> <span class="operator">=</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="keyword">NULL</span> <span class="operator">&gt;</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="keyword">NULL</span> <span class="operator">&lt;</span> <span class="keyword">NULL</span></span><br><span class="line"><span class="keyword">NULL</span> <span class="operator">&lt;&gt;</span> <span class="keyword">NULL</span></span><br></pre></td></tr></table></figure>
+
+<p>以 NULL 為對象的比對通常都不會為 true ，因為其實<strong>NULL不是值也不是變數</strong>， NULL 的意思是「這裡沒有值」，只是一個符號或是標誌的概念。能夠使用比對述詞的只有值，而 NULL 不是值，所以才總是回傳 unknown 。</p>
+<h3 id="unknown、第三真假值"><a href="#unknown、第三真假值" class="headerlink" title="unknown、第三真假值"></a>unknown、第三真假值</h3><p>unknown 為導入 NULL 之後在三元邏輯運算中新增進來的<strong>第三真假值</strong></p>
+<p>而要注意的一點是，這裡的<strong>unknown</strong>跟NULL的<strong>UNKNOWN</strong>是不一樣的，<strong>unknown</strong>為SQL三元邏輯運算中的布林值，而<strong>UNKNOWN</strong>既非值也非變數，<strong>unknown</strong>是可以做比較的，而<strong>UNKNOWN</strong>既然非值，自然就不能做比較。</p>
+<p>我們將這些放在 SQL 中去做真值運算會得到以下結果</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 單純的真假值比對</span></span><br><span class="line"><span class="literal">unknown</span> <span class="operator">=</span> <span class="literal">unknown</span> <span class="operator">&lt;</span><span class="comment">-- true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 簡單來說，這裡表示「NULL = NULL」</span></span><br><span class="line"><span class="literal">UNKNOWN</span> <span class="operator">=</span> <span class="literal">UNKNOWN</span> <span class="operator">&lt;</span><span class="comment">-- unknown</span></span><br></pre></td></tr></table></figure>
+
+<p>接下來我們來看看在 SQL 中的三元運算真值表</p>
+<h4 id="三元運算真值表-NOT"><a href="#三元運算真值表-NOT" class="headerlink" title="三元運算真值表(NOT)"></a>三元運算真值表(NOT)</h4><table>
+<thead>
+<tr>
+<th>X</th>
+<th>NOT X</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>t</td>
+<td>f</td>
+</tr>
+<tr>
+<td>u</td>
+<td>u</td>
+</tr>
+<tr>
+<td>f</td>
+<td>t</td>
+</tr>
+</tbody></table>
+<h4 id="三元運算真值表-AND"><a href="#三元運算真值表-AND" class="headerlink" title="三元運算真值表(AND)"></a>三元運算真值表(AND)</h4><table>
+<thead>
+<tr>
+<th>AND</th>
+<th>t</th>
+<th>u</th>
+<th>f</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>t</td>
+<td>t</td>
+<td>u</td>
+<td>f</td>
+</tr>
+<tr>
+<td>u</td>
+<td>u</td>
+<td>u</td>
+<td>f</td>
+</tr>
+<tr>
+<td>f</td>
+<td>f</td>
+<td>f</td>
+<td>f</td>
+</tr>
+</tbody></table>
+<h4 id="三元運算真值表-OR"><a href="#三元運算真值表-OR" class="headerlink" title="三元運算真值表(OR)"></a>三元運算真值表(OR)</h4><table>
+<thead>
+<tr>
+<th>OR</th>
+<th>t</th>
+<th>u</th>
+<th>f</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>t</td>
+<td>t</td>
+<td>t</td>
+<td>t</td>
+</tr>
+<tr>
+<td>u</td>
+<td>t</td>
+<td>u</td>
+<td>u</td>
+</tr>
+<tr>
+<td>f</td>
+<td>t</td>
+<td>u</td>
+<td>f</td>
+</tr>
+</tbody></table>
+<p>以上真假值是有規律的，其判斷順序如下</p>
+<ul>
+<li>AND 的情況：false &gt; unknown &gt; true</li>
+<li>OR 的情況：true &gt; unknown &gt; false</li>
+</ul>
+<p>比較的時候，較大的會吃掉較小的</p>
+<p>可參考以下比對</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">2</span><span class="operator">&lt;</span><span class="number">5</span>) <span class="keyword">AND</span> (<span class="number">5</span><span class="operator">&gt;</span><span class="keyword">NULL</span>) <span class="comment">--&gt; unknown</span></span><br><span class="line">(<span class="number">2</span><span class="operator">&gt;</span><span class="number">5</span>) <span class="keyword">OR</span> (<span class="number">5</span><span class="operator">&lt;</span><span class="keyword">NULL</span>) <span class="comment">--&gt; unknown</span></span><br><span class="line">(<span class="number">2</span><span class="operator">&lt;</span><span class="number">5</span>) <span class="keyword">OR</span> (<span class="number">5</span><span class="operator">&lt;</span><span class="keyword">NULL</span>)  <span class="comment">--&gt; true</span></span><br><span class="line"><span class="keyword">NOT</span> (<span class="number">5</span><span class="operator">&lt;&gt;</span><span class="keyword">NULL</span>)      <span class="comment">--&gt; unknown</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="實踐篇"><a href="#實踐篇" class="headerlink" title="實踐篇"></a>實踐篇</h2><h3 id="比對述詞與NULL其一-排中率不會成立"><a href="#比對述詞與NULL其一-排中率不會成立" class="headerlink" title="比對述詞與NULL其一-排中率不會成立"></a>比對述詞與NULL其一-排中率不會成立</h3><p>甚麼是排中率呢?</p>
+<p>排中率(Law of excluded middle)</p>
+<blockquote>
+<p>In logic, the law of excluded middle (or the principle of excluded middle) states that for any proposition, either that proposition is true or its negation is true.</p>
+<blockquote>
+<p>排中率指出，任何一個論述，他只有可能是對的，或是他的反面是對的<br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Law_of_excluded_middle">wiki</a></p>
+</blockquote>
+</blockquote>
+<p>這種思維在二元邏輯中相當顯而易見，對於某一句話，我們可以很直覺地去認定他是對的，或者他不是對的(反面是對的意即他是不對的)，但在三元邏輯中，這種邏輯思維則會出現問題。</p>
+<p><strong>Students</strong></p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>A</td>
+<td>22</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B</td>
+<td>19</td>
+</tr>
+<tr>
+<td>3</td>
+<td>C</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>4</td>
+<td>D</td>
+<td>21</td>
+</tr>
+</tbody></table>
+<p>若遵循排中率的結果，也就是比較偏向我們直覺的思維，我們會認為下面的SQL可以將所以的人都取出，畢竟人只有分成「20歲的」跟「不是20歲的」</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `students` <span class="keyword">WHERE</span> `age` <span class="operator">=</span> <span class="number">20</span> <span class="keyword">OR</span> `age` <span class="operator">&lt;&gt;</span> <span class="number">20</span></span><br></pre></td></tr></table></figure>
+<p>實際上我們拿到的資料會像是這樣，少了 C 的資料</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>A</td>
+<td>22</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B</td>
+<td>19</td>
+</tr>
+<tr>
+<td>4</td>
+<td>D</td>
+<td>21</td>
+</tr>
+</tbody></table>
+<p>這是因為 SQL 在逐列比對吻合結果的過程中發生了下面的事情</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 1. C的年齡為NULL</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `students` <span class="keyword">WHERE</span> <span class="keyword">NULL</span> <span class="operator">=</span> <span class="number">20</span> <span class="keyword">OR</span> <span class="keyword">NULL</span> <span class="operator">&lt;&gt;</span> <span class="number">20</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2. NULL的比對會得到unknown的結果</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `students` <span class="keyword">WHERE</span> <span class="literal">unknown</span> <span class="keyword">OR</span> <span class="literal">unknown</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 3. 「unknown OR unknown」會得到unknown的結果</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `students` <span class="keyword">WHERE</span> <span class="literal">unknown</span></span><br></pre></td></tr></table></figure>
+
+<p>由於 SQL 只會返回結果為 true 的列，所以 C 會被排除<br>如果我們想要將全部的資料取出的話我們應該改寫為這樣</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `students` <span class="keyword">WHERE</span> `age` <span class="operator">=</span> <span class="number">20</span> <span class="keyword">OR</span> `age` <span class="operator">&lt;&gt;</span> <span class="number">20</span> <span class="keyword">OR</span> `age` <span class="keyword">IS</span> <span class="keyword">NULL</span></span><br></pre></td></tr></table></figure>
+<h3 id="比對述詞與NULL其二-CASE陳述式與NULL"><a href="#比對述詞與NULL其二-CASE陳述式與NULL" class="headerlink" title="比對述詞與NULL其二-CASE陳述式與NULL"></a>比對述詞與NULL其二-CASE陳述式與NULL</h3><p>在 CASE 陳述式中，判斷的結果為 true 才會返回 THEN 的結果</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CASE</span> `col_1` </span><br><span class="line">    <span class="keyword">WHEN</span> <span class="number">1</span> <span class="keyword">THEN</span> <span class="string">&#x27;O&#x27;</span></span><br><span class="line">    <span class="keyword">WHEN</span> <span class="keyword">NULL</span> <span class="keyword">THEN</span> <span class="string">&#x27;X&#x27;</span> <span class="comment">--只回得到unknown的結果</span></span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+
+<p>上面的 CASE 陳述式中只返回 ‘X’ 的 CASE 是永遠進不去的，如果想要正常運作的話必須改為下面的寫法</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CASE</span>  </span><br><span class="line">    <span class="keyword">WHEN</span> `col_1` <span class="operator">=</span> <span class="number">1</span> <span class="keyword">THEN</span> <span class="string">&#x27;O&#x27;</span></span><br><span class="line">    <span class="keyword">WHEN</span> `col_1` <span class="keyword">IS</span> <span class="keyword">NULL</span> <span class="keyword">THEN</span> <span class="string">&#x27;X&#x27;</span></span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="NOT-IN-與-NOT-EXISTS-並不相等"><a href="#NOT-IN-與-NOT-EXISTS-並不相等" class="headerlink" title="NOT IN 與 NOT EXISTS 並不相等"></a>NOT IN 與 NOT EXISTS 並不相等</h3><p>NOT IN 及 NOT EXISTS 是常用的效能調教技巧，但有可能因為 NULL 的出現，使得我們得到不同的結果</p>
+<p><strong>Class_A</strong></p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+<th>city</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>A1</td>
+<td>22</td>
+<td>台北</td>
+</tr>
+<tr>
+<td>2</td>
+<td>A2</td>
+<td>19</td>
+<td>新北</td>
+</tr>
+<tr>
+<td>3</td>
+<td>A3</td>
+<td>21</td>
+<td>台北</td>
+</tr>
+</tbody></table>
+<p><strong>Class_B</strong></p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+<th>city</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>B1</td>
+<td>22</td>
+<td>台北</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B2</td>
+<td>23</td>
+<td>台北</td>
+</tr>
+<tr>
+<td>3</td>
+<td>B3</td>
+<td>NULL</td>
+<td>台北</td>
+</tr>
+<tr>
+<td>4</td>
+<td>B4</td>
+<td>18</td>
+<td>桃園</td>
+</tr>
+<tr>
+<td>5</td>
+<td>B5</td>
+<td>20</td>
+<td>桃園</td>
+</tr>
+<tr>
+<td>6</td>
+<td>B6</td>
+<td>19</td>
+<td>新竹</td>
+</tr>
+</tbody></table>
+<p>如上面兩張資料表，如果我們想要得到「年齡與 B 班住台北的學生不一致的 A 班學生」， SQL 大概會是這樣寫</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> `age` <span class="keyword">NOT</span> <span class="keyword">IN</span> </span><br><span class="line">    (<span class="keyword">SELECT</span> `age` <span class="keyword">FROM</span> `class_b` <span class="keyword">WHERE</span> `city` <span class="operator">=</span> <span class="string">&#x27;台北&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>我們期望可以獲得 A2 及 A3 這兩位同學的資料，但事實上我們只能得到搜尋為空的結果</p>
+<p>接下來讓我們來看看 SQL 執行的階段到底發生了甚麼事情吧</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 1. 執行子查詢，得到年齡的List</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> `age` <span class="keyword">NOT</span> <span class="keyword">IN</span> (<span class="number">22</span>, <span class="number">23</span>, <span class="keyword">NULL</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2. 將 NOT IN 換成NOT 與 IN，進行同值轉換</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> <span class="keyword">NOT</span> `age` <span class="keyword">IN</span> (<span class="number">22</span>, <span class="number">23</span>, <span class="keyword">NULL</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">-- 3. 將 IN 換成 OR，進行同值轉換</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> <span class="keyword">NOT</span> (</span><br><span class="line">    (`age` <span class="operator">=</span> <span class="number">22</span>) <span class="keyword">OR</span> (`age` <span class="operator">=</span> <span class="number">23</span>) <span class="keyword">OR</span> (`age` <span class="operator">=</span> <span class="keyword">NULL</span>)</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 4. 利用迪摩根定理進行同值轉換</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> </span><br><span class="line">    <span class="keyword">NOT</span> (`age` <span class="operator">=</span> <span class="number">22</span>)</span><br><span class="line">    <span class="keyword">AND</span> <span class="keyword">NOT</span> (`age` <span class="operator">=</span> <span class="number">23</span>) </span><br><span class="line">    <span class="keyword">AND</span> <span class="keyword">NOT</span> (`age` <span class="operator">=</span> <span class="keyword">NULL</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 5. 以 &lt;&gt; 代替 NOT 與 = 進行同值轉換</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> (`age` <span class="operator">&lt;&gt;</span> <span class="number">22</span>) <span class="keyword">AND</span> (`age` <span class="operator">&lt;&gt;</span> <span class="number">23</span>) <span class="keyword">AND</span> (`age` <span class="operator">&lt;&gt;</span> <span class="keyword">NULL</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 6. 因為NULL無法進行述值比對，則得到 unknown 的結果</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> (`age` <span class="operator">&lt;&gt;</span> <span class="number">22</span>) <span class="keyword">AND</span> (`age` <span class="operator">&lt;&gt;</span> <span class="number">23</span>) <span class="keyword">AND</span> <span class="literal">unknown</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">-- 7. AND 的運算中夾帶 unknown ，依之前的真值表，我們無法得到 true 的結果</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> <span class="literal">false</span> 或是 <span class="literal">unknown</span></span><br></pre></td></tr></table></figure>
+
+<p>因為每一列的資料都進行了這樣的比對流程，且都不為 true ，所以任何一筆資料都不會被取出來</p>
+<p>那麼底下我們來看看可以得到正確的結果的 NOT EXISTS ， SQL 如下</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> (</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> class_b </span><br><span class="line">        <span class="keyword">WHERE</span> class_a.age <span class="operator">=</span> class_b.age </span><br><span class="line">        <span class="keyword">AND</span> class_b.city <span class="operator">=</span> <span class="string">&#x27;台北&#x27;</span></span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+
+<p>一樣我們來看在含有 NULL 那列，中間的過程發生了甚麼事情</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 1. 子查詢與 NULL 的比對</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> (</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> class_b </span><br><span class="line">        <span class="keyword">WHERE</span> class_a.age <span class="operator">=</span> <span class="keyword">NULL</span> </span><br><span class="line">        <span class="keyword">AND</span> class_b.city <span class="operator">=</span> <span class="string">&#x27;台北&#x27;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2. NULL 的比對結果會得到 unknown</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> (</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> class_b </span><br><span class="line">        <span class="keyword">WHERE</span> <span class="literal">unknown</span></span><br><span class="line">        <span class="keyword">AND</span> class_b.city <span class="operator">=</span> <span class="string">&#x27;台北&#x27;</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 3. AND 的運算結果出現 unknown ，結果就不會是 true</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> (</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> class_b </span><br><span class="line">        <span class="keyword">WHERE</span> <span class="literal">false</span> 或是 <span class="literal">unknown</span></span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 4. 子查詢不會回傳任何結果，所以 NOT EXIST 將會回傳 true</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` <span class="keyword">WHERE</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="限定述詞與NULL"><a href="#限定述詞與NULL" class="headerlink" title="限定述詞與NULL"></a>限定述詞與NULL</h3><p>這邊要探討使用 ALL 的情形</p>
+<p><strong>Class_A</strong></p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+<th>city</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>A1</td>
+<td>22</td>
+<td>台北</td>
+</tr>
+<tr>
+<td>2</td>
+<td>A2</td>
+<td>19</td>
+<td>新北</td>
+</tr>
+<tr>
+<td>3</td>
+<td>A3</td>
+<td>21</td>
+<td>台北</td>
+</tr>
+</tbody></table>
+<p><strong>Class_B</strong></p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+<th>city</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>B1</td>
+<td>22</td>
+<td>台北</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B2</td>
+<td>23</td>
+<td>台北</td>
+</tr>
+<tr>
+<td>3</td>
+<td>B3</td>
+<td>NULL</td>
+<td>台北</td>
+</tr>
+<tr>
+<td>4</td>
+<td>B4</td>
+<td>18</td>
+<td>桃園</td>
+</tr>
+<tr>
+<td>5</td>
+<td>B5</td>
+<td>20</td>
+<td>桃園</td>
+</tr>
+<tr>
+<td>6</td>
+<td>B6</td>
+<td>19</td>
+<td>新竹</td>
+</tr>
+</tbody></table>
+<p>我們想取得「比 B 班住台北的任何學生都還要年輕的 A 班學生」， SQL 如下</p>
+<p><font color="#dd0000">這邊書上的資料表跟搜尋結果有點怪怪的</font></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> age <span class="operator">&lt;</span> <span class="keyword">ALL</span> ( <span class="keyword">SELECT</span> age </span><br><span class="line">                        <span class="keyword">FROM</span> class_b </span><br><span class="line">                        <span class="keyword">WHERE</span> city <span class="operator">=</span> <span class="string">&#x27;台北&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>我們期望得到 A2 、 A3 的資料，但結果依然是空白的，什麼也沒有回傳<br>所以我們一樣來看看過程中發生了什麼事情</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 1. 執行子查詢，取得年齡的 List</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> age <span class="operator">&lt;</span> <span class="keyword">ALL</span> ( <span class="number">22</span>, <span class="number">23</span>, <span class="keyword">NULL</span> )</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2. 以 AND 讓 ALL 述詞進行同質轉換</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> (age <span class="operator">&lt;</span>  <span class="number">22</span>) <span class="keyword">AND</span> (age <span class="operator">&lt;</span> <span class="number">23</span>) <span class="keyword">AND</span> (age <span class="operator">&lt;</span> <span class="keyword">NULL</span>)</span><br><span class="line">    </span><br><span class="line"><span class="comment">-- 3. NULL 的比對結果會得到 unknown</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> (age <span class="operator">&lt;</span>  <span class="number">22</span>) <span class="keyword">AND</span> (age <span class="operator">&lt;</span> <span class="number">23</span>) <span class="keyword">AND</span> <span class="literal">unknown</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">-- 3. AND 的運算結果出現 unknown ，結果就不會是 true</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` <span class="keyword">WHERE</span> <span class="literal">false</span> 或者 <span class="literal">unknown</span></span><br></pre></td></tr></table></figure>
+<h3 id="限定述詞與極值函數並非同值"><a href="#限定述詞與極值函數並非同值" class="headerlink" title="限定述詞與極值函數並非同值"></a>限定述詞與極值函數並非同值</h3><p>遇到上一個例子的狀況，或許會有人想說那就使用極值函數去取代（如 MIN）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> age <span class="operator">&lt;</span> <span class="keyword">ALL</span> ( <span class="keyword">SELECT</span> <span class="built_in">MIN</span>(age) </span><br><span class="line">                        <span class="keyword">FROM</span> class_b </span><br><span class="line">                        <span class="keyword">WHERE</span> city <span class="operator">=</span> <span class="string">&#x27;台北&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>搜尋出來的結果是符合我們預期的沒錯，只會選出 A2 、 A3 的資料</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+<th>city</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2</td>
+<td>A2</td>
+<td>19</td>
+<td>新北</td>
+</tr>
+<tr>
+<td>3</td>
+<td>A3</td>
+<td>21</td>
+<td>台北</td>
+</tr>
+</tbody></table>
+<p>這是因為，當我們使用極值函數在運算時，會排除 NULL 的資料項目，乍看之下可能會覺得使用極值函數就可以迴避掉 NULL 帶來的問題</p>
+<p>但試想如果今天 class_b 沒有人住在台北的狀況呢？如下表</p>
+<p><strong>Class_B_taipei_no_person</strong></p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>age</th>
+<th>city</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>B4</td>
+<td>18</td>
+<td>桃園</td>
+</tr>
+<tr>
+<td>2</td>
+<td>B5</td>
+<td>20</td>
+<td>桃園</td>
+</tr>
+<tr>
+<td>3</td>
+<td>B6</td>
+<td>19</td>
+<td>新竹</td>
+</tr>
+</tbody></table>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 0. 上方的 SQL 則寫成這樣</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> age <span class="operator">&lt;</span> <span class="keyword">ALL</span> ( <span class="keyword">SELECT</span> <span class="built_in">MIN</span>(age) </span><br><span class="line">                        <span class="keyword">FROM</span> class_b_taipei_no_person </span><br><span class="line">                        <span class="keyword">WHERE</span> city <span class="operator">=</span> <span class="string">&#x27;台北&#x27;</span>)</span><br><span class="line">                        </span><br><span class="line"><span class="comment">-- 1. 極值函數將傳回 NULL</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` <span class="keyword">WHERE</span> age <span class="operator">&lt;</span> <span class="keyword">NULL</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2. NULL 的比對結果會得到 unknown</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` <span class="keyword">WHERE</span> <span class="literal">unknown</span></span><br></pre></td></tr></table></figure>
+
+<p>則我們會得到一片空白的搜尋結果</p>
+<p>當我們想比對的對象不存在的時候，有的人覺得要回傳所有的資料，有的人覺得要回傳空的資料，要使用哪一種做法是根據情況而定。但要注意在這種狀況之下，使用極值函數是不會回傳任何值的。</p>
+<h3 id="彙總函數與NULL"><a href="#彙總函數與NULL" class="headerlink" title="彙總函數與NULL"></a>彙總函數與NULL</h3><p><strong>彙總函數、聚集函數(aggregate function) ：AVG()、COUNT()、MAX()、MIN()、SUM()</strong></p>
+<p>其實不只極值函數， COUNT 之外的彙總函數都會有上面例子那樣的結果，例如</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> `class_a` </span><br><span class="line">    <span class="keyword">WHERE</span> age <span class="operator">&lt;</span>  ( <span class="keyword">SELECT</span> <span class="built_in">AVG</span>(age) </span><br><span class="line">                        <span class="keyword">FROM</span> class_b_taipei_no_person </span><br><span class="line">                        <span class="keyword">WHERE</span> city <span class="operator">=</span> <span class="string">&#x27;台北&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>這個也會回傳完全空白的結果</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><ol>
+<li>NULL 不是值</li>
+<li>不是值，所以無法套入述詞（比對結果會為 unknown）</li>
+<li>勉強套用只會產生 unknown 的結果</li>
+<li>當邏輯運算出現 unknown ， SQL 會以有違直覺的方式去運算</li>
+<li>為了解決這個問題，我們必須分段觀察 SQL 的運算過程</li>
+</ol>
+<p><strong>最重要的是，解決 NULL 問題的最佳策略，莫過於在資料表上加上 NOT NULL 限制</strong></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a><a class="post-meta__tags" href="/tags/SQL/">SQL</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL%E9%81%94%E4%BA%BA%E7%9A%84%E7%8F%BE%E5%A0%B4%E5%B7%A5%E4%BD%9C%E7%AD%86%E8%A8%98-Ch4-%E4%B8%89%E5%85%83%E9%82%8F%E8%BC%AF%E9%81%8B%E7%AE%97%E8%88%87NULL"><span class="toc-number">1.</span> <span class="toc-text">SQL達人的現場工作筆記 - Ch4 - 三元邏輯運算與NULL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Intro"><span class="toc-number">1.1.</span> <span class="toc-text">Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%90%86%E8%AB%96%E7%AF%87"><span class="toc-number">1.2.</span> <span class="toc-text">理論篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%A0%E7%9F%A5%E9%81%93%E5%97%8E%EF%BC%9F%E5%85%B6%E5%AF%A6%E6%9C%89%E5%85%A9%E7%A8%AENULL%E3%80%82%E9%82%A3%E5%88%B0%E5%BA%95%E6%98%AF%E4%B8%89%E5%85%83%E9%82%8F%E8%BC%AF%E9%82%84%E6%98%AF%E5%9B%9B%E5%85%83%E9%82%8F%E8%BC%AF%EF%BC%9F"><span class="toc-number">1.2.1.</span> <span class="toc-text">你知道嗎？其實有兩種NULL。那到底是三元邏輯還是四元邏輯？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E4%B8%8D%E5%AF%AB%E6%88%90%E3%80%8C-NULL%E3%80%8D%EF%BC%9F%E5%BF%85%E9%A0%88%E5%AF%AB%E6%88%90%E3%80%8Cis-NULL%E3%80%8D%EF%BC%9F"><span class="toc-number">1.2.2.</span> <span class="toc-text">為什麼不寫成「&#x3D;NULL」？必須寫成「is NULL」？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unknown%E3%80%81%E7%AC%AC%E4%B8%89%E7%9C%9F%E5%81%87%E5%80%BC"><span class="toc-number">1.2.3.</span> <span class="toc-text">unknown、第三真假值</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E5%85%83%E9%81%8B%E7%AE%97%E7%9C%9F%E5%80%BC%E8%A1%A8-NOT"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">三元運算真值表(NOT)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E5%85%83%E9%81%8B%E7%AE%97%E7%9C%9F%E5%80%BC%E8%A1%A8-AND"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">三元運算真值表(AND)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89%E5%85%83%E9%81%8B%E7%AE%97%E7%9C%9F%E5%80%BC%E8%A1%A8-OR"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">三元運算真值表(OR)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%A6%E8%B8%90%E7%AF%87"><span class="toc-number">1.3.</span> <span class="toc-text">實踐篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E5%B0%8D%E8%BF%B0%E8%A9%9E%E8%88%87NULL%E5%85%B6%E4%B8%80-%E6%8E%92%E4%B8%AD%E7%8E%87%E4%B8%8D%E6%9C%83%E6%88%90%E7%AB%8B"><span class="toc-number">1.3.1.</span> <span class="toc-text">比對述詞與NULL其一-排中率不會成立</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AF%94%E5%B0%8D%E8%BF%B0%E8%A9%9E%E8%88%87NULL%E5%85%B6%E4%BA%8C-CASE%E9%99%B3%E8%BF%B0%E5%BC%8F%E8%88%87NULL"><span class="toc-number">1.3.2.</span> <span class="toc-text">比對述詞與NULL其二-CASE陳述式與NULL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NOT-IN-%E8%88%87-NOT-EXISTS-%E4%B8%A6%E4%B8%8D%E7%9B%B8%E7%AD%89"><span class="toc-number">1.3.3.</span> <span class="toc-text">NOT IN 與 NOT EXISTS 並不相等</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%90%E5%AE%9A%E8%BF%B0%E8%A9%9E%E8%88%87NULL"><span class="toc-number">1.3.4.</span> <span class="toc-text">限定述詞與NULL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%90%E5%AE%9A%E8%BF%B0%E8%A9%9E%E8%88%87%E6%A5%B5%E5%80%BC%E5%87%BD%E6%95%B8%E4%B8%A6%E9%9D%9E%E5%90%8C%E5%80%BC"><span class="toc-number">1.3.5.</span> <span class="toc-text">限定述詞與極值函數並非同值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BD%99%E7%B8%BD%E5%87%BD%E6%95%B8%E8%88%87NULL"><span class="toc-number">1.3.6.</span> <span class="toc-text">彙總函數與NULL</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B8%BD%E7%B5%90"><span class="toc-number">1.4.</span> <span class="toc-text">總結</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

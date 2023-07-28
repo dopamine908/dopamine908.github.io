@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.81.5 一個簡單的單元測試範例其實就算沒有測試框架的輔助，我們也可以自己寫一個自動化的單元測試 舉例來說，有一個類別 SimpleParser ，裡面有一個 ParseAndSum 方法 ParseAndSum()Input輸入零個或多個逗號分開的數字所組成的字串 exaple: 1,2,3 Output 輸入不包含數字 則">
+<meta property="og:type" content="article">
+<meta property="og:title" content="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8">
+<meta property="og:url" content="https://dopamine908.github.io/2021/02/24/UnitTestArt/ch1_sec1-5_sec1-8/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.81.5 一個簡單的單元測試範例其實就算沒有測試框架的輔助，我們也可以自己寫一個自動化的單元測試 舉例來說，有一個類別 SimpleParser ，裡面有一個 ParseAndSum 方法 ParseAndSum()Input輸入零個或多個逗號分開的數字所組成的字串 exaple: 1,2,3 Output 輸入不包含數字 則">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/153/800/600">
+<meta property="article:published_time" content="2021-02-24T13:42:52.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.238Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="讀書會報告">
+<meta property="article:tag" content="Test">
+<meta property="article:tag" content="Unit Test">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/153/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2021/02/24/UnitTestArt/ch1_sec1-5_sec1-8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-02-24T13:42:52.000Z" title="Created 2021-02-24 13:42:52">2021-02-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="單元測試的藝術-Ch1-單元測試基礎-Sec-1-5-1-8"><a href="#單元測試的藝術-Ch1-單元測試基礎-Sec-1-5-1-8" class="headerlink" title="單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8"></a>單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8</h1><h2 id="1-5-一個簡單的單元測試範例"><a href="#1-5-一個簡單的單元測試範例" class="headerlink" title="1.5 一個簡單的單元測試範例"></a>1.5 一個簡單的單元測試範例</h2><p>其實就算沒有測試框架的輔助，我們也可以自己寫一個自動化的單元測試</p>
+<p>舉例來說，有一個類別 <code>SimpleParser</code> ，裡面有一個 <code>ParseAndSum</code> 方法</p>
+<h3 id="ParseAndSum"><a href="#ParseAndSum" class="headerlink" title="ParseAndSum()"></a>ParseAndSum()</h3><h4 id="Input"><a href="#Input" class="headerlink" title="Input"></a>Input</h4><p>輸入零個或多個逗號分開的數字所組成的字串</p>
+<p>exaple: 1,2,3</p>
+<h4 id="Output"><a href="#Output" class="headerlink" title="Output"></a>Output</h4><ul>
+<li>輸入不包含數字<ul>
+<li>則回傳 0</li>
+</ul>
+</li>
+<li>包含一個數字<ul>
+<li>則回傳該數字</li>
+</ul>
+</li>
+<li>包含多個數字<ul>
+<li>則回傳這些數字的相加</li>
+</ul>
+</li>
+</ul>
+<p>為了示範方便，該 fucntion 現在只能處理0個或是1個數字的情況</p>
+<hr>
+<p>首先，我們有了一個已經實作了上述需求的 <code>SimpleParser</code> 類別</p>
+<p><code>SimpleParser</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Src</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Exception</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleParser</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">ParseAndSum</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$number</span></span>): <span class="title">int</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">strlen</span>(<span class="variable">$number</span>) == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="title function_ invoke__">strpos</span>(<span class="variable">$number</span>, <span class="string">&#x27;,&#x27;</span>) !== <span class="literal">false</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> (<span class="keyword">int</span>)<span class="variable">$number</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&#x27;I can only handle 0 and 1 numbers for now!&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接著我們新增一個要用來測試 <code>SimpleParser</code> 的 <code>SimpleParserTest</code> 類別，然後撰寫某一個 case 的測試內容</p>
+<p>我們想要測試在空字串的情況下， <code>ParseAndSum()</code> 會不會如期返回 0</p>
+<p><code>SimpleParserTest</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">Test</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Src</span>\<span class="title">SimpleParser</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleParserTest</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">TestReturnsZeroWhenEmptyString</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="variable">$SimpleParser</span> = <span class="keyword">new</span> <span class="title class_">SimpleParser</span>();</span><br><span class="line">            <span class="variable">$result</span> = <span class="variable">$SimpleParser</span>-&gt;<span class="title function_ invoke__">ParseAndSum</span>(<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">            <span class="keyword">if</span> (<span class="variable">$result</span> != <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">&quot; Error on SimpleParserTest::TestReturnsZeroWhenEmptyString\n</span></span><br><span class="line"><span class="string">                       ParseAndSum should have returned 0 on an empty string&quot;</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">&quot;SimpleParserTest::TestReturnsZeroWhenEmptyString verify success&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (\<span class="built_in">Exception</span> <span class="variable">$exception</span>) &#123;</span><br><span class="line">            <span class="title function_ invoke__">var_dump</span>(<span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getMessage</span>());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最後我們將測試的過程註冊到 <code>TestMain.php</code> 中，這樣我只要去執行這隻檔案就可以執行所有在這之中被註冊過的測試</p>
+<p><code>TestMain.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">&#x27;/test/SimpleParserTest.php&#x27;</span>;</span><br><span class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span> . <span class="string">&#x27;/src/SimpleParser.php&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Test</span>\<span class="title">SimpleParserTest</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="variable">$SimpleParserTest</span> = <span class="keyword">new</span> <span class="title class_">SimpleParserTest</span>();</span><br><span class="line">    <span class="variable">$SimpleParserTest</span>-&gt;<span class="title function_ invoke__">TestReturnsZeroWhenEmptyString</span>();</span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$exception</span>) &#123;</span><br><span class="line">    <span class="title function_ invoke__">var_dump</span>(<span class="variable">$exception</span>-&gt;<span class="title function_ invoke__">getMessage</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最後用指令去執行這隻可以運行測試的腳本 php 檔</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php TestMain.php</span><br></pre></td></tr></table></figure>
+
+<h2 id="1-6-測試驅動開發"><a href="#1-6-測試驅動開發" class="headerlink" title="1.6 測試驅動開發"></a>1.6 測試驅動開發</h2><p>大致上理解了該怎麼去寫測試之後，下一個問題就是我們該在何時轉寫測試呢？</p>
+<p>有不少人會在軟體完成之後去撰寫測試，但越來越多人選擇在撰寫產品程式碼之前就先寫測試，這種方式稱為 <strong>測試驅動開發(Test-Driven Development, TDD)</strong></p>
+<p>書上的圖 1-3, 1-4 呈現了傳統撰寫方式與 TDD 的不同之處</p>
+<!-- <p style="color:red">插入圖片</p>-->
+
+<p>但 TDD 並不能保證你的專案一定會成功，測試的命名、測試的可維護性和可讀性，以及是否測試了正確的內容，或是測試本身有無缺陷或者設計不良都可能左右專案的成敗。本書的重點會把主軸放在將測試寫的到位上。</p>
+<p>以下簡述一下 TDD 的開發過程</p>
+<ol>
+<li>寫一個失敗的測試，已證明產品功能上的缺失</li>
+<li>撰寫產品程式碼，已通過測試</li>
+<li>重構程式碼</li>
+</ol>
+<blockquote>
+<p>【重構】</p>
+<blockquote>
+<p>重構意味著在不改變功能的前提下，修改其程式碼，改善其可讀性、可維護性</p>
+</blockquote>
+</blockquote>
+<h2 id="1-7-成功進行-TDD-的三種核心技能"><a href="#1-7-成功進行-TDD-的三種核心技能" class="headerlink" title="1.7 成功進行 TDD 的三種核心技能"></a>1.7 成功進行 TDD 的三種核心技能</h2><p>想要成功的使用 TDD ，你需要三種核心技能</p>
+<ul>
+<li>僅僅做到先撰寫測試，並不能保證測試是可維護的、可讀且可靠的。</li>
+<li>僅僅做到撰寫出可維護、可讀、可靠的測試，並不能保證你能獲得測試先行的各種好處。</li>
+<li>僅僅做到測試先行，且測試可讀、可維護、可靠，並不能保證你能產出一個設計完善的系統。</li>
+</ul>
+<p>學習 TDD 的一個實際方式就是分別學習以上三個技能。</p>
+<h2 id="1-8-小結"><a href="#1-8-小結" class="headerlink" title="1.8 小結"></a>1.8 小結</h2><p>本章節中，作者定義了一個優秀的單元測試應該具有的特質，如下</p>
+<ul>
+<li>一段自動化程式，他會呼叫另一個方法，然後驗證這個方法或是該類別的邏輯行為或某些預期結果</li>
+<li>用一個自動化測試框架進行撰寫</li>
+<li>容易撰寫</li>
+<li>執行快速</li>
+<li>能由開發團隊裡的任何人重複執行且得到一樣的結果</li>
+</ul>
+<p>並且告訴我們，區分整合測試與單元測試之間的差異非常重要，每當想要寫一個測試的時候，我們就必須去判斷該寫的是單元測試或是整合測試才適當</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a><a class="post-meta__tags" href="/tags/Test/">Test</a><a class="post-meta__tags" href="/tags/Unit-Test/">Unit Test</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E7%9A%84%E8%97%9D%E8%A1%93-Ch1-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E5%9F%BA%E7%A4%8E-Sec-1-5-1-8"><span class="toc-number">1.</span> <span class="toc-text">單元測試的藝術 - Ch1 單元測試基礎 - Sec. 1.5 ~ 1.8</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-5-%E4%B8%80%E5%80%8B%E7%B0%A1%E5%96%AE%E7%9A%84%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E7%AF%84%E4%BE%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1.5 一個簡單的單元測試範例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ParseAndSum"><span class="toc-number">1.1.1.</span> <span class="toc-text">ParseAndSum()</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Input"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">Input</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Output"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">Output</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-6-%E6%B8%AC%E8%A9%A6%E9%A9%85%E5%8B%95%E9%96%8B%E7%99%BC"><span class="toc-number">1.2.</span> <span class="toc-text">1.6 測試驅動開發</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-7-%E6%88%90%E5%8A%9F%E9%80%B2%E8%A1%8C-TDD-%E7%9A%84%E4%B8%89%E7%A8%AE%E6%A0%B8%E5%BF%83%E6%8A%80%E8%83%BD"><span class="toc-number">1.3.</span> <span class="toc-text">1.7 成功進行 TDD 的三種核心技能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-8-%E5%B0%8F%E7%B5%90"><span class="toc-number">1.4.</span> <span class="toc-text">1.8 小結</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>PHP8 - Match Expression | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="PHP8 - Match ExpressionPHP 8 新增了一種叫做 match 的方法，幾乎是可以完全取代我們原本熟知的 switch ，同時帶來了一些好處，以下我們看一段範例比較一下 switch 跟 match Switch v.s. Match 1234567891011121314151617181920212223&#x2F;&#x2F; switchswitch ($operator) &amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP8 - Match Expression">
+<meta property="og:url" content="https://dopamine908.github.io/2021/08/13/Other/PHP8ReleaseNoteMatchExpression/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="PHP8 - Match ExpressionPHP 8 新增了一種叫做 match 的方法，幾乎是可以完全取代我們原本熟知的 switch ，同時帶來了一些好處，以下我們看一段範例比較一下 switch 跟 match Switch v.s. Match 1234567891011121314151617181920212223&#x2F;&#x2F; switchswitch ($operator) &amp;#123;">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/137/800/600">
+<meta property="article:published_time" content="2021-08-13T14:25:44.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.234Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="PHP8">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/137/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2021/08/13/Other/PHP8ReleaseNoteMatchExpression/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'PHP8 - Match Expression',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">PHP8 - Match Expression</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-08-13T14:25:44.000Z" title="Created 2021-08-13 14:25:44">2021-08-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/PHP/">PHP</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="PHP8 - Match Expression"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="PHP8-Match-Expression"><a href="#PHP8-Match-Expression" class="headerlink" title="PHP8 - Match Expression"></a>PHP8 - Match Expression</h1><p>PHP 8 新增了一種叫做 match 的方法，幾乎是可以完全取代我們原本熟知的 switch ，同時帶來了一些好處，以下我們看一段範例比較一下 switch 跟 match</p>
+<p><strong>Switch v.s. Match</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// switch</span></span><br><span class="line"><span class="keyword">switch</span> (<span class="variable">$operator</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;plus&#x27;</span>:</span><br><span class="line">        <span class="variable">$result</span> = <span class="variable">$a</span> + <span class="variable">$b</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;minus&#x27;</span>:</span><br><span class="line">        <span class="variable">$result</span> = <span class="variable">$a</span> - <span class="variable">$b</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;product&#x27;</span>:</span><br><span class="line">        <span class="variable">$result</span> = <span class="variable">$a</span> * <span class="variable">$b</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;division&#x27;</span>:</span><br><span class="line">        <span class="variable">$result</span> = <span class="variable">$a</span> / <span class="variable">$b</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// match</span></span><br><span class="line"><span class="variable">$result</span> = <span class="keyword">match</span> (<span class="variable">$operator</span>) &#123;</span><br><span class="line">    <span class="string">&#x27;plus&#x27;</span> =&gt; <span class="variable">$a</span> + <span class="variable">$b</span>,</span><br><span class="line">    <span class="string">&#x27;minus&#x27;</span> =&gt; <span class="variable">$a</span> - <span class="variable">$b</span>,</span><br><span class="line">    <span class="string">&#x27;product&#x27;</span> =&gt; <span class="variable">$a</span> * <span class="variable">$b</span>,</span><br><span class="line">    <span class="string">&#x27;division&#x27;</span> =&gt; <span class="variable">$a</span> / <span class="variable">$b</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="match-帶來更多元且靈活的判斷"><a href="#match-帶來更多元且靈活的判斷" class="headerlink" title="match 帶來更多元且靈活的判斷"></a>match 帶來更多元且靈活的判斷</h2><p>比起使用 switch 的時候，我們可以在 match 的判斷比對中放入更複雜的比對邏輯、函式呼叫，使得判斷過程能夠在同一個 scope 中完成</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$x</span> = <span class="string">&#x27;foo&#x27;</span>;</span><br><span class="line"><span class="variable">$result</span> = <span class="keyword">match</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">conditionA</span>() =&gt; ...,</span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">conditionB</span>(<span class="variable">$x</span>) =&gt; ...,</span><br><span class="line">    <span class="variable language_">$this</span>-&gt;bar =&gt; ...,</span><br><span class="line">    <span class="keyword">default</span> =&gt; ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Switch-與-Match-的差異"><a href="#Switch-與-Match-的差異" class="headerlink" title="Switch 與 Match 的差異"></a>Switch 與 Match 的差異</h2><p>幾乎所有的 switch 都可以轉化成 match ，但這兩種語法還是存在著一些執行上的差異，底下會一一列舉</p>
+<h3 id="Switch-與-Match-的條件比對"><a href="#Switch-與-Match-的條件比對" class="headerlink" title="Switch 與 Match 的條件比對"></a>Switch 與 Match 的條件比對</h3><p>Switch 與 Match 在做判斷的時候，使用的比對運算是不相同的</p>
+<ul>
+<li>switch 使用的是 <code>==</code></li>
+<li>match 使用的是 <code>===</code></li>
+</ul>
+<p>match 比起 switch ，但斷上更為嚴格，且比較不會因為 PHP 弱型別的主動轉型造成問題，底下我們看個例子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// switch</span></span><br><span class="line"><span class="keyword">switch</span> (<span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        <span class="variable">$switchResult</span> = <span class="string">&quot;Oh no!\n&quot;</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;1&#x27;</span>:</span><br><span class="line">        <span class="variable">$switchResult</span> = <span class="string">&quot;This is what I expected\n&quot;</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;switchResult : &#x27;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$switchResult</span>; <span class="comment">// output : switchResult : Oh no!</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// match </span></span><br><span class="line"><span class="variable">$matchResult</span> = <span class="keyword">match</span> (<span class="string">&#x27;1&#x27;</span>) &#123;</span><br><span class="line">    <span class="number">1</span> =&gt; <span class="string">&quot;Oh no!\n&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;1&#x27;</span> =&gt; <span class="string">&quot;This is what I expected\n&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;matchResult : &#x27;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$matchResult</span>; <span class="comment">// matchResult : This is what I expected</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="當-switch-寫了-case-卻沒有-break-的時候"><a href="#當-switch-寫了-case-卻沒有-break-的時候" class="headerlink" title="當 switch 寫了 case 卻沒有 break 的時候"></a>當 switch 寫了 case 卻沒有 break 的時候</h3><p>撰寫 switch 的時候需要搭配 break，不然會繼續往下執行，這樣的特性或許在某些特殊用法中很不錯，但一般來說我們既不期望他繼續往下執行，也難免會忘記寫上 break，而如果使用 match ，他會在判斷成功的那一行就強制跳出去，不會再繼續往下執行，可以參考下面的例子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// switch</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;----- switch result ----- \n&quot;</span>;</span><br><span class="line"><span class="keyword">switch</span> (<span class="string">&#x27;foo&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;foo&#x27;</span>:</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;Oh foo!\n&quot;</span>;</span><br><span class="line">        <span class="comment">// 這邊忘記寫 break 了！</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;bar&#x27;</span>:</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;Oh bar!\n&quot;</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// optput</span></span><br><span class="line">----- <span class="keyword">switch</span> result ----- </span><br><span class="line">Oh foo!</span><br><span class="line">Oh bar!</span><br><span class="line"></span><br><span class="line"><span class="comment">// match</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;----- match result ----- \n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="keyword">match</span> (<span class="string">&#x27;foo&#x27;</span>) &#123;</span><br><span class="line">    <span class="string">&#x27;foo&#x27;</span> =&gt; <span class="string">&quot;Oh foo!\n&quot;</span>,</span><br><span class="line">    <span class="string">&#x27;bar&#x27;</span> =&gt; <span class="string">&quot;Oh bar!\n&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// output</span></span><br><span class="line">----- <span class="keyword">match</span> result ----- </span><br><span class="line">Oh foo!</span><br></pre></td></tr></table></figure>
+
+<h3 id="多條件對應同結果的時候"><a href="#多條件對應同結果的時候" class="headerlink" title="多條件對應同結果的時候"></a>多條件對應同結果的時候</h3><p>我們常常會遇到多種比對條件必須合併對應到某個相同結果的時候，這時候在 switch 及 match 的差異如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// switch</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;----- switch result ----- \n&quot;</span>;</span><br><span class="line"><span class="keyword">switch</span> (<span class="string">&#x27;bar&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;foo&#x27;</span>:</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;bar&#x27;</span>:</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;bingo!\n&quot;</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// output</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// match</span></span><br><span class="line">----- <span class="keyword">switch</span> result ----- </span><br><span class="line">bingo!</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;----- match result ----- \n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="keyword">match</span> (<span class="string">&#x27;bar&#x27;</span>) &#123;</span><br><span class="line">    <span class="string">&#x27;foo&#x27;</span>, <span class="string">&#x27;bar&#x27;</span> =&gt; <span class="string">&quot;bingo!\n&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// output</span></span><br><span class="line">----- <span class="keyword">match</span> result ----- </span><br><span class="line">bingo!</span><br></pre></td></tr></table></figure>
+
+<h3 id="錯誤訊息的比較"><a href="#錯誤訊息的比較" class="headerlink" title="錯誤訊息的比較"></a>錯誤訊息的比較</h3><p>有時候在寫 switch 我們會漏掉一些 case 沒有定義，這時候的錯誤訊息與我們將這樣的 switch 轉換為 match 不同，match 的錯誤訊息會比 switch 的更加精確一些，看以下範例</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// switch</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;----- switch result ----- \n&quot;</span>;</span><br><span class="line"><span class="keyword">switch</span> (<span class="string">&#x27;-&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;+&#x27;</span>:</span><br><span class="line">        <span class="variable">$switchResult</span> = <span class="string">&quot;plus\n&quot;</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$switchResult</span>;</span><br><span class="line"><span class="comment">// ErrorException : Undefined variable $switchResult</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// match</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;----- match result ----- \n&quot;</span>;</span><br><span class="line"><span class="variable">$matchResult</span> = <span class="keyword">match</span> (<span class="string">&#x27;-&#x27;</span>) &#123;</span><br><span class="line">    <span class="string">&#x27;+&#x27;</span> =&gt; <span class="string">&quot;plus\n&quot;</span>,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$matchResult</span>;</span><br><span class="line"><span class="comment">// UnhandledMatchError : Unhandled match value of type string</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="https://wiki.php.net/rfc/match_expression_v2">PHP RFC : Match expression v2</a></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PHP/">PHP</a><a class="post-meta__tags" href="/tags/PHP8/">PHP8</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PHP8-Match-Expression"><span class="toc-number">1.</span> <span class="toc-text">PHP8 - Match Expression</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#match-%E5%B8%B6%E4%BE%86%E6%9B%B4%E5%A4%9A%E5%85%83%E4%B8%94%E9%9D%88%E6%B4%BB%E7%9A%84%E5%88%A4%E6%96%B7"><span class="toc-number">1.1.</span> <span class="toc-text">match 帶來更多元且靈活的判斷</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Switch-%E8%88%87-Match-%E7%9A%84%E5%B7%AE%E7%95%B0"><span class="toc-number">1.2.</span> <span class="toc-text">Switch 與 Match 的差異</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Switch-%E8%88%87-Match-%E7%9A%84%E6%A2%9D%E4%BB%B6%E6%AF%94%E5%B0%8D"><span class="toc-number">1.2.1.</span> <span class="toc-text">Switch 與 Match 的條件比對</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%95%B6-switch-%E5%AF%AB%E4%BA%86-case-%E5%8D%BB%E6%B2%92%E6%9C%89-break-%E7%9A%84%E6%99%82%E5%80%99"><span class="toc-number">1.2.2.</span> <span class="toc-text">當 switch 寫了 case 卻沒有 break 的時候</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E6%A2%9D%E4%BB%B6%E5%B0%8D%E6%87%89%E5%90%8C%E7%B5%90%E6%9E%9C%E7%9A%84%E6%99%82%E5%80%99"><span class="toc-number">1.2.3.</span> <span class="toc-text">多條件對應同結果的時候</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%8C%AF%E8%AA%A4%E8%A8%8A%E6%81%AF%E7%9A%84%E6%AF%94%E8%BC%83"><span class="toc-number">1.2.4.</span> <span class="toc-text">錯誤訊息的比較</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">1.3.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

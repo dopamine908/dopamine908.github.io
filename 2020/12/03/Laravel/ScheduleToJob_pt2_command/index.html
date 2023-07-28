@@ -1,0 +1,310 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇本文章使用的開發環境為 PHP : 7.3.11Laravel : 8.16.1Redis : 6.0MySQL : 8.0  前言在開發的過程中，「如果我想要在特定的時間點做某些事情呢？」這種需求也相當常見，這個所謂的「某些事情」工作量可能非常龐大，很自然的我們可以想到，「要是我可以在某個時間點觸發某個動作，然後">
+<meta property="og:type" content="article">
+<meta property="og:title" content="晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇">
+<meta property="og:url" content="https://dopamine908.github.io/2020/12/03/Laravel/ScheduleToJob_pt2_command/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇本文章使用的開發環境為 PHP : 7.3.11Laravel : 8.16.1Redis : 6.0MySQL : 8.0  前言在開發的過程中，「如果我想要在特定的時間點做某些事情呢？」這種需求也相當常見，這個所謂的「某些事情」工作量可能非常龐大，很自然的我們可以想到，「要是我可以在某個時間點觸發某個動作，然後">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/284/800/600">
+<meta property="article:published_time" content="2020-12-03T16:13:39.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.234Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="Artisan">
+<meta property="article:tag" content="Command">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/284/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2020/12/03/Laravel/ScheduleToJob_pt2_command/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2020-12-03T16:13:39.000Z" title="Created 2020-12-03 16:13:39">2020-12-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Laravel/">Laravel</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="晚點再說啦三部曲之二-Laravel-Artisan-Console-基礎篇"><a href="#晚點再說啦三部曲之二-Laravel-Artisan-Console-基礎篇" class="headerlink" title="晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇"></a>晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇</h1><p>本文章使用的開發環境為</p>
+<p>PHP : 7.3.11<br>Laravel : 8.16.1<br>Redis : 6.0<br>MySQL : 8.0</p>
+<hr>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在開發的過程中，「如果我想要在特定的時間點做某些事情呢？」這種需求也相當常見，這個所謂的「某些事情」工作量可能非常龐大，很自然的我們可以想到，「要是我可以在某個時間點觸發某個動作，然後讓他把對應的工作放到某個地方慢慢消化就好了」，而「把對應的工作放到某個地方慢慢消化」這就是我們上一篇的主題，接下來我們要專注於，「如何在某個時間點觸發某個動作」</p>
+<p>而這篇主要著重於如何處理「觸發某個動作」，而下一篇將要探討「如何在某個時間點觸發」</p>
+<p>講到要「觸發某個動作」， Web 的開發者會很自然的想到要去寫一個可以瀏覽的網址去當作觸發的媒介，當我們瀏覽這個網址一次，就觸發對應的動作，這看起來相當合理也很直覺，但視情況而言，這種方式可能會成為一個不是很好的解決方式。</p>
+<p>舉個例子來說吧，電商網站常常會有寄送廣告信件的功能，那們我如果將「寄送廣告給所有使用者」這個動作寫成一個網址，再讓知道網址的人瀏覽去觸發，這樣真的好嗎？</p>
+<p>首先，假設該電商公司是一間血汗公司，離職員工懷恨在心，於是寫了一支程式每秒去瀏覽這個神奇的寄信用網址，可想而知的會發生以下的事情</p>
+<ol>
+<li>大量的信件被寄出， Mail Server 的計費直達天際</li>
+<li>客戶收到很多重複的信件，客戶觀感會很差</li>
+<li>這些重複的信件會被某些信箱視為垃圾郵件，導致發送信件的來源信任度下降</li>
+</ol>
+<p>那麼，應該怎麼辦呢？我們換個想法，讓「寄送廣告給所有使用者」的觸發媒介改為在 Server 上輸入特定指令如何？這可以確保只有公司內部人士可以使用，也可以對主機的使用者做權限控制，只讓有這個權責的工程師才有辦法操作，不會被超量寄出信件，更不會讓客戶收到很多重複的信件。</p>
+<p>所以本篇的主角登場了，我們該如何在 Laravel 上寫一個指令呢？ Laravel 本身提供了一系列相當好用的 Artisan 指令，同時他也支援我們可以去新增自己想要的指令，開放了一些介面可以讓我們達到高度客製化自己的指令</p>
+<h2 id="建立第一個-Artisan-Command"><a href="#建立第一個-Artisan-Command" class="headerlink" title="建立第一個 Artisan Command"></a>建立第一個 Artisan Command</h2><p>首先來建立第一個 Artisan Command 吧！我們只要透過下面的指令便可以輕鬆的新增一個 Laravel 幫你包裝好的指令物件（<code>SendEDMCommand</code>）到 <code>app\Console\Commands</code>資料夾</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan make:command SendEDMCommand</span><br></pre></td></tr></table></figure>
+
+<p>然後我們就得到了一個 Laravel 幫我們定義好的空白 Artisan Command</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Console</span>\<span class="title class_">Commands</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Console</span>\<span class="title">Command</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SendEDMCommand</span> <span class="keyword">extends</span> <span class="title">Command</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The name and signature of the console command.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> string</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$signature</span> = <span class="string">&#x27;command:name&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The console command description.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> string</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$description</span> = <span class="string">&#x27;Command description&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Create a new command instance.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">parent</span>::<span class="title function_ invoke__">__construct</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Execute the console command.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> int</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下來我們來介紹這個類別</p>
+<p><strong>signature</strong></p>
+<p>簡單的來說這個參數就是讓你為你的 Artisan Command 命名，及給他一些設定，舉個例子來說我們可以將這個參數設置為下面這樣</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$signature = &#x27;edm:send&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>之後我們便可以透過<code>php artisan edm:send</code>去寄發所有的 EDM 信件</p>
+<p><strong>description</strong></p>
+<p>就是該 Artisan Command 的描述，我們看一將他設定為下面這樣</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$description = &#x27;寄送 EDM 給所有的使用者&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>handle()</strong></p>
+<p>這邊就是主角的部分了，我想要執行的工作內容都會寫在 <code>handle()</code> 這個 function 裡面，舉例來說像是這樣</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;寄送 EDM 給所有的使用者\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下來我們只要將這個 Artisan Command 註冊，接著就可以開始使用了</p>
+<h2 id="註冊-Artisan-Command"><a href="#註冊-Artisan-Command" class="headerlink" title="註冊 Artisan Command"></a>註冊 Artisan Command</h2><p>要如何註冊呢？我們找到 <code>app\Console\Kernel.php</code> </p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app\Console\Kernel.php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Console</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Console</span>\<span class="title">Scheduling</span>\<span class="title">Schedule</span>;</span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Foundation</span>\<span class="title">Console</span>\<span class="title">Kernel</span> <span class="keyword">as</span> <span class="title">ConsoleKernel</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Kernel</span> <span class="keyword">extends</span> <span class="title">ConsoleKernel</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The Artisan commands provided by your application.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> array</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$commands</span> = [</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">    ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Define the application&#x27;s command schedule.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span>  \Illuminate\Console\Scheduling\Schedule  $schedule</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">schedule</span>(<span class="params">Schedule <span class="variable">$schedule</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// $schedule-&gt;command(&#x27;inspire&#x27;)-&gt;hourly();</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Register the commands for the application.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">commands</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">load</span>(<span class="keyword">__DIR__</span>.<span class="string">&#x27;/Commands&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">require</span> <span class="title function_ invoke__">base_path</span>(<span class="string">&#x27;routes/console.php&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接著我們將 <code>$commands</code> 的 array 加入我們的 Artisan Command 類別，就算是註冊完成了，如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="variable">$commands</span> = [</span><br><span class="line">    <span class="title class_">SendEDMCommand</span>::<span class="variable language_">class</span></span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>接著當我們將所有的指令列出來的時候就會看到我們剛剛寫的 Artisan Command 了</p>
+<p><img src="https://i.imgur.com/1Uxpo8X.jpg"></p>
+<h2 id="執行"><a href="#執行" class="headerlink" title="執行"></a>執行</h2><p> 註冊完的 Artisan Command 有兩種方式可以執行，一種是直接在黑窗裡面下指令，除此之外， Laravel 也有提供讓我們可以在程式內去呼叫指令</p>
+<h3 id="打指令執行"><a href="#打指令執行" class="headerlink" title="打指令執行"></a>打指令執行</h3><p> 就像我們一般在下 Artisan 指令一樣，我們只要輸入 <code>php artisan edm:send</code> 就可以執行了，如圖</p>
+<p> <img src="https://i.imgur.com/ujAW5qD.png"></p>
+<h3 id="在程式中執行"><a href="#在程式中執行" class="headerlink" title="在程式中執行"></a>在程式中執行</h3><p>另外一種方式是從程式碼中去呼叫並執行，我們只要在程式中加入下面這行就可以了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Artisan::call(&#x27;edm:send&#x27;);</span><br></pre></td></tr></table></figure>
+
+<p>使用起來像下方這樣</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Artisan</span>;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Route</span>::<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/&#x27;</span>,function()&#123;</span><br><span class="line">    <span class="title class_">Artisan</span>::<span class="title function_ invoke__">call</span>(<span class="string">&#x27;edm:send&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="做更多的事"><a href="#做更多的事" class="headerlink" title="做更多的事"></a>做更多的事</h2><p>除了上面描述的基本指令格式以外，其實市面上許多指令可以搭配一些可以選擇的項目、或者一些表示成功或失敗的文字跟顏色之類的， Laravel 也幫這樣的客製化準備好了</p>
+<h3 id="回應文字的-style"><a href="#回應文字的-style" class="headerlink" title="回應文字的 style"></a>回應文字的 style</h3><p>如果我想要將回饋給使用者的文字做一些變化，可以使用下面語法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 綠色</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">info</span>(<span class="string">&#x27;寄送 EDM 給所有的使用者&#x27;</span>);</span><br><span class="line">    <span class="comment">// 紅底</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">error</span>(<span class="string">&#x27;寄送 EDM 給所有的使用者&#x27;</span>);</span><br><span class="line">    <span class="comment">// 新增三行空白的空間</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">newLine</span>(<span class="number">3</span>);</span><br><span class="line">    <span class="comment">// 新的一行的文字</span></span><br><span class="line">    <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">line</span>(<span class="string">&#x27;寄送 EDM 給所有的使用者&#x27;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上執行起來會像下圖</p>
+<p><img src="https://i.imgur.com/9u3r1ge.png"></p>
+<h3 id="option-選項"><a href="#option-選項" class="headerlink" title="option 選項"></a>option 選項</h3><p>我們可以給我們的 Artisan Command 一些可以互動的選項，讓他使用起來可以更方便</p>
+<h4 id="Options-Without-Values-沒有值得選項"><a href="#Options-Without-Values-沒有值得選項" class="headerlink" title="Options Without Values 沒有值得選項"></a>Options Without Values 沒有值得選項</h4><p>例如我們想讓信件只被寄出一次</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="variable">$signature</span> = <span class="string">&#x27;edm:send &#123;--once&#125;&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>當指令有加入這個選項的時候 once 會為 <code>true</code> ，反之則為 <code>false</code></p>
+<h4 id="Options-With-Values-可指定值的選項"><a href="#Options-With-Values-可指定值的選項" class="headerlink" title="Options With Values 可指定值的選項"></a>Options With Values 可指定值的選項</h4><p>如果我們想要自己指定寄出的信件的次數，且讓次數預設為一次</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="variable">$signature</span> = <span class="string">&#x27;edm:send &#123;--times=1&#125;&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>這樣我們就可以在指令後面加上 <code>--times=5</code> 讓信重複寄出五次</p>
+<h4 id="Option-Shortcuts-簡寫"><a href="#Option-Shortcuts-簡寫" class="headerlink" title="Option Shortcuts 簡寫"></a>Option Shortcuts 簡寫</h4><p>我也可以給選項一些簡寫</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="variable">$signature</span> = <span class="string">&#x27;edm:send &#123;--o|once&#125;&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>這樣一來我們便可以用 <code>-o</code> 取代 <code>--once</code></p>
+<h4 id="Input-Descriptions-描述"><a href="#Input-Descriptions-描述" class="headerlink" title="Input Descriptions 描述"></a>Input Descriptions 描述</h4><p>當然我們給的設定應該要寫一些說明給使用者看</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="variable">$signature</span> = <span class="string">&#x27;edm:send &#123;user? : 沒有填寫會寄給全部的使用者，有寫的話可以寄給指定的人&#125; </span></span><br><span class="line"><span class="string">                        &#123;--o|once : 只寄出一封，可以使 --times 失效&#125; </span></span><br><span class="line"><span class="string">                        &#123;--times=1 : 預設為一次，可指定次數&#125;&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>這樣子我們在看指令的 help 的時候就可以看到我們寫的說明</p>
+<p><img src="https://i.imgur.com/RZgjaz6.png"></p>
+<h3 id="取得選項的輸入值"><a href="#取得選項的輸入值" class="headerlink" title="取得選項的輸入值"></a>取得選項的輸入值</h3><p>當我們下了像這樣的指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan edm:send user_a --times=4</span><br></pre></td></tr></table></figure>
+<p>我們的程式要怎麼拿到這些指令代表的值呢？<br>我們將參數分為 option 跟 argument 兩類，這兩類個別有自己取得參數值的方法</p>
+<h4 id="option"><a href="#option" class="headerlink" title="option"></a>option</h4><p>我們可以使用下面的語法取得特定的 option</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">option</span>(<span class="string">&#x27;once&#x27;</span>)</span><br><span class="line"><span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">option</span>(<span class="string">&#x27;times&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>又或者可以直接取得全部的 option</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">options</span>()</span><br></pre></td></tr></table></figure>
+
+<h4 id="argument"><a href="#argument" class="headerlink" title="argument"></a>argument</h4><p>我們可以使用下面的語法取得特定的 argument</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">argument</span>(<span class="string">&#x27;user&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>又或者可以直接取得全部的 argument</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">arguments</span>()</span><br></pre></td></tr></table></figure>
+
+<h2 id="最終版本"><a href="#最終版本" class="headerlink" title="最終版本"></a>最終版本</h2><p>經過上面的介紹，我們把自己新增的 Artisan Command 改寫成了下面的版本</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> <span class="title class_">App</span>\<span class="title class_">Console</span>\<span class="title class_">Commands</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Console</span>\<span class="title">Command</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SendEDMCommand</span> <span class="keyword">extends</span> <span class="title">Command</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The name and signature of the console command.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> string</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$signature</span> = <span class="string">&#x27;edm:send &#123;user? : 沒有填寫會寄給全部的使用者，有寫的話可以寄給指定的人&#125; &#123;--o|once : 只寄出一封，可以使 --times 失效&#125; &#123;--times=1 : 預設為一次，可指定次數&#125;&#x27;</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The console command description.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> string</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$description</span> = <span class="string">&#x27;寄送 EDM 給使用者&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Create a new command instance.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> void</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">parent</span>::<span class="title function_ invoke__">__construct</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Execute the console command.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> int</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$user</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getSendUser</span>();</span><br><span class="line">        <span class="variable">$send_times</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">getSendTimes</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="variable">$i</span> = <span class="number">0</span>; <span class="variable">$i</span> &lt; <span class="variable">$send_times</span>; <span class="variable">$i</span>++) &#123;</span><br><span class="line">            <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">info</span>(<span class="string">&#x27;寄送 EDM 給 &#x27;</span> . <span class="variable">$user</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">getSendTimes</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">option</span>(<span class="string">&#x27;once&#x27;</span>) || <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">option</span>(<span class="string">&#x27;times&#x27;</span>) == <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="variable">$send_times</span> = <span class="number">1</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="variable">$send_times</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">option</span>(<span class="string">&#x27;times&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$send_times</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">getSendUser</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ( ! <span class="title function_ invoke__">is_null</span>(<span class="variable">$this</span>-&gt;<span class="title function_ invoke__">argument</span>(<span class="string">&#x27;user&#x27;</span>))) &#123;</span><br><span class="line">            <span class="variable">$user</span> = <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">argument</span>(<span class="string">&#x27;user&#x27;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="variable">$user</span> = <span class="string">&#x27;所有的使用者&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$user</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然後將 Artisan Command 給註冊</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app\Console\Kernel.php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span> <span class="variable">$commands</span> = [</span><br><span class="line">    <span class="title class_">SendEDMCommand</span>::<span class="variable language_">class</span></span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>之後我們便可以在黑窗內看到註冊成功的 Artisan Command </p>
+<p><img src="https://i.imgur.com/1Uxpo8X.jpg"></p>
+<p>而且可以 <code>-h</code> 看到他使用的方法</p>
+<p><img src="https://i.imgur.com/RZgjaz6.png"></p>
+<p>最後我們來執行一下吧</p>
+<p><img src="https://i.imgur.com/AxBrWy6.png"></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://laravel.com/docs/8.x/artisan">Laravel Artisan Console</a></li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PHP/">PHP</a><a class="post-meta__tags" href="/tags/Laravel/">Laravel</a><a class="post-meta__tags" href="/tags/Artisan/">Artisan</a><a class="post-meta__tags" href="/tags/Command/">Command</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%99%9A%E9%BB%9E%E5%86%8D%E8%AA%AA%E5%95%A6%E4%B8%89%E9%83%A8%E6%9B%B2%E4%B9%8B%E4%BA%8C-Laravel-Artisan-Console-%E5%9F%BA%E7%A4%8E%E7%AF%87"><span class="toc-number">1.</span> <span class="toc-text">晚點再說啦三部曲之二 - Laravel Artisan Console - 基礎篇</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E7%AC%AC%E4%B8%80%E5%80%8B-Artisan-Command"><span class="toc-number">1.2.</span> <span class="toc-text">建立第一個 Artisan Command</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A8%BB%E5%86%8A-Artisan-Command"><span class="toc-number">1.3.</span> <span class="toc-text">註冊 Artisan Command</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%B7%E8%A1%8C"><span class="toc-number">1.4.</span> <span class="toc-text">執行</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%93%E6%8C%87%E4%BB%A4%E5%9F%B7%E8%A1%8C"><span class="toc-number">1.4.1.</span> <span class="toc-text">打指令執行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E7%A8%8B%E5%BC%8F%E4%B8%AD%E5%9F%B7%E8%A1%8C"><span class="toc-number">1.4.2.</span> <span class="toc-text">在程式中執行</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%9A%E6%9B%B4%E5%A4%9A%E7%9A%84%E4%BA%8B"><span class="toc-number">1.5.</span> <span class="toc-text">做更多的事</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E6%87%89%E6%96%87%E5%AD%97%E7%9A%84-style"><span class="toc-number">1.5.1.</span> <span class="toc-text">回應文字的 style</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#option-%E9%81%B8%E9%A0%85"><span class="toc-number">1.5.2.</span> <span class="toc-text">option 選項</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Options-Without-Values-%E6%B2%92%E6%9C%89%E5%80%BC%E5%BE%97%E9%81%B8%E9%A0%85"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">Options Without Values 沒有值得選項</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Options-With-Values-%E5%8F%AF%E6%8C%87%E5%AE%9A%E5%80%BC%E7%9A%84%E9%81%B8%E9%A0%85"><span class="toc-number">1.5.2.2.</span> <span class="toc-text">Options With Values 可指定值的選項</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Option-Shortcuts-%E7%B0%A1%E5%AF%AB"><span class="toc-number">1.5.2.3.</span> <span class="toc-text">Option Shortcuts 簡寫</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Input-Descriptions-%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.5.2.4.</span> <span class="toc-text">Input Descriptions 描述</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E5%BE%97%E9%81%B8%E9%A0%85%E7%9A%84%E8%BC%B8%E5%85%A5%E5%80%BC"><span class="toc-number">1.5.3.</span> <span class="toc-text">取得選項的輸入值</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#option"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">option</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#argument"><span class="toc-number">1.5.3.2.</span> <span class="toc-text">argument</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%B5%82%E7%89%88%E6%9C%AC"><span class="toc-number">1.6.</span> <span class="toc-text">最終版本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reference"><span class="toc-number">1.7.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

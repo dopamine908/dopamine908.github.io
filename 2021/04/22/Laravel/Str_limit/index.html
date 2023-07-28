@@ -1,0 +1,241 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Laravel Helper - Str::limit() 在中文應用場景的大小事 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Laravel Helper - Str::limit() 在中文應用場景的大小事最近在開發上遇到了要擷取中文訊息內容預覽的問題，例如今天我有一個句子  萊布尼茨和牛頓都被普遍認為是獨立的微積分發明者。牛頓最先將微積分應用到普通物理當中，而萊布尼茨創作了不少今天在微積分所使用的符號。牛頓、萊布尼茨都給出了微分、積分的基本規則，二階與更高階導數，近似多項式級數的記法等。在牛頓的時代，微積分基本定理是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel Helper - Str::limit() 在中文應用場景的大小事">
+<meta property="og:url" content="https://dopamine908.github.io/2021/04/22/Laravel/Str_limit/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="Laravel Helper - Str::limit() 在中文應用場景的大小事最近在開發上遇到了要擷取中文訊息內容預覽的問題，例如今天我有一個句子  萊布尼茨和牛頓都被普遍認為是獨立的微積分發明者。牛頓最先將微積分應用到普通物理當中，而萊布尼茨創作了不少今天在微積分所使用的符號。牛頓、萊布尼茨都給出了微分、積分的基本規則，二階與更高階導數，近似多項式級數的記法等。在牛頓的時代，微積分基本定理是">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/660/800/600">
+<meta property="article:published_time" content="2021-04-22T14:25:44.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.234Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="Laravel">
+<meta property="article:tag" content="Laravel Helper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/660/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2021/04/22/Laravel/Str_limit/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Laravel Helper - Str::limit() 在中文應用場景的大小事',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Laravel Helper - Str::limit() 在中文應用場景的大小事</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-04-22T14:25:44.000Z" title="Created 2021-04-22 14:25:44">2021-04-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Laravel/">Laravel</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Laravel Helper - Str::limit() 在中文應用場景的大小事"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="Laravel-Helper-Str-limit-在中文應用場景的大小事"><a href="#Laravel-Helper-Str-limit-在中文應用場景的大小事" class="headerlink" title="Laravel Helper - Str::limit() 在中文應用場景的大小事"></a>Laravel Helper - Str::limit() 在中文應用場景的大小事</h1><p>最近在開發上遇到了要擷取中文訊息內容預覽的問題，例如今天我有一個句子</p>
+<blockquote>
+<p>萊布尼茨和牛頓都被普遍認為是獨立的微積分發明者。牛頓最先將微積分應用到普通物理當中，而萊布尼茨創作了不少今天在微積分所使用的符號。牛頓、萊布尼茨都給出了微分、積分的基本規則，二階與更高階導數，近似多項式級數的記法等。在牛頓的時代，微積分基本定理是已知的事實。</p>
+</blockquote>
+<p>擷取自 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BE%AE%E7%A7%AF%E5%88%86%E5%AD%A6">微積分 wiki</a></p>
+<p>這很可能是某個文章的內容，而我在顯示頁面上的預覽只有要顯示部分的文字，例如前十個字好了，而且我想讓被隱藏的文字用「…」代替，我想顯示的內容大概如下</p>
+<blockquote>
+<p>萊布尼茨和牛頓都被普…</p>
+</blockquote>
+<p>這時候我們就需要用到 <a target="_blank" rel="noopener" href="https://laravel.com/docs/8.x/helpers#introduction">Laraevl Helper</a> 裡面幫我們預先寫好的字串處理函式了</p>
+<p>我們要使用的是 <code>Str::limit()</code> 這個函式，它可以幫助我們擷取某個字串的前幾個字，並且可以自定義超過字數之後的結尾</p>
+<h2 id="Str-limit"><a href="#Str-limit" class="headerlink" title="Str::limit"></a><a target="_blank" rel="noopener" href="https://laravel.com/docs/8.x/helpers#method-str-limit">Str::limit</a></h2><p>先來看看官網的例子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Str</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$truncated</span> = <span class="title class_">Str</span>::<span class="title function_ invoke__">limit</span>(<span class="string">&#x27;The quick brown fox jumps over the lazy dog&#x27;</span>, <span class="number">20</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// The quick brown fox...</span></span><br></pre></td></tr></table></figure>
+
+<p>但是當我們的文字是中文的時候，使用起來結果會如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Str</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$post</span> = <span class="string">&#x27;萊布尼茨和牛頓都被普遍認為是獨立的微積分發明者。&#x27;</span>;</span><br><span class="line"><span class="variable">$truncated</span> = <span class="title class_">Str</span>::<span class="title function_ invoke__">limit</span>(<span class="variable">$post</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 萊布尼茨和...</span></span><br></pre></td></tr></table></figure>
+
+<p>結果跟我們預想的差蠻多的，明顯比我們想要限制的10的字還要少，所以我們就來研究一下背後到底做了什麼事情</p>
+<p>首先，我們先去找到 <code>Str::limit()</code> 的 <a target="_blank" rel="noopener" href="https://github.com/laravel/framework/blob/8.x/src/Illuminate/Support/Str.php#L344">source code</a></p>
+<p><strong>Str::limit()</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Limit the number of characters in a string.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>  string  $value</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>  int  $limit</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span>  string  $end</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> string</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="built_in">static</span> <span class="function"><span class="keyword">function</span> <span class="title">limit</span>(<span class="params"><span class="variable">$value</span>, <span class="variable">$limit</span> = <span class="number">100</span>, <span class="variable">$end</span> = <span class="string">&#x27;...&#x27;</span></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_ invoke__">mb_strwidth</span>(<span class="variable">$value</span>, <span class="string">&#x27;UTF-8&#x27;</span>) &lt;= <span class="variable">$limit</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable">$value</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">rtrim</span>(<span class="title function_ invoke__">mb_strimwidth</span>(<span class="variable">$value</span>, <span class="number">0</span>, <span class="variable">$limit</span>, <span class="string">&#x27;&#x27;</span>, <span class="string">&#x27;UTF-8&#x27;</span>)).<span class="variable">$end</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="end"><a href="#end" class="headerlink" title="$end"></a>$end</h3><p>首先我們可以注意一下 input 最後一個變數 <code>$end</code> ，在上面的例子中都沒有賦予 <code>$end</code> 值，但這邊是可以給他設定值的，給了設定值之後結尾的 “…” 就可以被置換成你想要換的字串</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Str</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$truncated</span> = <span class="title class_">Str</span>::<span class="title function_ invoke__">limit</span>(<span class="string">&#x27;The quick brown fox jumps over the lazy dog&#x27;</span>, <span class="number">20</span>, <span class="string">&#x27;~~~&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// The quick brown fox~~~</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="中文字串字數判定"><a href="#中文字串字數判定" class="headerlink" title="中文字串字數判定"></a>中文字串字數判定</h3><p>接著我們看到 <a target="_blank" rel="noopener" href="https://github.com/laravel/framework/blob/8.x/src/Illuminate/Support/Str.php#L346">11 行的位置</a></p>
+<p>這邊的用意是當我給定的字串 <code>$value</code> 比我想要擷取的字串長度還要來得短的時候，就直接回傳原本的結果（並且不會加上 <code>$end</code>）</p>
+<p>這邊值得注意的是用來判斷字串長度的 <code>mb_strwidth()</code> ，我們來看一下 <a target="_blank" rel="noopener" href="https://www.php.net/manual/en/function.mb-strwidth.php">php 官方的文件</a></p>
+<blockquote>
+<p><code>mb_strwidth ( string $string , string|null $encoding = null ) : int</code></p>
+<p>Returns the width of string string, where halfwidth characters count as 1, and fullwidth characters count as 2. See » <a target="_blank" rel="noopener" href="http://www.unicode.org/reports/tr11/">http://www.unicode.org/reports/tr11/</a> for details regarding East Asian character widths.</p>
+</blockquote>
+<p>大致上的意思就是當你輸入的文字為半形的時候，他會回傳 1，而當你輸入的文字是全形的時候，就會回傳 2，也就是說，當我輸入「你好」的時候，我會得到 4 的回傳值</p>
+<p>而底下 <a target="_blank" rel="noopener" href="https://github.com/laravel/framework/blob/8.x/src/Illuminate/Support/Str.php#L350">15 行的位置</a> 使用到的 <code>mb_strimwidth()</code> 也是同理，我們來看一下<a target="_blank" rel="noopener" href="https://www.php.net/manual/en/function.mb-strimwidth.php">文件的描述</a></p>
+<blockquote>
+<p>mb_strimwidth ( string $string , int $start , int $width , string $trim_marker &#x3D; “” , string|null $encoding &#x3D; null ) : string</p>
+<p>Truncates string string to specified width, where halfwidth characters count as 1, and fullwidth characters count as 2. See » <a target="_blank" rel="noopener" href="http://www.unicode.org/reports/tr11/">http://www.unicode.org/reports/tr11/</a> for details regarding East Asian character widths.</p>
+</blockquote>
+<figure class="highlight plaintext"><figcaption><span>在擷取字串的時候所使用的長度判斷就是上方提到的那套依據全形半形去做依據的判斷方式，所以如果我想要擷取的是中文字 10 個字，那麼我應該輸入的值是 20 ，而不是 10</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">```php=</span><br><span class="line">use Illuminate\Support\Str;</span><br><span class="line"></span><br><span class="line">$post = &#x27;萊布尼茨和牛頓都被普遍認為是獨立的微積分發明者。&#x27;;</span><br><span class="line">$truncated = Str::limit($post, 20, &#x27;...&#x27;);</span><br><span class="line"></span><br><span class="line">// 萊布尼茨和牛頓都被普...</span><br></pre></td></tr></table></figure>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/PHP/">PHP</a><a class="post-meta__tags" href="/tags/Laravel/">Laravel</a><a class="post-meta__tags" href="/tags/Laravel-Helper/">Laravel Helper</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Laravel-Helper-Str-limit-%E5%9C%A8%E4%B8%AD%E6%96%87%E6%87%89%E7%94%A8%E5%A0%B4%E6%99%AF%E7%9A%84%E5%A4%A7%E5%B0%8F%E4%BA%8B"><span class="toc-number">1.</span> <span class="toc-text">Laravel Helper - Str::limit() 在中文應用場景的大小事</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Str-limit"><span class="toc-number">1.1.</span> <span class="toc-text">Str::limit</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#end"><span class="toc-number">1.1.1.</span> <span class="toc-text">$end</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AD%E6%96%87%E5%AD%97%E4%B8%B2%E5%AD%97%E6%95%B8%E5%88%A4%E5%AE%9A"><span class="toc-number">1.1.2.</span> <span class="toc-text">中文字串字數判定</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

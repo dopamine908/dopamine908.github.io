@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Design Patterns - Creational - Prototype Pattern 原型模式 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="設計模式 - Prototype Pattern 原型模式Intro假設我們今天要瘋狂產出同一台MacBook裝置，而裝置中皆含有相同規格的配件 實作首先，如果是一般的建立物件方法及使用方法，我們會先寫一個物件，然後再需要用到它的時候將他new出來 12345678910111213141516171819class MacBook&amp;#123;    private $cpu;    privat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Design Patterns - Creational - Prototype Pattern 原型模式">
+<meta property="og:url" content="https://dopamine908.github.io/2020/07/11/DesignPattern/Prototype/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="設計模式 - Prototype Pattern 原型模式Intro假設我們今天要瘋狂產出同一台MacBook裝置，而裝置中皆含有相同規格的配件 實作首先，如果是一般的建立物件方法及使用方法，我們會先寫一個物件，然後再需要用到它的時候將他new出來 12345678910111213141516171819class MacBook&amp;#123;    private $cpu;    privat">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/1073/800/600">
+<meta property="article:published_time" content="2020-07-11T19:24:55.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.234Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="Design Patterns">
+<meta property="article:tag" content="Creational Patterns">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/1073/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2020/07/11/DesignPattern/Prototype/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Design Patterns - Creational - Prototype Pattern 原型模式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Design Patterns - Creational - Prototype Pattern 原型模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2020-07-11T19:24:55.000Z" title="Created 2020-07-11 19:24:55">2020-07-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Design Patterns - Creational - Prototype Pattern 原型模式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="設計模式-Prototype-Pattern-原型模式"><a href="#設計模式-Prototype-Pattern-原型模式" class="headerlink" title="設計模式 - Prototype Pattern 原型模式"></a>設計模式 - Prototype Pattern 原型模式</h1><h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>假設我們今天要瘋狂產出同一台MacBook裝置，而裝置中皆含有相同規格的配件</p>
+<h2 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h2><p>首先，如果是一般的建立物件方法及使用方法，我們會先寫一個物件，然後再需要用到它的時候將他new出來</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MacBook</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$cpu</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ssd</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ram</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$monitor</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$keyboard</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;cpu = <span class="string">&#x27;i7&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ssd = <span class="string">&#x27;256G&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ram = <span class="string">&#x27;16G&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;monitor = <span class="string">&#x27;13 inch&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;keyboard = <span class="string">&#x27;default keyboard&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>假設製造MacBook的建構子中做的事情相當複雜，我要生成很多MacBook就意味著我必須要負擔相同且重複又複雜的建構過程，而這些過程卻是完全一樣的。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$MacBook1</span> = <span class="keyword">new</span> <span class="title class_">MacBook</span>();</span><br><span class="line"><span class="variable">$MacBook2</span> = <span class="keyword">new</span> <span class="title class_">MacBook</span>();</span><br><span class="line"><span class="variable">$MacBook3</span> = <span class="keyword">new</span> <span class="title class_">MacBook</span>();</span><br><span class="line"><span class="variable">$MacBook4</span> = <span class="keyword">new</span> <span class="title class_">MacBook</span>();</span><br><span class="line"><span class="variable">$MacBook5</span> = <span class="keyword">new</span> <span class="title class_">MacBook</span>();</span><br></pre></td></tr></table></figure>
+
+<p>這無疑是造成資源上的浪費，所以底下我們實作普遍上來說的Prototype</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MacBook</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$cpu</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ssd</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ram</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$monitor</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$keyboard</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;cpu = <span class="string">&#x27;i7&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ssd = <span class="string">&#x27;256G&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ram = <span class="string">&#x27;16G&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;monitor = <span class="string">&#x27;13 inch&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;keyboard = <span class="string">&#x27;default keyboard&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">clone</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我們多新增了一個clone方法，我們的MacBook可以透過clone回傳一個已經建構好的MacBook而不需要再經過那相同且複雜的建構子過程。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$MacBook</span> = <span class="keyword">new</span> <span class="title class_">MacBook</span>();</span><br><span class="line"><span class="variable">$MacBook1</span> = <span class="variable">$MacBook</span>-&gt;<span class="keyword">clone</span>();</span><br><span class="line"><span class="variable">$MacBook2</span> = <span class="variable">$MacBook</span>-&gt;<span class="keyword">clone</span>();</span><br><span class="line"><span class="variable">$MacBook3</span> = <span class="variable">$MacBook</span>-&gt;<span class="keyword">clone</span>();</span><br><span class="line"><span class="variable">$MacBook4</span> = <span class="variable">$MacBook</span>-&gt;<span class="keyword">clone</span>();</span><br><span class="line"><span class="variable">$MacBook5</span> = <span class="variable">$MacBook</span>-&gt;<span class="keyword">clone</span>();</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意上方程式碼只是將Prototype的精神實作出來<br>事實上這樣做的話每個被clone的類別的reference會變成完全相同。</p>
+</blockquote>
+<p>其實現在一般的語言都會實作這個模式讓大家可以直接使用了，例如PHP本身就有clone()語法可以使用，也提供了magic method __clone()讓人可以自定義當呼叫clone的時候可以額外多做的事情</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MacBook</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$cpu</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ssd</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ram</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$monitor</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$keyboard</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;cpu = <span class="string">&#x27;i7&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ssd = <span class="string">&#x27;256G&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ram = <span class="string">&#x27;16G&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;monitor = <span class="string">&#x27;13 inch&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;keyboard = <span class="string">&#x27;default keyboard&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$MacBook</span>=<span class="keyword">new</span> <span class="title class_">MacBook</span>();</span><br><span class="line"><span class="variable">$MacBook1</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br><span class="line"><span class="variable">$MacBook2</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br><span class="line"><span class="variable">$MacBook3</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br><span class="line"><span class="variable">$MacBook4</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br><span class="line"><span class="variable">$MacBook5</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="淺複製-Shallow-Copy"><a href="#淺複製-Shallow-Copy" class="headerlink" title="淺複製(Shallow Copy)"></a>淺複製(Shallow Copy)</h3><p>我們常常遇到一種狀況，就是物件內的變數其實還是一個物件，而這種時候如果使用的是預設的clone則會發生一種狀況<br>在clone完之後會發現物件內的物件reference會全部指向同一個位置<br>此現象我們稱為淺複製</p>
+<p>如底下的例子，如果我將RAM獨立出來變成一個類別，這樣子去clone的話我們會發現所有的MacBook中的RAM的reference都會指向同一個位置</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MacBook2RAM</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$cpu</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ssd</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> RAM</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ram</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$monitor</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$keyboard</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;cpu = <span class="string">&#x27;i7&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ssd = <span class="string">&#x27;256G&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ram = <span class="keyword">new</span> <span class="title function_ invoke__">RAM</span>();</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;monitor = <span class="string">&#x27;13 inch&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;keyboard = <span class="string">&#x27;default keyboard&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RAM</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$ram1</span> = <span class="string">&#x27;8G&#x27;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$ram2</span> = <span class="string">&#x27;8G&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$MacBook</span>=<span class="keyword">new</span> <span class="title class_">MacBook</span>();</span><br><span class="line"><span class="variable">$MacBook1</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br><span class="line"><span class="variable">$MacBook2</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br><span class="line"><span class="variable">$MacBook3</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br><span class="line"><span class="variable">$MacBook4</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br><span class="line"><span class="variable">$MacBook5</span> = <span class="keyword">clone</span> <span class="variable">$MacBook</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="深複製-Deep-Copy"><a href="#深複製-Deep-Copy" class="headerlink" title="深複製(Deep Copy)"></a>深複製(Deep Copy)</h3><p>如上面的情況，如果我們沒有要更改各自的RAM內容的話，就不會有什麼問題發生<br>但如果我們今天想要更改某幾台的RAM配置的話，在相同reference的前提下，會發生我改一個全部就一起被更改的問題，導致我不能單獨為特定幾台去更改RAM的配置</p>
+<p>所以底下實作了搭配__clone去進行深複製的寫法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MacBook2RAM</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$cpu</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ssd</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@var</span> RAM</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$ram</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$monitor</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$keyboard</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;cpu = <span class="string">&#x27;i7&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ssd = <span class="string">&#x27;256G&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ram = <span class="keyword">new</span> <span class="title function_ invoke__">RAM</span>();</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;monitor = <span class="string">&#x27;13 inch&#x27;</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;keyboard = <span class="string">&#x27;default keyboard&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;ram = <span class="keyword">clone</span> <span class="variable language_">$this</span>-&gt;ram;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="時機"><a href="#時機" class="headerlink" title="時機"></a>時機</h2><ul>
+<li>當目標物件的建構需付出龐大代價時</li>
+<li>當我們需要對象物件的副本時</li>
+</ul>
+<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>制定可以用原型個體生成的物件類型，之後只需要複製此物件即可生成新物件</p>
+<h2 id="類別圖"><a href="#類別圖" class="headerlink" title="類別圖"></a>類別圖</h2><p><img src="https://i.imgur.com/PC7euN5.png"></p>
+<h3 id="Plant-UML"><a href="#Plant-UML" class="headerlink" title="Plant UML"></a>Plant UML</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line"></span><br><span class="line">skinparam classAttributeIconSize 0</span><br><span class="line"></span><br><span class="line">interface Prototype&#123;</span><br><span class="line">&#123;method&#125; +clone()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class ConcretePrototypeA&#123;</span><br><span class="line">&#123;method&#125; +clone()</span><br><span class="line">&#125;</span><br><span class="line">class ConcretePrototypeB&#123;</span><br><span class="line">&#123;method&#125; +clone()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Prototype &lt;|.. ConcretePrototypeA</span><br><span class="line">Prototype &lt;|.. ConcretePrototypeB</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h2><ul>
+<li>不需要跟其他的類別有耦合（例如工廠）</li>
+<li>避免反覆付出建構子中的初始化邏輯代價，方便的生成複雜的類別</li>
+</ul>
+<h2 id="缺點"><a href="#缺點" class="headerlink" title="缺點"></a>缺點</h2><ul>
+<li>如果物件結構中含有循環指涉(<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/36913443/how-to-handle-class-object-with-circular-references">circular reference</a>)的情形，情況會變得相當複雜且崩潰</li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Design-Patterns/">Design Patterns</a><a class="post-meta__tags" href="/tags/Creational-Patterns/">Creational Patterns</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-Prototype-Pattern-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">設計模式 - Prototype Pattern 原型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Intro"><span class="toc-number">1.1.</span> <span class="toc-text">Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%A6%E4%BD%9C"><span class="toc-number">1.2.</span> <span class="toc-text">實作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BA%E8%A4%87%E8%A3%BD-Shallow-Copy"><span class="toc-number">1.2.1.</span> <span class="toc-text">淺複製(Shallow Copy)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E8%A4%87%E8%A3%BD-Deep-Copy"><span class="toc-number">1.2.2.</span> <span class="toc-text">深複製(Deep Copy)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%82%E6%A9%9F"><span class="toc-number">1.3.</span> <span class="toc-text">時機</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E7%9A%84"><span class="toc-number">1.4.</span> <span class="toc-text">目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%9E%E5%88%A5%E5%9C%96"><span class="toc-number">1.5.</span> <span class="toc-text">類別圖</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Plant-UML"><span class="toc-number">1.5.1.</span> <span class="toc-text">Plant UML</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%84%AA%E9%BB%9E"><span class="toc-number">1.6.</span> <span class="toc-text">優點</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%BA%E9%BB%9E"><span class="toc-number">1.7.</span> <span class="toc-text">缺點</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

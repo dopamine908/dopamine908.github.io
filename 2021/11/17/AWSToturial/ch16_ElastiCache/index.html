@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>大話 AWS 雲端架構 - Ch16 - ElastiCache | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="大話 AWS 雲端架構 - Ch16 - ElastiCacheElasticCache 簡單來說就是單獨管理快取的一種服務 16.3 兩種常見的暫存資料操作手法Lazy-LoadingLazy-Loading 又稱延遲載入，大意上是只在有人需要資料的時候才將資料做快取，這樣下次有人需要同筆資料的時候就可以快速的回覆資料給使用者 Write-Through簡單來說，就是當我們寫入資料的時候也寫一份">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大話 AWS 雲端架構 - Ch16 - ElastiCache">
+<meta property="og:url" content="https://dopamine908.github.io/2021/11/17/AWSToturial/ch16_ElastiCache/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="大話 AWS 雲端架構 - Ch16 - ElastiCacheElasticCache 簡單來說就是單獨管理快取的一種服務 16.3 兩種常見的暫存資料操作手法Lazy-LoadingLazy-Loading 又稱延遲載入，大意上是只在有人需要資料的時候才將資料做快取，這樣下次有人需要同筆資料的時候就可以快速的回覆資料給使用者 Write-Through簡單來說，就是當我們寫入資料的時候也寫一份">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/137/800/600">
+<meta property="article:published_time" content="2021-11-17T15:00:38.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.138Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="大話 AWS 雲端架構">
+<meta property="article:tag" content="AWS">
+<meta property="article:tag" content="讀書會報告">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/137/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2021/11/17/AWSToturial/ch16_ElastiCache/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '大話 AWS 雲端架構 - Ch16 - ElastiCache',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">大話 AWS 雲端架構 - Ch16 - ElastiCache</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2021-11-17T15:00:38.000Z" title="Created 2021-11-17 15:00:38">2021-11-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="大話 AWS 雲端架構 - Ch16 - ElastiCache"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="大話-AWS-雲端架構-Ch16-ElastiCache"><a href="#大話-AWS-雲端架構-Ch16-ElastiCache" class="headerlink" title="大話 AWS 雲端架構 - Ch16 - ElastiCache"></a>大話 AWS 雲端架構 - Ch16 - ElastiCache</h1><p><a target="_blank" rel="noopener" href="https://aws.amazon.com/tw/elasticache/">ElasticCache</a> 簡單來說就是單獨管理快取的一種服務</p>
+<h2 id="16-3-兩種常見的暫存資料操作手法"><a href="#16-3-兩種常見的暫存資料操作手法" class="headerlink" title="16.3 兩種常見的暫存資料操作手法"></a>16.3 兩種常見的暫存資料操作手法</h2><h3 id="Lazy-Loading"><a href="#Lazy-Loading" class="headerlink" title="Lazy-Loading"></a>Lazy-Loading</h3><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%83%B0%E6%80%A7%E8%BC%89%E5%85%A5">Lazy-Loading</a> 又稱延遲載入，大意上是只在有人需要資料的時候才將資料做快取，這樣下次有人需要同筆資料的時候就可以快速的回覆資料給使用者</p>
+<h3 id="Write-Through"><a href="#Write-Through" class="headerlink" title="Write-Through"></a>Write-Through</h3><p>簡單來說，就是當我們寫入資料的時候也寫一份到快取內，則使用者需要資料的時候就可以即時反應</p>
+<h3 id="Lazy-Loading-與-Lazy-Loading-的比較"><a href="#Lazy-Loading-與-Lazy-Loading-的比較" class="headerlink" title="Lazy-Loading 與 Lazy-Loading 的比較"></a>Lazy-Loading 與 Lazy-Loading 的比較</h3><table>
+<thead>
+<tr>
+<th>Lazy-Loading</th>
+<th>Write-Through</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用戶第一次存取資料的時候，<br>才寫入快取中</td>
+<td>資料寫入資料庫的時候，<br>同時寫一份到快取中</td>
+</tr>
+<tr>
+<td>第一次提取時速度會比較慢</td>
+<td>提取速度快</td>
+</tr>
+<tr>
+<td>被動快取資料</td>
+<td>主動快取資料</td>
+</tr>
+<tr>
+<td>節省記憶體用量</td>
+<td>記憶體用量大</td>
+</tr>
+<tr>
+<td>第一次查詢資料的時候速度會較慢，<br>另外如果資料庫資料有更新而沒有順便更新快取的話，<br>使用者可能會取用到舊的資料</td>
+<td>會快取很多沒有要用到的資料，<br>且寫入資料的時候會更花時間</td>
+</tr>
+</tbody></table>
+<h2 id="16-4-ElastiCache-的兩種底層引擎-Memcached-與-Redis"><a href="#16-4-ElastiCache-的兩種底層引擎-Memcached-與-Redis" class="headerlink" title="16.4 ElastiCache 的兩種底層引擎 - Memcached 與 Redis"></a>16.4 ElastiCache 的兩種底層引擎 - Memcached 與 Redis</h2><h3 id="Redis-與-Memcached-的使用差異"><a href="#Redis-與-Memcached-的使用差異" class="headerlink" title="Redis 與 Memcached 的使用差異"></a>Redis 與 Memcached 的使用差異</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>Memcached</th>
+<th>Redis</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>毫秒等級延遲</td>
+<td>:white_check_mark:</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>資料分割</td>
+<td>:white_check_mark:</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>支援多種程式語言</td>
+<td>:white_check_mark:</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>進階資料結構</td>
+<td>:x:</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>多執行緒架構</td>
+<td>:white_check_mark:</td>
+<td>:x:</td>
+</tr>
+<tr>
+<td>快照備份</td>
+<td>:x:</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>覆寫功能</td>
+<td>:x:</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>交易用途</td>
+<td>:x:</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>消息訂閱系統</td>
+<td>:x:</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>支持 Lua 腳本</td>
+<td>:x:</td>
+<td>:white_check_mark:</td>
+</tr>
+<tr>
+<td>支援地理位置</td>
+<td>:x:</td>
+<td>:white_check_mark:</td>
+</tr>
+</tbody></table>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Lua">Lua</a></p>
+<h2 id="16-5-Redis"><a href="#16-5-Redis" class="headerlink" title="16.5 Redis"></a>16.5 Redis</h2><p>Redis 隨著需求發顫，已經越來越像在記憶體上的資料庫了。於是 Redis on ElastiCache 的高備援方案，自然也就像是資料庫一樣。首先我們必須定義 Subnet Group (子網路群組)，未來 ElastiCache 會在裡面開啟資料庫的 Node (節點)，並且在節點裡面會用多個 Shard (分片) 來儲存資料，並把<br>Shard 分散在多個節點，避免節點失效後，資料也一併遺失。如果想要做效能調校，也可以透過 Parameter Group 完成</p>
+<p><img src="https://i.imgur.com/Bof40XJ.png"></p>
+<p>Redis 與 RDS 雷同，必須透過 Parameter Group 調整參數，然後在 subnet group 內開啟節點，並把資料存在各個分片內，並具有 Snapshot 快照功能</p>
+<h2 id="16-6-Memcached"><a href="#16-6-Memcached" class="headerlink" title="16.6 Memcached"></a>16.6 Memcached</h2><p>Memcached 就比較不像是資料庫了，也可以做成叢集。資料會分佈在各個節點上，但不會採 Redis 的方式做分片，也就是說如果有節電壞掉，在那個節點的資料就真的遺失了</p>
+<p><img src="https://i.imgur.com/QKymtPA.png"></p>
+<h3 id="Auto-Discovery"><a href="#Auto-Discovery" class="headerlink" title="Auto Discovery"></a>Auto Discovery</h3><p>ElastiCache 給 Memcached 的建議是多加節點。節點數量越多，資料遺失的時候，損失的資料筆數就會相對的少。</p>
+<p>另外因為節點數量較多，在找資料的時候其實有可能會找錯節點，對此 Memchached 推出了 Auto Discovery (自動探索) 功能，當用戶在尋找資料的時候，發現找錯節點時，能夠自動探勘到正確的節點上。</p>
+<p><img src="https://i.imgur.com/oNqjAgF.png"></p>
+<h2 id="16-7-考題解析與思路延伸"><a href="#16-7-考題解析與思路延伸" class="headerlink" title="16.7 考題解析與思路延伸"></a>16.7 考題解析與思路延伸</h2><h3 id="資料庫與記憶體之間的混搭方式-Lazy-Loading"><a href="#資料庫與記憶體之間的混搭方式-Lazy-Loading" class="headerlink" title="資料庫與記憶體之間的混搭方式 - Lazy Loading"></a>資料庫與記憶體之間的混搭方式 - Lazy Loading</h3><p>Application 收到資料後，記憶體不載入資料，直到第一次 Application 存取時，從資料庫取出一份，同時轉存一份回 Cache。</p>
+<p><strong>優點</strong>：確保空間使用效率，相對不會保存讀取頻率較低的資料在快取中<br><strong>缺點</strong>：第一次讀取要從資料庫拿取，後續讀取速度才會提升</p>
+<h3 id="資料庫與記憶體之間的混搭方式-Write-Through"><a href="#資料庫與記憶體之間的混搭方式-Write-Through" class="headerlink" title="資料庫與記憶體之間的混搭方式 - Write Through"></a>資料庫與記憶體之間的混搭方式 - Write Through</h3><p>Application 收到資料後，存一份回資料庫，同時也存一份在 Cache 中。</p>
+<p><strong>優點</strong>：確保下次讀取資料時， Cache 裡面已存有資料，能快速回應<br><strong>缺點</strong>：有可能會保存讀取頻率低的資料，造成空間浪費</p>
+<h2 id="16-8-ElastiCache-整體架構圖"><a href="#16-8-ElastiCache-整體架構圖" class="headerlink" title="16.8 ElastiCache 整體架構圖"></a>16.8 ElastiCache 整體架構圖</h2><p><img src="https://i.imgur.com/onsDoiW.png"></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%A7%E8%A9%B1-AWS-%E9%9B%B2%E7%AB%AF%E6%9E%B6%E6%A7%8B/">大話 AWS 雲端架構</a><a class="post-meta__tags" href="/tags/AWS/">AWS</a><a class="post-meta__tags" href="/tags/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E8%A9%B1-AWS-%E9%9B%B2%E7%AB%AF%E6%9E%B6%E6%A7%8B-Ch16-ElastiCache"><span class="toc-number">1.</span> <span class="toc-text">大話 AWS 雲端架構 - Ch16 - ElastiCache</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#16-3-%E5%85%A9%E7%A8%AE%E5%B8%B8%E8%A6%8B%E7%9A%84%E6%9A%AB%E5%AD%98%E8%B3%87%E6%96%99%E6%93%8D%E4%BD%9C%E6%89%8B%E6%B3%95"><span class="toc-number">1.1.</span> <span class="toc-text">16.3 兩種常見的暫存資料操作手法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lazy-Loading"><span class="toc-number">1.1.1.</span> <span class="toc-text">Lazy-Loading</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Write-Through"><span class="toc-number">1.1.2.</span> <span class="toc-text">Write-Through</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lazy-Loading-%E8%88%87-Lazy-Loading-%E7%9A%84%E6%AF%94%E8%BC%83"><span class="toc-number">1.1.3.</span> <span class="toc-text">Lazy-Loading 與 Lazy-Loading 的比較</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-4-ElastiCache-%E7%9A%84%E5%85%A9%E7%A8%AE%E5%BA%95%E5%B1%A4%E5%BC%95%E6%93%8E-Memcached-%E8%88%87-Redis"><span class="toc-number">1.2.</span> <span class="toc-text">16.4 ElastiCache 的兩種底層引擎 - Memcached 與 Redis</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Redis-%E8%88%87-Memcached-%E7%9A%84%E4%BD%BF%E7%94%A8%E5%B7%AE%E7%95%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">Redis 與 Memcached 的使用差異</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-5-Redis"><span class="toc-number">1.3.</span> <span class="toc-text">16.5 Redis</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-6-Memcached"><span class="toc-number">1.4.</span> <span class="toc-text">16.6 Memcached</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Auto-Discovery"><span class="toc-number">1.4.1.</span> <span class="toc-text">Auto Discovery</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-7-%E8%80%83%E9%A1%8C%E8%A7%A3%E6%9E%90%E8%88%87%E6%80%9D%E8%B7%AF%E5%BB%B6%E4%BC%B8"><span class="toc-number">1.5.</span> <span class="toc-text">16.7 考題解析與思路延伸</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E5%BA%AB%E8%88%87%E8%A8%98%E6%86%B6%E9%AB%94%E4%B9%8B%E9%96%93%E7%9A%84%E6%B7%B7%E6%90%AD%E6%96%B9%E5%BC%8F-Lazy-Loading"><span class="toc-number">1.5.1.</span> <span class="toc-text">資料庫與記憶體之間的混搭方式 - Lazy Loading</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B3%87%E6%96%99%E5%BA%AB%E8%88%87%E8%A8%98%E6%86%B6%E9%AB%94%E4%B9%8B%E9%96%93%E7%9A%84%E6%B7%B7%E6%90%AD%E6%96%B9%E5%BC%8F-Write-Through"><span class="toc-number">1.5.2.</span> <span class="toc-text">資料庫與記憶體之間的混搭方式 - Write Through</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-8-ElastiCache-%E6%95%B4%E9%AB%94%E6%9E%B6%E6%A7%8B%E5%9C%96"><span class="toc-number">1.6.</span> <span class="toc-text">16.8 ElastiCache 整體架構圖</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

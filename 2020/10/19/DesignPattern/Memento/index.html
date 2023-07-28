@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Design Patterns - Behavioral - Memento Pattern 備忘錄模式 | Mobius</title><meta name="author" content="Mobius Wu"><meta name="copyright" content="Mobius Wu"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="設計模式 - Memento Pattern 備忘錄模式Intro假設今天我們想製作一個可以”上一步”的編輯器 實作為了顧及功能的靈活性，我們做了一些分工我們建立一個IDE的class(IDEOriginator)，讓他掌管原本IDE該有的所有功能再來我們需要一個儲存狀態的class(Memento)，讓我們可以把IDE的狀態變成某種資料格式儲存起來最後既然我們需要將IDE的狀態儲存起來，我們再新">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Design Patterns - Behavioral - Memento Pattern 備忘錄模式">
+<meta property="og:url" content="https://dopamine908.github.io/2020/10/19/DesignPattern/Memento/index.html">
+<meta property="og:site_name" content="Mobius">
+<meta property="og:description" content="設計模式 - Memento Pattern 備忘錄模式Intro假設今天我們想製作一個可以”上一步”的編輯器 實作為了顧及功能的靈活性，我們做了一些分工我們建立一個IDE的class(IDEOriginator)，讓他掌管原本IDE該有的所有功能再來我們需要一個儲存狀態的class(Memento)，讓我們可以把IDE的狀態變成某種資料格式儲存起來最後既然我們需要將IDE的狀態儲存起來，我們再新">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://picsum.photos/id/532/800/600">
+<meta property="article:published_time" content="2020-10-19T20:47:23.000Z">
+<meta property="article:modified_time" content="2023-07-28T12:32:56.234Z">
+<meta property="article:author" content="Mobius Wu">
+<meta property="article:tag" content="Design Patterns">
+<meta property="article:tag" content="Behavioral Patterns">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://picsum.photos/id/532/800/600"><link rel="shortcut icon" href="/img/mobius_stripe.png"><link rel="canonical" href="https://dopamine908.github.io/2020/10/19/DesignPattern/Memento/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Design Patterns - Behavioral - Memento Pattern 備忘錄模式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-28 12:32:56'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/mobius_stripe.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Mobius"><span class="site-name">Mobius</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Design Patterns - Behavioral - Memento Pattern 備忘錄模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">Created</span><time datetime="2020-10-19T20:47:23.000Z" title="Created 2020-10-19 20:47:23">2020-10-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%AE%80%E6%9B%B8%E6%9C%83%E5%A0%B1%E5%91%8A/">讀書會報告</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Design Patterns - Behavioral - Memento Pattern 備忘錄模式"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="post-content" id="article-container"><h1 id="設計模式-Memento-Pattern-備忘錄模式"><a href="#設計模式-Memento-Pattern-備忘錄模式" class="headerlink" title="設計模式 - Memento Pattern 備忘錄模式"></a>設計模式 - Memento Pattern 備忘錄模式</h1><h2 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h2><p>假設今天我們想製作一個可以”上一步”的編輯器</p>
+<h2 id="實作"><a href="#實作" class="headerlink" title="實作"></a>實作</h2><p>為了顧及功能的靈活性，我們做了一些分工<br>我們建立一個IDE的class(IDEOriginator)，讓他掌管原本IDE該有的所有功能<br>再來我們需要一個儲存狀態的class(Memento)，讓我們可以把IDE的狀態變成某種資料格式儲存起來<br>最後既然我們需要將IDE的狀態儲存起來，我們再新增一個可以管理儲存內容的class(CareTaker)<br>接著來看看怎麼將他一步一步建構出來吧</p>
+<p>首先，我們看一下IDEOriginator<br>除了他的原本的功能外，我們為了儲存狀態及設定狀態多給了他2個function</p>
+<ol>
+<li>createMemento : 將現在IDE的狀態轉化為一個Memento物件，讓這個物件負責掌管IDEOriginator的參數設定</li>
+<li>setMemento : 可以將Memento輸入，並且將IDEOriginator的參數全部設定為Memento所記錄的樣子</li>
+</ol>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IDEOriginator</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$action</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Restore Memento</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setMemento</span>(<span class="params">Memento <span class="variable">$memento</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;action = <span class="variable">$memento</span>-&gt;<span class="title function_ invoke__">getState</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Return save memento</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">createMemento</span>(<span class="params"></span>): <span class="title">Memento</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Memento</span>(<span class="variable language_">$this</span>-&gt;action);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setAction</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$action</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;action = <span class="variable">$action</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getAction</span>(<span class="params"></span>): <span class="title">string</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;action;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>而負責儲存狀態的Memento則像下面這樣，僅負責儲存狀態</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Memento</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$state</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$state</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;<span class="title function_ invoke__">setMemento</span>(<span class="variable">$state</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setMemento</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$state</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;state = <span class="variable">$state</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getState</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;state;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>而這些Memento的管理則交由CareTaker負責</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CareTaker</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="variable">$saves</span> = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getSave</span>(<span class="params"><span class="keyword">int</span> <span class="variable">$index</span></span>): <span class="title">Memento</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;saves[<span class="variable">$index</span> - <span class="number">1</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">saveMemento</span>(<span class="params">Memento <span class="variable">$memento</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;saves[] = <span class="variable">$memento</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>使用方式則如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$Originator</span> = <span class="keyword">new</span> <span class="title class_">IDEOriginator</span>();</span><br><span class="line"><span class="variable">$CareTaker</span> = <span class="keyword">new</span> <span class="title class_">CareTaker</span>();</span><br><span class="line"></span><br><span class="line"><span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">setAction</span>(<span class="string">&#x27;press a&#x27;</span>);</span><br><span class="line"><span class="variable">$Step1Memento</span>=<span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">createMemento</span>();</span><br><span class="line"><span class="variable">$CareTaker</span>-&gt;<span class="title function_ invoke__">saveMemento</span>(<span class="variable">$Step1Memento</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">setAction</span>(<span class="string">&#x27;press b&#x27;</span>);</span><br><span class="line"><span class="variable">$Step2Memento</span> = <span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">createMemento</span>();</span><br><span class="line"><span class="variable">$CareTaker</span>-&gt;<span class="title function_ invoke__">saveMemento</span>(<span class="variable">$Step2Memento</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">setAction</span>(<span class="string">&#x27;press c&#x27;</span>);</span><br><span class="line"><span class="variable">$Step3Memento</span> = <span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">createMemento</span>();</span><br><span class="line"><span class="variable">$CareTaker</span>-&gt;<span class="title function_ invoke__">saveMemento</span>(<span class="variable">$Step3Memento</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">setMemento</span>(<span class="variable">$CareTaker</span>-&gt;<span class="title function_ invoke__">getSave</span>(<span class="number">1</span>));</span><br><span class="line"><span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">getAction</span>(); <span class="comment">// return &#x27;press a&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">setMemento</span>(<span class="variable">$CareTaker</span>-&gt;<span class="title function_ invoke__">getSave</span>(<span class="number">2</span>));</span><br><span class="line"><span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">getAction</span>(); <span class="comment">// return &#x27;press b&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">setMemento</span>(<span class="variable">$CareTaker</span>-&gt;<span class="title function_ invoke__">getSave</span>(<span class="number">3</span>));</span><br><span class="line"><span class="variable">$Originator</span>-&gt;<span class="title function_ invoke__">getAction</span>(); <span class="comment">// return &#x27;press c&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="時機"><a href="#時機" class="headerlink" title="時機"></a>時機</h2><ul>
+<li>當我們的程式需提供先前的狀態給使用者使用時</li>
+<li>當我們想將狀態做封裝不被使用者直接取用時</li>
+</ul>
+<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><p>在不違反封裝性的前提下，捕捉物件的內部狀態並儲存在外面，以便日後回復至此一狀態</p>
+<h2 id="類別圖"><a href="#類別圖" class="headerlink" title="類別圖"></a>類別圖</h2><p><img src="https://i.imgur.com/DSGJ5QA.png"></p>
+<h3 id="Plant-UML"><a href="#Plant-UML" class="headerlink" title="Plant UML"></a>Plant UML</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">@startuml</span><br><span class="line"></span><br><span class="line">skinparam classAttributeIconSize 0</span><br><span class="line"></span><br><span class="line">class Originator&#123;</span><br><span class="line">&#123;field&#125; - $state</span><br><span class="line"></span><br><span class="line">&#123;method&#125; + setMemento(Memento $memento)</span><br><span class="line">&#123;method&#125; + createMemento() : Memento</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Memento&#123;</span><br><span class="line">&#123;field&#125; - $state</span><br><span class="line"></span><br><span class="line">&#123;method&#125; + __construct($state)</span><br><span class="line">&#123;method&#125; + setMemento($state)</span><br><span class="line">&#123;method&#125; + getMemento() : $state</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class CareTaker</span><br><span class="line"></span><br><span class="line">Originator .right.&gt; Memento</span><br><span class="line">Memento o-right-&gt; CareTaker</span><br><span class="line"></span><br><span class="line">@enduml</span><br></pre></td></tr></table></figure>
+
+<h2 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h2><ul>
+<li>可以恢復物件先前的狀態</li>
+<li>可將”主要功能”、”狀態”、”狀態管理”三個職責分離</li>
+</ul>
+<h2 id="缺點"><a href="#缺點" class="headerlink" title="缺點"></a>缺點</h2><ul>
+<li>紀錄狀態本身就是一種記憶體消耗</li>
+<li>CareTaker如果不知道Originator的某些特殊的生命週期或是運作前提，可能會在移除Memento的過程發生問題</li>
+</ul>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Design-Patterns/">Design Patterns</a><a class="post-meta__tags" href="/tags/Behavioral-Patterns/">Behavioral Patterns</a></div><div class="post_share"></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/mobius_stripe.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Mobius Wu</div><div class="author-info__description">Laziness, Impatience and Hubris</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">66</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/dopamine908"><i class="fab fa-github"></i><span>My Github</span></a></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A8%AD%E8%A8%88%E6%A8%A1%E5%BC%8F-Memento-Pattern-%E5%82%99%E5%BF%98%E9%8C%84%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">設計模式 - Memento Pattern 備忘錄模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Intro"><span class="toc-number">1.1.</span> <span class="toc-text">Intro</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%A6%E4%BD%9C"><span class="toc-number">1.2.</span> <span class="toc-text">實作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%82%E6%A9%9F"><span class="toc-number">1.3.</span> <span class="toc-text">時機</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E7%9A%84"><span class="toc-number">1.4.</span> <span class="toc-text">目的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%9E%E5%88%A5%E5%9C%96"><span class="toc-number">1.5.</span> <span class="toc-text">類別圖</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Plant-UML"><span class="toc-number">1.5.1.</span> <span class="toc-text">Plant UML</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%84%AA%E9%BB%9E"><span class="toc-number">1.6.</span> <span class="toc-text">優點</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BC%BA%E9%BB%9E"><span class="toc-number">1.7.</span> <span class="toc-text">缺點</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2023 By Mobius Wu</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, '']
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
